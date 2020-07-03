@@ -1,14 +1,16 @@
-module.exports = function(app, passport) {
-    app.post('/login', passport.authenticate('local', {
-        successRedirect: '/dashboard',
-        failureRedirect: '/failure'
-    }))
+'use strict';
 
-    app.get('/dashboard', (req,res) => {
-        res.send('Success');
-    })
+module.exports = function (app, passport) {
+  app.post('/login', passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/failure'
+  }));
 
-    app.get('/failure', (req,res) => {
-        res.send('Fail');
-    })
-}
+  app.get('/dashboard', (req, res) => {
+    res.send('Success');
+  });
+
+  app.get('/failure', (req, res) => {
+    res.send('Fail');
+  });
+};
