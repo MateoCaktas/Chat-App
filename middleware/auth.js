@@ -1,36 +1,38 @@
-const LocalStrategy = require('passport-local').Strategy;
+'use strict';
+
 const bcrypt = require('bcrypt');
+const LocalStrategy = require('passport-local').Strategy;
 
-module.exports = function(passport, User) {
-    passport.use(
-        new LocalStrategy({ usernameField: 'email'} , (email, password, done) => {
-            User.findOne({ where: { email }})
-            .then(user => {
-                if(!user) {
-                    return done(null, false)
-                }
+module.exports = function (passport, User) {
+  passport.use(
+    new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+      User.findOne({ where: { email } })
+        .then(user => {
+          if (!user) {
+            return done(null, false);
+          }
 
-                bcrypt.compare(password, user.password, (err, isMatch) => {
-                    if(err) throw err;
+          bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) throw err;
 
-                    if(isMatch) {
-                        return done(null,user);
-                    } else {
-                        return done(null, false);
-                    }
-                })
-            })
-            .catch(err => console.log(err));
+            if (isMatch) {
+              return done(null, user);
+            } else {
+              return done(null, false);
+            }
+          });
         })
-    )
-
-    passport.serializeUser((user, done) => {
-        done(null, user.id);
+      .catch(err => console.log(err));
     })
+  );
 
-    passport.deserializeUser((id, done) => {
-        User
-            .findByPk(id)
-            .then(user => done(null, user))
-    })
-}
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser((id, done) => {
+    User
+      .findByPk(id)
+      .then(user => done(null, user));
+  });
+};
