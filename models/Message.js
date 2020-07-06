@@ -3,7 +3,7 @@
 const db = require('../config/db');
 const Sequelize = require('sequelize/types');
 
-const Message = db.define('User', {
+const Message = db.define('Message', {
   time: {
     type: Sequelize.DATE
   },
