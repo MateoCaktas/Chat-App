@@ -11,7 +11,7 @@ const User = require('./models/User');
 const app = express();
 
 app.use(session({ secret: 'mysecret' }));
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(passport.initialize());
 app.use(passport.session());
