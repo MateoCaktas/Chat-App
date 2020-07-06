@@ -1,17 +1,17 @@
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const initializeConnection = require('./config/dbConnect');
-const app = express();
+'use strict';
 
+const bodyParser = require('body-parser');
+const connectDB = require('./config/dbConnect');
+const express = require('express');
+const initializePassport = require('./middleware/auth');
+const passport = require('passport');
+const session = require('express-session');
 const User = require('./models/User');
 
-const initializePassport = require('./middleware/auth');
+const app = express();
 
 app.use(session({ secret: 'mysecret' }));
 app.use(bodyParser.urlencoded({extended: false}))
-
-const passport = require('passport');
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -20,6 +20,6 @@ require('./routes/api/index')(app, passport);
 
 const PORT = process.env.PORT || 3000;
 
-initializeConnection()
+connectDB()
     .then(() => initializePassport(passport, User))
-    .then(() => app.listen(PORT, console.log(`Server started on port ${PORT}`)))
+    .then(() => app.listen(PORT, console.log(`Server started on port ${PORT}`)));

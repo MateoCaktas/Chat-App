@@ -1,9 +1,10 @@
 'use strict';
 
 const db = require('./db');
+const Room = require('../models/Room');
 const User = require('../models/User');
 
-module.exports = function initializeConnection() {
+module.exports = function connectDB() {
   return db
     .sync({
       force: true
@@ -22,6 +23,13 @@ module.exports = function initializeConnection() {
         last_name: 'User',
         email: 'second.user@gmail.com',
         password: '222222'
+      });
+    })
+    .then(() => {
+      Room.create({
+        creation_time: Date.now(),
+        name: 'First Room',
+        limit: 10
       });
     });
 };
