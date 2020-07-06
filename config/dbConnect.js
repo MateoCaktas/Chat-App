@@ -1,8 +1,13 @@
 'use strict';
 
 const db = require('./db');
+const Message = require('../models/Message');
 const Room = require('../models/Room');
 const User = require('../models/User');
+
+Message.belongsTo(Room, { as: 'messageRoom', foreignKey: 'FK_room' });
+User.belongsToMany(Room, { as: 'ChatRooms', through: 'UserRooms' });
+Room.belongsToMany(User, { as: 'BelongingUsers', through: 'UserRooms' });
 
 module.exports = function connectDB() {
   return db
@@ -30,6 +35,16 @@ module.exports = function connectDB() {
         creation_time: Date.now(),
         name: 'First Room',
         limit: 10
+      })
+      .then(room => {
+        room.setBelongingUsers([1, 2]);
+      });
+    })
+    .then(() => {
+      Message.create({
+        FK_room: 1,
+        time: Date.now(),
+        content: 'This is a message.'
       });
     });
 };

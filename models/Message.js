@@ -1,7 +1,7 @@
 'use strict';
 
 const db = require('../config/db');
-const Sequelize = require('sequelize/types');
+const Sequelize = require('sequelize');
 
 const Message = db.define('Message', {
   time: {
