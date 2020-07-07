@@ -9,7 +9,10 @@ class Message extends Model {
         time: DataTypes.DATE,
         content: DataTypes.STRING
       },
-      { sequelize }
+      {
+        tableName: 'messages',
+        sequelize
+      }
     );
   }
 

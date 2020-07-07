@@ -12,12 +12,15 @@ class Room extends Model {
         name: DataTypes.STRING,
         limit: DataTypes.INTEGER
       },
-      { sequelize }
+      {
+        tableName: "rooms",
+        sequelize
+      }
     );
   }
 
   static associate(models) {
-    this.BelongingUsers = this.belongsToMany(models.User, { as: 'BelongingUsers', through: 'UserRooms' });
+    this.BelongingUsers = this.belongsToMany(models.User, { as: 'BelongingUsers', through: 'userrooms' });
   }
 }
 

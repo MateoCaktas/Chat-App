@@ -14,12 +14,15 @@ class User extends Model {
         full_name: DataTypes.STRING,
         password: DataTypes.STRING
       },
-      { sequelize }
+      {
+        tableName: 'users',
+        sequelize
+      }
     );
   }
 
   static associate(models) {
-    this.ChatRooms = this.belongsToMany(models.Room, { as: 'ChatRooms', through: 'UserRooms' });
+    this.ChatRooms = this.belongsToMany(models.Room, { as: 'ChatRooms', through: 'userrooms' });
   }
 
   static hooks() {
