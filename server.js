@@ -17,6 +17,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./routes/api/index')(app, passport);
+app.use('/users', require('./routes/api/Users'));
+
+app.get('/', (req, res) => {
+  res.send('Welcome to home page!');
+});
 
 const PORT = process.env.PORT || 3000;
 
