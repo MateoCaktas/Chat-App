@@ -1,18 +1,24 @@
 'use strict';
 
-const db = require('../config/db');
-const Sequelize = require('sequelize');
+const { Model } = require('sequelize');
 
-const Room = db.define('Room', {
-  creation_time: {
-    type: Sequelize.DATE
-  },
-  name: {
-    type: Sequelize.STRING
-  },
-  limit: {
-    type: Sequelize.INTEGER
+class Room extends Model {
+  static init(sequelize, DataTypes) {
+    return super.init(
+      {
+        creation_time: {
+          type: DataTypes.DATE
+        },
+        name: DataTypes.STRING,
+        limit: DataTypes.INTEGER
+      },
+      { sequelize }
+    );
   }
-});
+
+  static associate(models) {
+    this.BelongingUsers = this.belongsToMany(models.User, { as: 'BelongingUsers', through: 'UserRooms' });
+  }
+}
 
 module.exports = Room;

@@ -5,12 +5,6 @@ const Message = require('../models/Message');
 const Room = require('../models/Room');
 const User = require('../models/User');
 
-Message.belongsTo(Room, { as: 'messageRoom', foreignKey: 'FK_room' });
-Message.belongsTo(User, { as: 'userMessage', foreignKey: 'FK_user' });
-
-User.belongsToMany(Room, { as: 'ChatRooms', through: 'UserRooms' });
-Room.belongsToMany(User, { as: 'BelongingUsers', through: 'UserRooms' });
-
 module.exports = function connectDB() {
   return db
     .sync({
@@ -43,11 +37,31 @@ module.exports = function connectDB() {
       });
     })
     .then(() => {
+      return User.create({
+        first_name: 'Third',
+        last_name: 'User',
+        email: 'second.user@gmail.com',
+        password: '333333'
+      })
+      // Adding data in the third table because of N:M relation
+      .then(user => {
+        return user.setChatRooms(1);
+      });
+    })
+    .then(() => {
       return Message.create({
         FK_user: 1,
         FK_room: 1,
         time: Date.now(),
         content: 'This is a message.'
       });
+    })
+    .then(() => {
+      return Message.create({
+        FK_user: 2,
+        FK_room: 1,
+        time: Date.now(),
+        content: `This is second user's response`
+      })
     });
 };

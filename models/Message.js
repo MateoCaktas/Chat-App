@@ -1,15 +1,22 @@
 'use strict';
 
-const db = require('../config/db');
-const Sequelize = require('sequelize');
+const { Model } = require('sequelize');
 
-const Message = db.define('Message', {
-  time: {
-    type: Sequelize.DATE
-  },
-  content: {
-    type: Sequelize.STRING
+class Message extends Model {
+  static init(sequelize, DataTypes) {
+    return super.init(
+      {
+        time: DataTypes.DATE,
+        content: DataTypes.STRING
+      },
+      { sequelize }
+    );
   }
-});
+
+  static associate(models) {
+    this.messageRoom = this.belongsTo(models.Room, { as: 'messageRoom', foreignKey: 'FK_room' });
+    this.userMessage = this.belongsTo(models.User, { as: 'userMessage', foreignKey: 'FK_user' });
+  }
+}
 
 module.exports = Message;
