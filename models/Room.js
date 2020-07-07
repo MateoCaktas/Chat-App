@@ -13,7 +13,7 @@ class Room extends Model {
         limit: DataTypes.INTEGER
       },
       {
-        tableName: "rooms",
+        tableName: 'rooms',
         sequelize
       }
     );
