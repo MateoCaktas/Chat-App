@@ -8,14 +8,25 @@ class User extends Model {
   static init(sequelize, DataTypes) {
     return super.init(
       {
-        first_name: DataTypes.STRING,
-        last_name: DataTypes.STRING,
-        email: DataTypes.STRING,
-        full_name: DataTypes.STRING,
-        password: DataTypes.STRING
+        firstName: {
+          type: DataTypes.STRING
+        },
+        lastName: {
+          type: DataTypes.STRING
+        },
+        email: {
+          type: DataTypes.STRING
+        },
+        fullName: {
+          type: DataTypes.STRING
+        },
+        password: {
+          type: DataTypes.STRING
+        }
       },
       {
         tableName: 'users',
+        underscored: true,
         sequelize
       }
     );
@@ -27,7 +38,7 @@ class User extends Model {
 
   static hooks() {
     this.addHook('beforeCreate', user => {
-      user.full_name = `${user.first_name} ${user.last_name}`;
+      user.fullName = `${user.firstName} ${user.lastName}`;
       user.password = bcrypt.hashSync(user.password, saltRounds);
     });
   }

@@ -6,14 +6,19 @@ class Room extends Model {
   static init(sequelize, DataTypes) {
     return super.init(
       {
-        creation_time: {
+        creationTime: {
           type: DataTypes.DATE
         },
-        name: DataTypes.STRING,
-        limit: DataTypes.INTEGER
+        name: {
+          type: DataTypes.STRING
+        },
+        limit: {
+          type: DataTypes.INTEGER
+        }
       },
       {
         tableName: 'rooms',
+        underscored: true,
         sequelize
       }
     );

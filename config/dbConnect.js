@@ -12,23 +12,23 @@ module.exports = function connectDB() {
     })
     .then(() => {
       return User.create({
-        first_name: 'First',
-        last_name: 'User',
+        firstName: 'First',
+        lastName: 'User',
         email: 'first.user@gmail.com',
         password: '123456'
       });
     })
     .then(() => {
       return User.create({
-        first_name: 'Second',
-        last_name: 'User',
+        firstName: 'Second',
+        lastName: 'User',
         email: 'second.user@gmail.com',
         password: '222222'
       });
     })
     .then(() => {
       return Room.create({
-        creation_time: Date.now(),
+        creationTime: Date.now(),
         name: 'First Room',
         limit: 10
       })
@@ -38,8 +38,8 @@ module.exports = function connectDB() {
     })
     .then(() => {
       return User.create({
-        first_name: 'Third',
-        last_name: 'User',
+        firstName: 'Third',
+        lastName: 'User',
         email: 'second.user@gmail.com',
         password: '333333'
       })
@@ -61,7 +61,7 @@ module.exports = function connectDB() {
         FK_user: 2,
         FK_room: 1,
         time: Date.now(),
-        content: `This is second user's response`
-      })
+        content: 'This is second user\'s response'
+      });
     });
 };

@@ -6,11 +6,16 @@ class Message extends Model {
   static init(sequelize, DataTypes) {
     return super.init(
       {
-        time: DataTypes.DATE,
-        content: DataTypes.STRING
+        time: {
+          type: DataTypes.DATE
+        },
+        content: {
+          type: DataTypes.STRING
+        }
       },
       {
         tableName: 'messages',
+        underscored: true,
         sequelize
       }
     );
