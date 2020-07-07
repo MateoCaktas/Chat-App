@@ -20,7 +20,7 @@ class Room extends Model {
   }
 
   static associate(models) {
-    this.BelongingUsers = this.belongsToMany(models.User, { as: 'BelongingUsers', through: 'userrooms' });
+    this.BelongingUsers = this.belongsToMany(models.User, { as: 'BelongingUsers', through: 'user_rooms' });
   }
 }
 

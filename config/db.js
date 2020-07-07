@@ -32,6 +32,4 @@ forEach(models, model => {
   invoke(model, 'hooks');
 });
 
-console.log(models);
-
 module.exports = db;

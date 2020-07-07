@@ -22,7 +22,7 @@ class User extends Model {
   }
 
   static associate(models) {
-    this.ChatRooms = this.belongsToMany(models.Room, { as: 'ChatRooms', through: 'userrooms' });
+    this.ChatRooms = this.belongsToMany(models.Room, { as: 'ChatRooms', through: 'user_rooms' });
   }
 
   static hooks() {
