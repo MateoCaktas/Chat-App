@@ -29,5 +29,5 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 connectDB()
-    .then(() => initializePassport(passport, User))
-    .then(() => app.listen(PORT, console.log(`Server started on port ${PORT}`)));
+  .then(() => initializePassport(passport, User))
+  .then(() => app.listen(PORT, console.log(`Server started on port ${PORT}`)));
