@@ -41,6 +41,10 @@ class User extends Model {
       user.fullName = `${user.firstName} ${user.lastName}`;
       user.password = bcrypt.hashSync(user.password, saltRounds);
     });
+
+    this.addHook('beforeUpdate', user => {
+      user.fullName = `${user.firstName} ${user.lastName}`;
+    });
   }
 }
 
