@@ -16,15 +16,17 @@ router.post('/', (req, res) => {
     lastName,
     email,
     password
-  });
-
-  res.send('User created!');
+  })
+  .then(user => res.send(user))
+  .catch(err => console.log(err));
 });
 
 router.delete('/:id', (req, res) => {
   db.models.User.destroy({
     where: { id: req.params.id }
-  });
+  })
+  .then(() => res.status(202).send('User deleted'))
+  .catch(err => console.log(err));
 });
 
 router.put('/:id', (req, res) => {
@@ -41,7 +43,8 @@ router.put('/:id', (req, res) => {
     },
     individualHooks: true
   })
-  .then(() => res.send(`User ${firstName} ${lastName} updated.`));
+  .then(() => res.send(`User ${firstName} ${lastName} updated.`))
+  .catch(err => console.log(err));
 });
 
 module.exports = router;

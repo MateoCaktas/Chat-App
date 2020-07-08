@@ -5,9 +5,11 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  db.models.Room.findAll().then(room => {
+  db.models.Room.findAll()
+  .then(room => {
     res.json(room);
-  });
+  })
+  .catch(err => console.log(err));
 });
 
 router.post('/', (req, res) => {
@@ -18,16 +20,18 @@ router.post('/', (req, res) => {
     name,
     limit
   }).then(room => {
-    return room.setBelongingUsers(JSON.parse(usersIDs));
+    return room.setBelongingUsers(usersIDs);
   })
-  .then(() => res.send('Room created!'))
+  .then(room => res.send(room))
   .catch(err => console.log(err));
 });
 
 router.delete('/:id', (req, res) => {
   db.models.Room.destroy({
     where: { id: req.params.id }
-  });
+  })
+  .then(() => res.status(202).send('Room deleted'))
+  .catch(err => console.log(err));
 });
 
 router.put('/:id', (req, res) => {
@@ -40,7 +44,9 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id
     }
-  });
+  })
+  .then(() => res.status(202).send('Room updated'))
+  .catch(err => console.log(err));
 });
 
 module.exports = router;

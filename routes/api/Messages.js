@@ -16,15 +16,17 @@ router.post('/', (req, res) => {
     content,
     FK_room: fkRoom,
     FK_user: fkUser
-  });
-
-  res.send('Message created');
+  })
+  .then(msg => res.send(msg))
+  .catch(err => console.log(err));
 });
 
 router.delete('/:id', (req, res) => {
   db.models.Message.destroy({
     where: { id: req.params.id }
-  });
+  })
+  .then(() => res.status(202).send('Message deleted'))
+  .catch(err => console.log(err));
 });
 
 router.put('/:id', (req, res) => {
@@ -39,7 +41,9 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id
     }
-  });
+  })
+  .then(() => res.status(202).send('Message updated!'))
+  .catch(err => console.log(err));
 });
 
 module.exports = router;
