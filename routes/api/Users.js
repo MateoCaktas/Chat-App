@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
     password
   })
   .then(user => res.send(user))
-  .catch(err => console.log(err));
+  .catch(err => res.status(400).send(err));
 });
 
 router.delete('/:id', (req, res) => {
@@ -26,7 +26,7 @@ router.delete('/:id', (req, res) => {
     where: { id: req.params.id }
   })
   .then(() => res.status(202).send('User deleted'))
-  .catch(err => console.log(err));
+  .catch(err => res.status(400).send(err));
 });
 
 router.put('/:id', (req, res) => {
@@ -41,10 +41,12 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    individualHooks: true
+    individualHooks: true,
+    returning: true,
+    plain: true
   })
-  .then(() => res.send(`User ${firstName} ${lastName} updated.`))
-  .catch(err => console.log(err));
+  .then(result => res.status(202).send(result))
+  .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;

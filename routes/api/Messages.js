@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
     FK_user: fkUser
   })
   .then(msg => res.send(msg))
-  .catch(err => console.log(err));
+  .catch(err => res.status(400).send(err));
 });
 
 router.delete('/:id', (req, res) => {
@@ -26,7 +26,7 @@ router.delete('/:id', (req, res) => {
     where: { id: req.params.id }
   })
   .then(() => res.status(202).send('Message deleted'))
-  .catch(err => console.log(err));
+  .catch(err => res.status(400).send(err));
 });
 
 router.put('/:id', (req, res) => {
@@ -40,10 +40,12 @@ router.put('/:id', (req, res) => {
   }, {
     where: {
       id: req.params.id
-    }
+    },
+    returning: true,
+    plain: true
   })
-  .then(() => res.status(202).send('Message updated!'))
-  .catch(err => console.log(err));
+  .then(msg => res.status(202).send(msg))
+  .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;

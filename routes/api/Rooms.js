@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
   .then(room => {
     res.json(room);
   })
-  .catch(err => console.log(err));
+  .catch(err => res.status(400).send(err));
 });
 
 router.post('/', (req, res) => {
@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
     return room.setBelongingUsers(usersIDs);
   })
   .then(room => res.send(room))
-  .catch(err => console.log(err));
+  .catch(err => res.status(400).send(err));
 });
 
 router.delete('/:id', (req, res) => {
@@ -31,7 +31,7 @@ router.delete('/:id', (req, res) => {
     where: { id: req.params.id }
   })
   .then(() => res.status(202).send('Room deleted'))
-  .catch(err => console.log(err));
+  .catch(err => res.status(400).send(err));
 });
 
 router.put('/:id', (req, res) => {
@@ -43,10 +43,12 @@ router.put('/:id', (req, res) => {
   }, {
     where: {
       id: req.params.id
-    }
+    },
+    returning: true,
+    plain: true
   })
-  .then(() => res.status(202).send('Room updated'))
-  .catch(err => console.log(err));
+  .then(room => res.status(202).send(room))
+  .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;
