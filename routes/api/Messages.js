@@ -5,47 +5,46 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  db.models.User.findAll().then(user => res.json(user));
+  db.models.Message.findAll().then(msg => res.json(msg));
 });
 
 router.post('/', (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { time, content, fkRoom, fkUser } = req.body;
 
-  db.models.User.create({
-    firstName,
-    lastName,
-    email,
-    password
+  db.models.Message.create({
+    time,
+    content,
+    FK_room: fkRoom,
+    FK_user: fkUser
   })
-  .then(user => res.send(user))
+  .then(msg => res.send(msg))
   .catch(err => res.status(400).send(err));
 });
 
 router.delete('/:id', (req, res) => {
-  db.models.User.destroy({
+  db.models.Message.destroy({
     where: { id: req.params.id }
   })
-  .then(() => res.status(202).send('User deleted'))
+  .then(() => res.status(202).send('Message deleted'))
   .catch(err => res.status(400).send(err));
 });
 
 router.put('/:id', (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { time, content, fkRoom, fkUser } = req.body;
 
-  db.models.User.update({
-    firstName,
-    lastName,
-    email,
-    password
+  db.models.Message.update({
+    time,
+    content,
+    FK_room: fkRoom,
+    FK_user: fkUser
   }, {
     where: {
       id: req.params.id
     },
-    individualHooks: true,
     returning: true,
     plain: true
   })
-  .then(result => res.status(202).send(result))
+  .then(msg => res.status(202).send(msg))
   .catch(err => res.status(400).send(err));
 });
 

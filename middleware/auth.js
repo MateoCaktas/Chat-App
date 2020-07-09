@@ -2,8 +2,9 @@
 
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/User');
 
-module.exports = function (passport, User) {
+module.exports = function (passport) {
   passport.use(
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
       User.findOne({ where: { email } })
