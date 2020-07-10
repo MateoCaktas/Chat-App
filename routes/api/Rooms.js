@@ -14,16 +14,25 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   const { creationTime, name, limit, usersIDs } = req.body;
-
-  db.models.Room.create({
-    creationTime,
-    name,
-    limit
-  }).then(room => {
-    return room.setBelongingUsers(usersIDs);
+  console.log(usersIDs);
+  db.models.User.create({
+    firstName: 'Test',
+    lastName: 'User',
+    email: 'first.user@gmail.com',
+    password: '123456'
   })
-  .then(room => res.send(room))
-  .catch(err => res.status(400).send(err));
+  .then(user => {
+    db.models.Room.create({
+      creationTime,
+      name,
+      limit
+    }).then(room => {
+      return room.setBelongingUsers(user);
+    //  return room.setBelongingUsers(usersIDs);
+    })
+    .then(room => res.send(room))
+    .catch(err => res.status(400).send(err));
+  });
 });
 
 router.delete('/:id', (req, res) => {
