@@ -39,19 +39,24 @@ module.exports = async function dbSeed() {
     });
 
     // Create messages only after user1 and user2 are created
-    Promise.all([user1, user2]).then(users => {
+    Promise.all([room1, user1, user2]).then(data => {
+      const [room1, ...users] = data;
       Message.create({
-        FK_user: 1,
-        FK_room: 1,
         time: Date.now(),
         content: 'This is first user\'s message.'
+      })
+      .then(Message => {
+        Message.setUserMessage(users[0]);
+        Message.setMessageRoom(room1);
       });
 
       Message.create({
-        FK_user: 2,
-        FK_room: 1,
         time: Date.now(),
         content: 'This is second user\'s response'
+      })
+      .then(Message => {
+        Message.setUserMessage(users[1]);
+        Message.setMessageRoom(room1);
       });
     });
   } catch (err) {
