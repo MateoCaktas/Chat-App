@@ -5,17 +5,8 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const Users = require('../users.json');
 
-var usersPromise = [];
-
 module.exports = function dbSeed2() {
-  Users.forEach(user => {
-    usersPromise.push(User.create({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      password: user.password
-    }));
-  });
+  var usersPromise = Users.map(user => User.create(user));
 
   return Promise
     .all(usersPromise)
@@ -32,9 +23,9 @@ const createMessage = (time, content, user, room) => {
     time,
     content
   })
-  .then(Message => Promise.all([
-    Message.setUserMessage(user),
-    Message.setMessageRoom(room)
+  .then(message => Promise.all([
+    message.setUserMessage(user),
+    message.setMessageRoom(room)
   ]));
 };
 
@@ -44,9 +35,9 @@ const createRoom = (creationTime, name, limit, users) => {
     name,
     limit
   })
-  .then(Room => {
-    return Room
+  .then(room => {
+    return room
     .setBelongingUsers(users)
-    .then(() => [Room, users]);
+    .then(() => [room, users]);
   });
 };
