@@ -3,63 +3,50 @@
 const Message = require('../models/Message');
 const Room = require('../models/Room');
 const User = require('../models/User');
+const Users = require('../users.json');
 
-module.exports = async function dbSeed() {
-  try {
-    const user1 = User.create({
-      firstName: 'First',
-      lastName: 'User',
-      email: 'first.user@gmail.com',
-      password: '123456'
+var usersPromise = [];
+
+module.exports = function dbSeed2() {
+  Users.forEach(user => {
+    usersPromise.push(User.create({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password
+    }));
+  });
+
+  return Promise
+    .all(usersPromise)
+    .then(usersPromise => createRoom(Date.now(), 'First Room', 10, usersPromise))
+    .then(([room, users]) => {
+      var message1 = createMessage(Date.now(), 'This is first user\'s message.', users[0], room);
+      var message2 = createMessage(Date.now(), 'This is second message.', users[1], room);
+      return Promise.all([message1, message2]);
     });
+};
 
-    const user2 = User.create({
-      firstName: 'Second',
-      lastName: 'User',
-      email: 'second.user@gmail.com',
-      password: '222222'
-    });
+const createMessage = (time, content, user, room) => {
+  return Message.create({
+    time,
+    content
+  })
+  .then(Message => Promise.all([
+    Message.setUserMessage(user),
+    Message.setMessageRoom(room)
+  ]));
+};
 
-    const user3 = User.create({
-      firstName: 'Third',
-      lastName: 'User',
-      email: 'third.user@gmail.com',
-      password: '333333'
-    });
-
-    const room1 = Room.create({
-      creationTime: Date.now(),
-      name: 'First Room',
-      limit: 10
-    });
-
-    Promise.all([room1, user1, user2, user3]).then(data => {
-      const [room, ...users] = data;
-      room.setBelongingUsers(users);
-    });
-
-    // Create messages only after user1 and user2 are created
-    Promise.all([room1, user1, user2]).then(data => {
-      const [room1, ...users] = data;
-      Message.create({
-        time: Date.now(),
-        content: 'This is first user\'s message.'
-      })
-      .then(Message => {
-        Message.setUserMessage(users[0]);
-        Message.setMessageRoom(room1);
-      });
-
-      Message.create({
-        time: Date.now(),
-        content: 'This is second user\'s response'
-      })
-      .then(Message => {
-        Message.setUserMessage(users[1]);
-        Message.setMessageRoom(room1);
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
+const createRoom = (creationTime, name, limit, users) => {
+  return Room.create({
+    creationTime,
+    name,
+    limit
+  })
+  .then(Room => {
+    return Room
+    .setBelongingUsers(users)
+    .then(() => [Room, users]);
+  });
 };
