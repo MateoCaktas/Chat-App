@@ -14,7 +14,6 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   const { creationTime, name, limit, usersIDs } = req.body;
-
   db.models.Room.create({
     creationTime,
     name,
@@ -22,8 +21,8 @@ router.post('/', (req, res) => {
   }).then(room => {
     return room.setBelongingUsers(usersIDs);
   })
-  .then(room => res.send(room))
-  .catch(err => res.status(400).send(err));
+    .then(room => res.send(room))
+    .catch(err => res.status(400).send(err));
 });
 
 router.delete('/:id', (req, res) => {
