@@ -1,16 +1,35 @@
 'use strict';
 
+const { signJwt, authenticateToken } = require('../../middleware/checkAuthentication');
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
+// POST login metoda
 module.exports = function (app, passport) {
-  app.post('/login', passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/failure'
-  }));
-
-  app.get('/dashboard', (req, res) => {
-    res.send('Success');
+  app.get('/login', (req, res, next) => {
+    console.log(req.body);
+    passport.authenticate('local', {
+      successRedirect: '/dashboard',
+      failureRedirect: '/failure'
+    })(req, res, next);
   });
 
+  app.get('/dashboard', (req, res, next) => {
+    console.log('Been to dashboard');
+
+    const myJwt = signJwt(req.user);
+
+    res.json({ myJwt });
+  });
+
+  app.get('/testToken', authenticateToken, (req, res, next) => {
+    res.send('This is very much authenticated!');
+  })
   app.get('/failure', (req, res) => {
+    console.log('Been to failure');
     res.send('Fail');
   });
+
+  app.get('/test', authenticateToken, (req, res) => {
+    res.send('Success!')
+  })
 };
