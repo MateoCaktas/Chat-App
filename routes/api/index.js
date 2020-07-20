@@ -1,7 +1,6 @@
 'use strict';
 
 const { signJwt, authenticateToken } = require('../../middleware/checkAuthentication');
-const jwt = require('jsonwebtoken');
 require('dotenv').config()
 // POST login metoda
 module.exports = function (app, passport) {
@@ -28,8 +27,4 @@ module.exports = function (app, passport) {
     console.log('Been to failure');
     res.send('Fail');
   });
-
-  app.get('/test', authenticateToken, (req, res) => {
-    res.send('Success!')
-  })
 };

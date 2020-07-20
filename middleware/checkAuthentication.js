@@ -5,9 +5,9 @@ const jwt = require('jsonwebtoken');
 
 const signJwt = (data) => {
   const email = data.email;
-  const user = { name: email }
+  const user = { name: email };
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
   return accessToken;
 };
 
@@ -22,9 +22,9 @@ const authenticateToken = (req, res, next) => {
     req.user = user;
     next();
   })
-}
+};
 
 module.exports = {
   signJwt,
   authenticateToken
-}
+};
