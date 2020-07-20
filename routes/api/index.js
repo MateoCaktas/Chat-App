@@ -1,6 +1,6 @@
 'use strict';
 
-const { authenticateToken, signJwt } = require('../../middleware/checkAuthentication');
+const { signJwt } = require('../../middleware/checkAuthentication');
 require('dotenv').config();
 // POST login metoda
 module.exports = function (app, passport) {
