@@ -9,8 +9,6 @@ const User = require('../models/User');
 var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.ACCESS_TOKEN_SECRET;
-// opts.issuer = 'accounts.examplesoft.com';
-// opts.audience = 'what.net';
 
 module.exports = function (passport) {
   passport.use(
