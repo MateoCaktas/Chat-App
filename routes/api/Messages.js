@@ -1,15 +1,14 @@
 'use strict';
 
-const { authenticateToken } = require('../../middleware/checkAuthentication');
 const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', authenticateToken, (req, res) => {
+router.get('/', (req, res) => {
   db.models.Message.findAll().then(msg => res.json(msg));
 });
 
-router.post('/', authenticateToken, (req, res) => {
+router.post('/', (req, res) => {
   const { time, content, fkRoom, fkUser } = req.body;
 
   db.models.Message.create({
@@ -22,7 +21,7 @@ router.post('/', authenticateToken, (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.delete('/:id', authenticateToken, (req, res) => {
+router.delete('/:id', (req, res) => {
   db.models.Message.destroy({
     where: { id: req.params.id }
   })
@@ -30,7 +29,7 @@ router.delete('/:id', authenticateToken, (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.put('/:id', authenticateToken, (req, res) => {
+router.put('/:id', (req, res) => {
   const { time, content, fkRoom, fkUser } = req.body;
 
   db.models.Message.update({

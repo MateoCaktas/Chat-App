@@ -1,11 +1,10 @@
 'use strict';
 
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const signJwt = data => {
-  const email = data.email;
-  const user = { name: email };
+  const { email, id } = data;
+  const user = { email, id };
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
   return accessToken;

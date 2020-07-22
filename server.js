@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config();
 const bodyParser = require('body-parser');
 const connectDB = require('./config/dbConnect');
 const express = require('express');
@@ -17,6 +18,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./routes/api/index')(app, passport);
+app.use(passport.authenticate('jwt', { session: false }));
 app.use('/users', require('./routes/api/Users'));
 app.use('/messages', require('./routes/api/Messages'));
 app.use('/rooms', require('./routes/api/Rooms'));
