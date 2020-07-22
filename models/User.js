@@ -1,6 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { Model } = require('sequelize');
 const saltRounds = 10;
 
@@ -34,6 +35,15 @@ class User extends Model {
 
   static associate(models) {
     this.ChatRooms = this.belongsToMany(models.Room, { as: 'ChatRooms', through: 'user_rooms' });
+  }
+
+  signJwt() {
+    const email = this.email;
+    const id = this.id;
+    const user = { email, id };
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+
+    return accessToken;
   }
 
   static hooks() {

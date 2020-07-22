@@ -1,8 +1,14 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+var JwtStrategy = require('passport-jwt').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/User');
+
+var opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = process.env.ACCESS_TOKEN_SECRET;
 
 module.exports = function (passport) {
   passport.use(
@@ -24,6 +30,17 @@ module.exports = function (passport) {
           });
         })
       .catch(err => console.log(err));
+    })
+  );
+
+  passport.use(
+    new JwtStrategy(opts, (jwtPayload, done) => {
+      User.findByPk(jwtPayload.id)
+      .then(user => {
+        if (user) return done(null, user);
+        return done(null, false);
+      })
+      .catch(err => done(err, false));
     })
   );
 
