@@ -1,17 +1,22 @@
 {
   "name": "chatapp",
   "version": "1.0.0",
+  "private": true,
   "description": "",
-  "main": "index.js",
+  "author": "",
   "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "dev": "concurrently \"nodemon server.js\" \"npm run serve\"",
     "dev:server": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "main": "index.js",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "concurrently": "^5.2.0",
     "dotenv": "^8.2.0",
     "eslint-plugin-require-sort": "^1.2.1",
     "express": "^4.17.1",
@@ -22,10 +27,14 @@
     "passport-local": "^1.0.0",
     "pg": "^8.2.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.2.4"
+    "sequelize": "^6.2.4",
+    "vue": "^2.6.11",
+    "vue-cookie": "^1.1.4",
+    "vue-router": "^3.3.4"
   },
   "devDependencies": {
     "@extensionengine/eslint-config": "^1.2.0",
+    "@vue/cli-service": "~4.4.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.3.1",
     "eslint-config-semistandard": "^15.0.1",
@@ -35,6 +44,10 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
-    "nodemon": "^2.0.4"
-  }
+    "nodemon": "^2.0.4",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "_id": "chatapp@1.0.0",
+  "license": "ISC",
+  "readme": "ERROR: No README data found!"
 }
