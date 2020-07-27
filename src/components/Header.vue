@@ -18,7 +18,9 @@ export default {
   methods: {
     deleteCookie() {
       document.cookie = 'token=Expired; Expires=expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      this.$router.push('login');
+      if (this.$router.currentRoute.path !== '/login') {
+        this.$router.push('login');
+      }
     }
   }
 };
