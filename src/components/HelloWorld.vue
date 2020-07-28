@@ -38,19 +38,30 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+
+$green-color: #42b983;
+
 h3 {
   margin: 40px 0 0;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
+  transition: transform 1s ease;
   margin: 0 10px;
 }
+
+li:hover {
+  transform: scale(1.1);
+}
+
 a {
-  color: #42b983;
+  color: $green-color;
 }
 </style>

@@ -6,7 +6,7 @@
     <div class="navigation-bar">
       <router-link to="/" class="navigation-link">Home</router-link>
       <router-link to="/hello-world" class="navigation-link">Hello World</router-link>
-      <button @click="deleteCookie" to="/" class="navigation-link"> Logout</button>
+      <button @click="deleteCookie" to="/" class="logout-button">Logout</button>
       <router-link to="/login" class="navigation-link"> Login </router-link>
     </div>
   </div>
@@ -28,38 +28,53 @@ export default {
 
 <style scoped>
 .header {
-    height: auto;
-    display:flex;
-    flex-direction: column;
-    width: 100%;
-    background-color: rgb(0, 225, 255);
-    color: white;
+  display: flex;
+  width: 100%;
+  height: auto;
+  color: white;
+  flex-direction: column;
+  background-color: rgb(0, 225, 255);
 }
+
 .title {
-    height: 45px;
-    margin: 5px;
-    font-size: 40px;
+  height: 45px;
+  margin: 5px;
+  font-size: 40px;
 }
+
 .navigation-bar {
-    display: flex;
-    flex-direction: row;
-    width:100%;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
+
 .navigation-link {
-    color:white;
-    margin: 10px 40px;
+  margin: 10px 40px;
+  color: white;
 }
+
 .navigation-link:hover {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+.logout-button {
+  width: 60px;
+  height: 25px;
+  margin: 10px 40px;
+  color: black;
+}
+
+.logout-button:hover {
+  cursor: pointer;
 }
 
 .navigation-link:last-child {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 @media only screen and (max-width: 370px) {
-    .navigation-link {
-        margin: 10px 15px;
-    }
+  .navigation-link {
+    margin: 10px 15px;
+  }
 }
 </style>

@@ -42,28 +42,28 @@ export default {
 </script>
 
 <style scoped>
-  .input-form {
-    display:flex;
-    flex-direction: column;
-    width: 40%;
-    margin: auto;
-  }
+.input-form {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin: auto;
+}
 
-  .input-field {
-    margin-bottom: 20px;
-    height: 40px;
-    border: 1px solid rgb(0,225,255);
-    border-radius: 50;
-    padding: 0 5px;
-  }
+.input-field {
+  height: 40px;
+  margin-bottom: 20px;
+  padding: 0 5px;
+  border: 1px solid rgb(0,225,255);
+  border-radius: 50;
+}
 
-  .input-button {
-    margin-top: 10px;
-    background-color: rgb(0,225,255);
-    color: white;
-    height: 40px;
-    width: 60%;
-    border: none;
-    align-self: center;
-  }
+.input-button {
+  width: 60%;
+  height: 40px;
+  margin-top: 10px;
+  color: white;
+  background-color: rgb(0,225,255);
+  border: none;
+  align-self: center;
+}
 </style>

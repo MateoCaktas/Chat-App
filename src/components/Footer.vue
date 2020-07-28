@@ -12,10 +12,10 @@ export default {
 
 <style scoped>
 .footer {
-    height: 50px;
-    width: 100%;
-    background-color: rgb(0, 225, 255);
-    position: fixed;
-    bottom: 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background-color: rgb(0, 225, 255);
 }
 </style>
