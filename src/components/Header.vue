@@ -5,7 +5,7 @@
     </h1>
     <div class="navigation-bar">
       <router-link to="/" class="navigation-link">Home</router-link>
-      <router-link to="/hello-world" class="navigation-link">Hello World</router-link>
+      <router-link to="/about" class="navigation-link">About</router-link>
       <button @click="deleteCookie" to="/" class="logout-button">Logout</button>
       <router-link to="/login" class="navigation-link"> Login </router-link>
     </div>

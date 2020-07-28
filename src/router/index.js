@@ -1,4 +1,4 @@
-import HelloWorld from '../components/HelloWorld';
+import About from '../components/About';
 import Home from '../components/Home.vue';
 import LoginForm from '../components/LoginForm.vue';
 import Vue from 'vue';
@@ -13,14 +13,14 @@ const routes = [
     component: Home
   },
   {
+    path: '/about',
+    name: 'About',
+    component: About
+  },
+  {
     path: '/login',
     name: 'login',
     component: LoginForm
-  },
-  {
-    path: '/hello-world',
-    name: 'hello-world',
-    component: HelloWorld
   }
 ];
 
