@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>This is the about page.</h1>
+    <h1>Admin dashboard</h1>
   </div>
 </template>
 
@@ -9,3 +9,9 @@ export default {
 
 };
 </script>
+
+<style>
+h1 {
+  font-size: 45px;
+}
+</style>

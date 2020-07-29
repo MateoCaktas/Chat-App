@@ -3,18 +3,21 @@
     "firstName": "First",
     "lastName": "User",
     "email": "first.user@gmail.com",
-    "password": "123456"
+    "password": "123456",
+    "isAdmin": true
   },
   {
     "firstName": "Second",
     "lastName": "User",
     "email": "second.user@gmail.com",
-    "password": "222222"
+    "password": "222222",
+    "isAdmin": false
   },
   {
     "firstName": "Third",
     "lastName": "User",
     "email": "third.user@gmail.com",
-    "password": "333333"
+    "password": "333333",
+    "isAdmin": false
   }
 ]

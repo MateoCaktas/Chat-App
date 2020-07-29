@@ -6,8 +6,9 @@
     <div class="navigation-bar">
       <router-link to="/" class="navigation-link">Home</router-link>
       <router-link to="/about" class="navigation-link">About</router-link>
-      <button @click="deleteCookie" to="/" class="logout-button">Logout</button>
-      <router-link to="/login" class="navigation-link"> Login </router-link>
+      <router-link v-if="isAdmin" to="/admin" class="navigation-link"> Dashboard </router-link>
+      <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
+      <button v-if="isLoggedIn" @click="logoutUser()" to="/" class="logout-button">Logout</button>
     </div>
   </div>
 </template>
@@ -15,12 +16,29 @@
 <script>
 export default {
   name: 'custom-header',
+  props: {
+    user: Object()
+  },
+  data() {
+    return {
+      isLoggedIn: false,
+      isAdmin: false
+    };
+  },
   methods: {
-    deleteCookie() {
-      document.cookie = 'token=Expired; Expires=expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      if (this.$router.currentRoute.path !== '/login') {
-        this.$router.push('login');
-      }
+    logoutUser() {
+      localStorage.removeItem('user');
+      document.cookie = 'token=Expired; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      this.isAdmin = false;
+      this.isLoggedIn = false;
+      this.$router.push('login')
+        .catch(err => console.log(err));
+    }
+  },
+  watch: {
+    user(user) {
+      this.isAdmin = user.isAdmin;
+      user ? (this.isLoggedIn = true) : (this.isLoggedIn = false);
     }
   }
 };
@@ -58,17 +76,19 @@ export default {
 }
 
 .logout-button {
-  width: 60px;
-  height: 25px;
   margin: 10px 40px;
-  color: black;
+  color: white;
+  font-size: 16px;
+  background-color: rgb(0, 225, 255);
+  text-decoration: underline;
+  border: none;
 }
 
 .logout-button:hover {
   cursor: pointer;
 }
 
-.navigation-link:last-child {
+.navigation-bar > *:last-child {
   margin-left: auto;
 }
 

@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <Header />
+    <Header :user="user" />
     <transition name="view">
-      <router-view />
+      <router-view
+        @logIn="(user) => checkUser(user)" />
     </transition>
     <Footer />
   </div>
@@ -15,6 +16,16 @@ import Header from './components/Header';
 
 export default {
   name: 'app',
+  data() {
+    return {
+      user: {}
+    };
+  },
+  methods: {
+    checkUser(user) {
+      this.user = user;
+    }
+  },
   components: {
     Header,
     Footer

@@ -23,6 +23,9 @@ class User extends Model {
         },
         password: {
           type: DataTypes.STRING
+        },
+        isAdmin: {
+          type: DataTypes.BOOLEAN
         }
       },
       {

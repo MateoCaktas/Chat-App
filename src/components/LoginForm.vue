@@ -1,12 +1,11 @@
 <template>
   <div>
     <h2> You need to log in to proceed. </h2>
-
     <div class="input-form">
       <p>Please enter your email</p>
       <input v-model="email" type="text" class="input-field" placeholder="email">
       <p>Please enter your password</p>
-      <input v-model="password" type="text" class="input-field" placeholder="password">
+      <input v-model="password" type="password" class="input-field" placeholder="password">
       <button @click="logIn" class="input-button"> Log in</button>
     </div>
   </div>
@@ -33,15 +32,22 @@ export default {
         })
       })
         .then(res => res.json())
-        .then(res => this.$cookie.set('token', res.jwt))
-        .then(() => this.$router.push('/'))
+        .then(res => {
+          localStorage.user = JSON.stringify(res.user);
+          this.$cookie.set('token', res.jwt);
+          return this.$emit('logIn', res.user);
+        })
+        .then(() => this.$router.push('/admin').catch(() => {}))
         .catch(err => console.log(err));
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+$color-teal: rgb(0,225,255);
+
 .input-form {
   display: flex;
   flex-direction: column;
@@ -53,7 +59,7 @@ export default {
   height: 40px;
   margin-bottom: 20px;
   padding: 0 5px;
-  border: 1px solid rgb(0,225,255);
+  border: 1px solid $color-teal;
   border-radius: 50;
 }
 
@@ -62,7 +68,7 @@ export default {
   height: 40px;
   margin-top: 10px;
   color: white;
-  background-color: rgb(0,225,255);
+  background-color: $color-teal;
   border: none;
   align-self: center;
 }
