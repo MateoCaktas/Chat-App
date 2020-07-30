@@ -32,12 +32,7 @@ export default {
         })
       })
         .then(res => res.json())
-        .then(res => {
-          localStorage.user = JSON.stringify(res.user);
-          this.$cookie.set('token', res.jwt);
-          return this.$emit('logIn', res.user);
-        })
-        .then(() => this.$router.push('/admin').catch(() => {}))
+        .then(res => this.$emit('logIn', res))
         .catch(err => console.log(err));
     }
   }

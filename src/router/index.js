@@ -36,21 +36,15 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login') {
-    // Check if token exists in the cookie
-    if (document.cookie.split(';').filter(item => item.trim().startsWith('token=')).length) {
-      const user = JSON.parse(localStorage.user);
+  if (to.name === 'Login') return next();
+  // Check if token exists in the cookie
+  if (document.cookie.split(';').filter(item => item.trim().startsWith('token=')).length === 0) return next('login');
+  const user = JSON.parse(localStorage.user);
 
-      if (to.name !== 'Dashboard') return next();
-      if (!user.isAdmin) return next('/');
+  if (to.name !== 'Dashboard') return next();
+  if (!user.isAdmin) return next('/');
 
-      next();
-    } else {
-      next('login');
-    }
-  } else {
-    next();
-  }
+  next();
 });
 
 export default router;

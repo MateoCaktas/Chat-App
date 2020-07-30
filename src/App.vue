@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <Header :user="user" />
+    <Header
+      @logout="logOutUser"
+      :user="user" />
     <transition name="view">
       <router-view
-        @logIn="(user) => checkUser(user)" />
+        @logIn="logInUser" />
     </transition>
     <Footer />
   </div>
@@ -22,8 +24,19 @@ export default {
     };
   },
   methods: {
-    checkUser(user) {
-      this.user = user;
+    logInUser(response) {
+      this.user = response.user;
+      localStorage.user = JSON.stringify(response.user);
+
+      this.$cookie.set('token', response.jwt);
+      this.$router.push({ name: 'Dashboard' })
+      .catch(() => {});
+    },
+    logOutUser() {
+      localStorage.removeItem('user');
+      document.cookie = 'token=Expired; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      this.$router.push({ name: 'Login' })
+      .catch(err => console.log(err));
     }
   },
   components: {

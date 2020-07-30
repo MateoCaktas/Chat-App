@@ -8,7 +8,7 @@
       <router-link to="/about" class="navigation-link">About</router-link>
       <router-link v-if="isAdmin" to="/admin" class="navigation-link"> Dashboard </router-link>
       <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
-      <button v-if="isLoggedIn" @click="logoutUser()" to="/" class="logout-button">Logout</button>
+      <button v-else @click="logoutUser" class="logout-button">Logout</button>
     </div>
   </div>
 </template>
@@ -17,7 +17,13 @@
 export default {
   name: 'custom-header',
   props: {
-    user: Object()
+    user: {
+      type: Object,
+      default: function () {
+        return {};
+      },
+      required: true
+    }
   },
   data() {
     return {
@@ -27,18 +33,15 @@ export default {
   },
   methods: {
     logoutUser() {
-      localStorage.removeItem('user');
-      document.cookie = 'token=Expired; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       this.isAdmin = false;
       this.isLoggedIn = false;
-      this.$router.push('login')
-        .catch(err => console.log(err));
+      return this.$emit('logout');
     }
   },
   watch: {
     user(user) {
       this.isAdmin = user.isAdmin;
-      user ? (this.isLoggedIn = true) : (this.isLoggedIn = false);
+      this.isLoggedIn = !!user;
     }
   }
 };
