@@ -9,13 +9,14 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, isAdmin } = req.body;
 
   db.models.User.create({
     firstName,
     lastName,
     email,
-    password
+    password,
+    isAdmin
   })
   .then(user => res.send(user))
   .catch(err => res.status(400).send(err));
@@ -30,22 +31,18 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, isAdmin } = req.body;
 
-  db.models.User.update({
+  db.models.User
+  .findByPk(req.params.id)
+  .then(user => user.update({
     firstName,
     lastName,
     email,
-    password
-  }, {
-    where: {
-      id: req.params.id
-    },
-    individualHooks: true,
-    returning: true,
-    plain: true
+    password,
+    isAdmin
   })
-  .then(result => res.status(202).send(result))
+  .then(result => res.status(202).send(result)))
   .catch(err => res.status(400).send(err));
 });
 

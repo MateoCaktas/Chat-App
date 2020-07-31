@@ -19,9 +19,6 @@ export default {
   props: {
     user: {
       type: Object,
-      default: function () {
-        return {};
-      },
       required: true
     }
   },

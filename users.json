@@ -18,6 +18,20 @@
     "lastName": "User",
     "email": "third.user@gmail.com",
     "password": "333333",
+    "isAdmin": true
+  },
+  {
+    "firstName": "Fourth",
+    "lastName": "User",
+    "email": "fourth.user@gmail.com",
+    "password": "444444",
+    "isAdmin": false
+  },
+  {
+    "firstName": "Fifth",
+    "lastName": "User",
+    "email": "fifth.user@gmail.com",
+    "password": "555555",
     "isAdmin": false
   }
 ]
