@@ -87,7 +87,6 @@ export default {
       this.setData();
     },
     saveUser() {
-      console.log(this.currentUser);
       this.$emit('updateUserList', this.currentUser, this.actionType);
       this.close();
     },
