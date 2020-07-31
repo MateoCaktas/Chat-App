@@ -35,8 +35,6 @@ export default {
     addUser(user) {
       const jwt = this.$cookie.get('token');
 
-      console.log('inside add');
-
       fetch('/users/', {
         method: 'post',
         headers: {
