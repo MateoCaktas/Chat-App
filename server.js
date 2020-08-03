@@ -2,7 +2,6 @@
 
 require('dotenv').config();
 const bodyParser = require('body-parser');
-// const connectDB = require('./config/dbConnect');
 const express = require('express');
 const initializePassport = require('./middleware/auth');
 const passport = require('passport');

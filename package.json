@@ -5,7 +5,7 @@
   "description": "",
   "author": "",
   "scripts": {
-    "connectDB":"node ./config/dbConnect",
+    "resetDB":"node ./config/dbReset",
     "seedDB":"node ./config/dbSeed",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
