@@ -35,7 +35,8 @@
               <input
                 v-model="currentUser.password"
                 class="input-field"
-                placeholder="Password">
+                placeholder="Password"
+                autocomplete="on">
             </div>
             <div>
               <input v-model="currentUser.isAdmin" class="checkbox" type="checkbox">
