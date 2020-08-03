@@ -7,6 +7,8 @@
   "scripts": {
     "resetDB":"node ./config/dbReset",
     "seedDB":"node ./config/dbSeed",
+    "prestartDB":"npm run resetDB",
+    "startDB":"npm run seedDB",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "dev": "concurrently \"nodemon server.js\" \"npm run serve\"",
