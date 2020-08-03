@@ -5,6 +5,8 @@
   "description": "",
   "author": "",
   "scripts": {
+    "connectDB":"node ./config/dbConnect",
+    "seedDB":"node ./config/dbSeed",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "dev": "concurrently \"nodemon server.js\" \"npm run serve\"",

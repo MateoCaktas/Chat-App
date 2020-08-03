@@ -5,7 +5,7 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const Users = require('../users.json');
 
-module.exports = function dbSeed2() {
+module.exports = function dbSeed() {
   var usersPromise = Users.map(user => User.create(user));
 
   return Promise
