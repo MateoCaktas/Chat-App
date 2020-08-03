@@ -6,12 +6,13 @@
         @changeUser="changeUser"
         :user="user" />
     </div>
-    <button @click="openModal" class="btn">Add user</button>
-    <EditUserModal
-      v-if="showModal"
-      @close="showModal = false"
-      @updateUserList="changeUser"
-      :userslength="users.length" />
+    <button @click="showModal = true" class="add-user-button">Add user</button>
+    <transition name="view">
+      <EditUserModal
+        v-if="showModal"
+        @close="showModal = false"
+        @updateUserList="changeUser" />
+    </transition>
   </div>
 </template>
 
@@ -29,51 +30,23 @@ export default {
     };
   },
   methods: {
-    openModal() {
-      this.showModal = true;
-    },
     addUser(user) {
-      const jwt = this.$cookie.get('token');
-
-      fetch('/users/', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`
-        },
-        body: JSON.stringify(user)
-      })
-      .then(user => user.json())
-      .then(user => {
-        this.users.push(user);
-      });
+      this.sendUserRequest(user, 'post')
+        .then(user => user.json())
+        .then(user => {
+          this.users.push(user);
+        });
     },
     deleteUser(user) {
-      const jwt = this.$cookie.get('token');
-
-      fetch(`/users/${user.id}`, {
-        method: 'delete',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`
-        }
-      })
-      .then(() => {
-        const index = this.users.findIndex(usr => usr.id === user.id);
-        this.users.splice(index, 1);
-      });
+      this.sendUserRequest(user, 'delete')
+        .then(() => {
+          const index = this.users.findIndex(usr => usr.id === user.id);
+          this.users.splice(index, 1);
+        });
     },
 
     editUser(user) {
-      const jwt = this.$cookie.get('token');
-      fetch(`/users/${user.id}`, {
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`
-        },
-        body: JSON.stringify(user)
-      })
+      this.sendUserRequest(user, 'put')
       .then(user => user.json())
       .then(user => {
         const index = this.users.findIndex(usr => usr.id === user.id);
@@ -97,10 +70,26 @@ export default {
         case 'delete': return this.deleteUser(user);
         default: return null;
       }
+    },
+    sendUserRequest(user, type) {
+      const jwt = this.$cookie.get('token');
+      let path = '/users';
+
+      if (user.id) path = `/users/${user.id}`;
+
+      return fetch(path, {
+        method: `${type}`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`
+        },
+        body: JSON.stringify(user)
+      });
     }
   },
   mounted() {
     const jwt = this.$cookie.get('token');
+
     fetch('/users', {
       headers: {
         'Content-Type': 'application/json',
@@ -119,16 +108,31 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 h1 {
   font-size: 30px;
 }
 
-.btn {
-  width: 30%;
-  height: 40px;
-  margin: 20px 0;
-  background-color: rgb(0,225,255);
-  align-self: center;
+.add-user-button {
+  @include button;
+
+  width: 20%;
+  margin: 30px 0;
+}
+
+.view-enter-active, .view-leave-active {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+}
+
+.view-enter, .view-leave-to {
+  opacity: 0;
+}
+
+.view-enter-active {
+  transition-delay: 0.3s;
+}
+
+.view-enter-to, .view-leave {
+  opacity: 1;
 }
 </style>

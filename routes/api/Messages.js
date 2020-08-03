@@ -25,7 +25,7 @@ router.delete('/:id', (req, res) => {
   db.models.Message.destroy({
     where: { id: req.params.id }
   })
-  .then(() => res.status(202).send('Message deleted'))
+  .then(() => res.send('Message deleted'))
   .catch(err => res.status(400).send(err));
 });
 
@@ -44,7 +44,7 @@ router.put('/:id', (req, res) => {
     returning: true,
     plain: true
   })
-  .then(msg => res.status(202).send(msg))
+  .then(msg => res.json(msg))
   .catch(err => res.status(400).send(err));
 });
 

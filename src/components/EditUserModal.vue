@@ -41,15 +41,15 @@
               <input v-model="currentUser.isAdmin" class="checkbox" type="checkbox">
               <label for="checkbox"> Admin </label>
             </div>
-            <div v-if="!!currentUser.id" class="modal-body-line">
+            <div v-if="currentUser.id" class="modal-body-line">
               <h4>User ID: {{ currentUser.id }}</h4>
             </div>
           </div>
           <div class="modal-footer">
-            <button @click="close" class="cancel-button">
+            <button @click="$emit('close')" class="cancel-button">
               Cancel
             </button>
-            <button @click="saveUser" :disabled="!validateFields()" class="save-button">
+            <button @click="saveUser" :disabled="!validateFields" class="save-button">
               Save
             </button>
           </div>
@@ -68,10 +68,6 @@ export default {
       default: function () {
         return {};
       }
-    },
-    userslength: {
-      type: Number,
-      default: 0
     }
   },
   data() {
@@ -81,30 +77,21 @@ export default {
       actionType: ''
     };
   },
-  methods: {
-    close() {
-      this.$emit('close');
-      this.setData();
-    },
-    saveUser() {
-      this.$emit('updateUserList', this.currentUser, this.actionType);
-      this.close();
-    },
-    setData() {
-      this.currentUser = Object.assign({}, this.user);
-    },
-    validateFields() {
+  computed: {
+    validateFields: function () {
       // Check if there are no empty fields
-      return this.currentUser.firstName && this.currentUser.lastName && this.currentUser.email;
+      return this.currentUser.firstName && this.currentUser.lastName && this.currentUser.email && this.currentUser.password;
     }
   },
-  watch: {
-    user: {
-      handler: 'setData',
-      immediate: true
+  methods: {
+    saveUser() {
+      this.$emit('updateUserList', this.currentUser, this.actionType);
+      this.$emit('close');
     }
   },
   mounted() {
+    this.currentUser = Object.assign({}, this.user);
+
     if (this.currentUser.id) {
       this.actionType = 'edit';
     } else {
@@ -148,7 +135,7 @@ export default {
   display: flex;
   flex-direction: row;
   height: 60px;
-  background-color: rgb(0,225,255);
+  background-color: $primary-color;
   justify-content: center;
   align-items: center;
 
@@ -185,24 +172,12 @@ export default {
   cursor: pointer;
 }
 
-%modal-default-button {
-  width: 80px;
-  height: 40px;
-  margin: 5px;
-  background-color: rgb(0,225,255);
-  border: 1px solid gray;
-}
-
-%modal-default-button:hover {
-  cursor: pointer;
-}
-
 .save-button {
-  @extend %modal-default-button;
+  @include button;
 }
 
 .cancel-button {
-  @extend %modal-default-button;
+  @include button;
 
   background-color: red;
 }

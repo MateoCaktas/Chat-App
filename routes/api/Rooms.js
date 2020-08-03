@@ -29,7 +29,7 @@ router.delete('/:id', (req, res) => {
   db.models.Room.destroy({
     where: { id: req.params.id }
   })
-  .then(() => res.status(202).send('Room deleted'))
+  .then(() => res.send('Room deleted'))
   .catch(err => res.status(400).send(err));
 });
 
@@ -46,7 +46,7 @@ router.put('/:id', (req, res) => {
     returning: true,
     plain: true
   })
-  .then(room => res.status(202).send(room))
+  .then(room => res.json(room))
   .catch(err => res.status(400).send(err));
 });
 

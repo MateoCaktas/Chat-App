@@ -44,14 +44,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
 .header {
   display: flex;
   width: 100%;
   height: auto;
   color: white;
   flex-direction: column;
-  background-color: rgb(0, 225, 255);
+  background-color: $primary-color;
 }
 
 .title {
@@ -79,7 +80,7 @@ export default {
   margin: 10px 40px;
   color: white;
   font-size: 16px;
-  background-color: rgb(0, 225, 255);
+  background-color: $primary-color;
   text-decoration: underline;
   border: none;
 }

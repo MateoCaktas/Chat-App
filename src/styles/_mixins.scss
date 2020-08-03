@@ -1,0 +1,11 @@
+@mixin button {
+  width: 80px;
+  height: 40px;
+  margin: 5px;
+  background-color: $primary-color;
+  border-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

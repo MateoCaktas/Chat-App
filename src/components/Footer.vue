@@ -10,12 +10,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .footer {
   position: fixed;
   bottom: 0;
   width: 100%;
   height: 50px;
-  background-color: rgb(0, 225, 255);
+  background-color: $primary-color;
 }
 </style>

@@ -1,13 +1,13 @@
 <template>
   <div>
     <h2> You need to log in to proceed. </h2>
-    <div class="input-form">
+    <form @submit.prevent="logIn" id="input-form">
       <p>Please enter your email</p>
       <input v-model="email" type="text" class="input-field" placeholder="email">
       <p>Please enter your password</p>
-      <input v-model="password" @keyup.enter="logIn" type="password" class="input-field" placeholder="password">
-      <button @click="logIn" class="input-button"> Log in</button>
-    </div>
+      <input v-model="password" type="password" class="input-field" placeholder="password">
+      <input class="submit-button" value="Log in" type="submit">
+    </form>
   </div>
 </template>
 
@@ -41,9 +41,7 @@ export default {
 
 <style lang="scss" scoped>
 
-$color-teal: rgb(0,225,255);
-
-.input-form {
+#input-form {
   display: flex;
   flex-direction: column;
   width: 40%;
@@ -54,17 +52,15 @@ $color-teal: rgb(0,225,255);
   height: 40px;
   margin-bottom: 20px;
   padding: 0 5px;
-  border: 1px solid $color-teal;
+  border: 1px solid $primary-color;
   border-radius: 50;
 }
 
-.input-button {
-  width: 60%;
-  height: 40px;
-  margin-top: 10px;
-  color: white;
-  background-color: $color-teal;
-  border: none;
+.submit-button {
+  @include button;
+
+  width: 40%;
+  margin: 30px 0;
   align-self: center;
 }
 </style>

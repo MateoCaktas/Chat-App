@@ -26,7 +26,7 @@ router.delete('/:id', (req, res) => {
   db.models.User.destroy({
     where: { id: req.params.id }
   })
-  .then(() => res.status(202).send('User deleted'))
+  .then(() => res.send('User deleted'))
   .catch(err => res.status(400).send(err));
 });
 
@@ -42,7 +42,7 @@ router.put('/:id', (req, res) => {
     password,
     isAdmin
   })
-  .then(result => res.status(202).send(result)))
+  .then(result => res.json(result)))
   .catch(err => res.status(400).send(err));
 });
 

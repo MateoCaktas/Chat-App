@@ -6,12 +6,14 @@
     </div>
     <div class="button-options">
       <button @click="showModal = true" class="edit-button"> Edit user </button>
-      <button v-if="!loggedUser()" @click="$emit('changeUser', user, 'delete')" class="delete-button"> Delete user </button>
-      <EditUserModal
-        v-if="showModal"
-        @close="showModal = false"
-        @updateUserList="(currentUser, action) => $emit('changeUser', currentUser, action)"
-        :user="user" />
+      <button v-if="!loggedUser" @click="$emit('changeUser', user, 'delete')" class="delete-button"> Delete user </button>
+      <transition name="view">
+        <EditUserModal
+          v-if="showModal"
+          @close="showModal = false"
+          @updateUserList="(currentUser, action) => $emit('changeUser', currentUser, action)"
+          :user="user" />
+      </transition>
     </div>
   </div>
 </template>
@@ -33,8 +35,8 @@ export default {
       showModal: false
     };
   },
-  methods: {
-    loggedUser() {
+  computed: {
+    loggedUser: function () {
       const loggedUser = JSON.parse(localStorage.user);
       return this.user.id === loggedUser.id;
     }
@@ -70,22 +72,31 @@ h1 {
   margin-left: auto;
 }
 
-%button {
-  width: 80px;
-  height: 40px;
-  margin: 5px;
-  border: 1px solid gray;
-}
-
 .edit-button {
-  @extend %button;
+  @include button;
 
-  background-color: rgb(0, 225, 255);
+  background-color: $primary-color;
 }
 
 .delete-button {
-  @extend %button;
+  @include button;
 
   background-color: red;
+}
+
+.view-enter-active, .view-leave-active {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+}
+
+.view-enter-active {
+  transition-delay: 0.3s;
+}
+
+.view-enter, .view-leave-to {
+  opacity: 0;
+}
+
+.view-enter-to, .view-leave {
+  opacity: 1;
 }
 </style>
