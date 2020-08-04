@@ -3,23 +3,24 @@
     <h1>Admin dashboard</h1>
     <div v-for="user in users" :key="user.id">
       <UserItem
-        @changeUser="changeUser"
+        @changeUserData="changeUserData"
         :user="user" />
     </div>
     <button @click="showModal = true" class="add-user-button">Add user</button>
-    <transition name="view">
+    <transition name="fade-add-user-modal">
       <EditUserModal
         v-if="showModal"
         @close="showModal = false"
-        @updateUserList="changeUser" />
+        @updateUserList="changeUserData" />
     </transition>
   </div>
 </template>
 
 <script>
 
-import EditUserModal from '../EditUserModal';
-import UserItem from '../UserItem';
+import EditUserModal from '../Users/EditUserModal';
+import { sendRequest } from '../../services/index';
+import UserItem from '../Users/UserItem';
 
 export default {
   name: 'admin-dashboard',
@@ -31,14 +32,14 @@ export default {
   },
   methods: {
     addUser(user) {
-      this.sendUserRequest(user, 'post')
+      sendRequest('/users', user, 'post')
         .then(user => user.json())
         .then(user => {
           this.users.push(user);
         });
     },
     deleteUser(user) {
-      this.sendUserRequest(user, 'delete')
+      sendRequest('/users', user, 'delete')
         .then(() => {
           const index = this.users.findIndex(usr => usr.id === user.id);
           this.users.splice(index, 1);
@@ -46,7 +47,7 @@ export default {
     },
 
     editUser(user) {
-      this.sendUserRequest(user, 'put')
+      sendRequest('/users', user, 'put')
       .then(user => user.json())
       .then(user => {
         const index = this.users.findIndex(usr => usr.id === user.id);
@@ -63,28 +64,13 @@ export default {
       });
     },
 
-    changeUser(user, actionType) {
+    changeUserData(user, actionType) {
       switch (actionType) {
         case 'add': return this.addUser(user);
         case 'edit': return this.editUser(user);
         case 'delete': return this.deleteUser(user);
         default: return null;
       }
-    },
-    sendUserRequest(user, type) {
-      const jwt = this.$cookie.get('token');
-      let path = '/users';
-
-      if (user.id) path = `/users/${user.id}`;
-
-      return fetch(path, {
-        method: `${type}`,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwt}`
-        },
-        body: JSON.stringify(user)
-      });
     }
   },
   mounted() {
@@ -118,21 +104,22 @@ h1 {
 
   width: 20%;
   margin: 30px 0;
+  font-size: 20px;
 }
 
-.view-enter-active, .view-leave-active {
+.fade-add-user-modal-enter-active, .fade-add-user-modal-leave-active {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease;
 }
 
-.view-enter, .view-leave-to {
+.fade-add-user-modal-enter, .fade-add-user-modal-leave-to {
   opacity: 0;
 }
 
-.view-enter-active {
+.fade-add-user-modal-enter-active {
   transition-delay: 0.3s;
 }
 
-.view-enter-to, .view-leave {
+.fade-add-user-modal-enter-to, .fade-add-user-modal-leave {
   opacity: 1;
 }
 </style>

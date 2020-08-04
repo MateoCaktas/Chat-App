@@ -56,6 +56,10 @@ export default {
   color: #2c3e50;
 }
 
+body {
+  margin: 0;
+}
+
 .view-enter-active, .view-leave-active {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease;
 }

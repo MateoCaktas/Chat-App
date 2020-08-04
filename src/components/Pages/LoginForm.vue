@@ -51,9 +51,14 @@ export default {
 .input-field {
   height: 40px;
   margin-bottom: 20px;
-  padding: 0 5px;
-  border: 1px solid $primary-color;
-  border-radius: 50;
+  padding: 5px 15px;
+  border: 2px solid $primary-color;
+  border-radius: 50px;
+  box-shadow: 5px 5px;
+}
+
+.input-field:focus {
+  outline: none;
 }
 
 .submit-button {
@@ -61,6 +66,7 @@ export default {
 
   width: 40%;
   margin: 30px 0;
+  font-size: 18px;
   align-self: center;
 }
 </style>

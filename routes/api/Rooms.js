@@ -19,7 +19,8 @@ router.post('/', (req, res) => {
     name,
     limit
   }).then(room => {
-    return room.setBelongingUsers(usersIDs);
+    room.setBelongingUsers(usersIDs);
+    return room;
   })
     .then(room => res.send(room))
     .catch(err => res.status(400).send(err));

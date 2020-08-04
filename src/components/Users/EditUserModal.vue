@@ -1,63 +1,61 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
-          <div class="modal-header">
-            <h2> Edit user</h2>
+  <div class="modal-mask">
+    <div class="modal-wrapper">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h2>{{ currentUser.id ? 'Edit User' : 'Add User' }}</h2>
+        </div>
+        <div class="modal-body">
+          <div class="modal-body-line">
+            <h4>First name:</h4>
+            <input
+              v-model="currentUser.firstName"
+              class="input-field"
+              placeholder="FirstName">
           </div>
-          <div class="modal-body">
-            <div class="modal-body-line">
-              <h4>First name:</h4>
-              <input
-                v-model="currentUser.firstName"
-                class="input-field"
-                placeholder="FirstName">
-            </div>
-            <div class="modal-body-line">
-              <h4>Last name:</h4>
-              <input
-                v-model="currentUser.lastName"
-                class="input-field"
-                placeholder="LastName">
-            </div>
-            <div class="modal-body-line">
-              <h4>Email:</h4>
-              <input
-                v-model="currentUser.email"
-                class="input-field"
-                placeholder="Email">
-            </div>
-            <div
-              v-if="actionType === 'add'"
-              class="modal-body-line">
-              <h4>Password:</h4>
-              <input
-                v-model="currentUser.password"
-                class="input-field"
-                placeholder="Password"
-                autocomplete="on">
-            </div>
-            <div>
-              <input v-model="currentUser.isAdmin" class="checkbox" type="checkbox">
-              <label for="checkbox"> Admin </label>
-            </div>
-            <div v-if="currentUser.id" class="modal-body-line">
-              <h4>User ID: {{ currentUser.id }}</h4>
-            </div>
+          <div class="modal-body-line">
+            <h4>Last name:</h4>
+            <input
+              v-model="currentUser.lastName"
+              class="input-field"
+              placeholder="LastName">
           </div>
-          <div class="modal-footer">
-            <button @click="$emit('close')" class="cancel-button">
-              Cancel
-            </button>
-            <button @click="saveUser" :disabled="!validateFields" class="save-button">
-              Save
-            </button>
+          <div class="modal-body-line">
+            <h4>Email:</h4>
+            <input
+              v-model="currentUser.email"
+              class="input-field"
+              placeholder="Email">
           </div>
+          <div
+            v-if="actionType === 'add'"
+            class="modal-body-line">
+            <h4>Password:</h4>
+            <input
+              v-model="currentUser.password"
+              class="input-field"
+              placeholder="Password"
+              autocomplete="on">
+          </div>
+          <div>
+            <input v-model="currentUser.isAdmin" class="checkbox" type="checkbox">
+            <label for="checkbox"> Admin </label>
+          </div>
+          <div v-if="currentUser.id" class="modal-body-line">
+            <h4>User ID: {{ currentUser.id }}</h4>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button @click="$emit('close')" class="cancel-button">
+            Cancel
+          </button>
+          <button @click="saveUser" :disabled="!validateFields" class="save-button">
+            Save
+          </button>
         </div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
@@ -74,7 +72,6 @@ export default {
   data() {
     return {
       currentUser: {},
-      firstLoad: true,
       actionType: ''
     };
   },
@@ -130,12 +127,14 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  border: 1px solid $tertiary-color;
 }
 
 .modal-header {
   display: flex;
   flex-direction: row;
   height: 60px;
+  color: $secondary-color;
   background-color: $primary-color;
   justify-content: center;
   align-items: center;

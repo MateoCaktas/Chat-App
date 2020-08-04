@@ -5,8 +5,9 @@
     </h1>
     <div class="navigation-bar">
       <router-link to="/" class="navigation-link">Home</router-link>
-      <router-link to="/about" class="navigation-link">About</router-link>
+      <router-link to="/about" class="navigation-link" class-active="navigation-link-active">About</router-link>
       <router-link v-if="isAdmin" to="/admin" class="navigation-link"> Dashboard </router-link>
+      <router-link v-if="isAdmin" to="/admin/rooms" class="navigation-link"> Rooms </router-link>
       <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
       <button v-else @click="logoutUser" class="logout-button">Logout</button>
     </div>
@@ -50,9 +51,11 @@ export default {
   display: flex;
   width: 100%;
   height: auto;
-  color: white;
+  color: $secondary-color;
   flex-direction: column;
   background-color: $primary-color;
+  border-top: 1px solid $tertiary-color;
+  border-bottom: 1px solid $tertiary-color;
 }
 
 .title {
@@ -69,19 +72,26 @@ export default {
 
 .navigation-link {
   margin: 10px 40px;
-  color: white;
+  color: $secondary-color;
+  font-size: 20px;
+  text-decoration: none;
 }
 
 .navigation-link:hover {
+  transform: scale(1.1);
   cursor: pointer;
+}
+
+.navigation-link.router-link-exact-active {
+  transform: scale(1.25);
+  font-weight: bold;
 }
 
 .logout-button {
   margin: 10px 40px;
-  color: white;
-  font-size: 16px;
+  color: $secondary-color;
+  font-size: 20px;
   background-color: $primary-color;
-  text-decoration: underline;
   border: none;
 }
 
