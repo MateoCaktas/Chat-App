@@ -7,22 +7,41 @@
         </div>
         <div class="modal-body">
           <div class="modal-body-line">
-            <h4>Room name:</h4>
+            <h4 class="modal-body-title">Room name:</h4>
             <input
               v-model="currentRoom.name"
               class="input-field"
               placeholder="Name">
           </div>
           <div class="modal-body-line">
-            <h4>Limit: </h4>
+            <h4 class="modal-body-title">Limit: </h4>
             <input
-              v-model="currentRoom.limit"
+              v-model.number="currentRoom.limit"
               class="input-field"
               placeholder="Limit"
               type="number">
           </div>
           <div class="modal-body-line">
-            <h4>Belonging Users:</h4>
+            <h4 class="modal-body-title">Belonging Users:</h4>
+            <div class="users-input">
+              <div v-for="user in users" :key="user.value">
+                <input
+                  v-model.number="user.value"
+                  class="input-field-user"
+                  placeholder="User"
+                  type="number">
+                <button @click="removeUserField(user.value)" class="delete-user-button"><span>x</span></button>
+              </div>
+              <label class="add-user-label">Add user (max {{ currentRoom.limit ? currentRoom.limit : '-' }})</label>
+              <div>
+                <input
+                  v-model.number="userID"
+                  class="input-field-user"
+                  placeholder="User"
+                  type="number">
+                <button @click="addUser(userID)" class="add-user-button"><span>+</span></button>
+              </div>
+            </div>
           </div>
           <div v-if="currentRoom.id" class="modal-body-line">
             <h4>Room ID: {{ currentRoom.id }}</h4>
@@ -53,20 +72,28 @@ export default {
   data() {
     return {
       currentRoom: {},
-      actionType: ''
+      actionType: '',
+      users: [],
+      userID: 0
     };
   },
   computed: {
     validateFields() {
-      return this.currentRoom.name && this.currentRoom.limit;
+      return this.currentRoom.name && this.currentRoom.limit && this.users.length <= this.currentRoom.limit;
     }
   },
   methods: {
     saveRoom() {
-      this.currentRoom.usersIDs = [1, 2];
+      this.currentRoom.usersIDs = this.users.map(user => user.value);
       this.currentRoom.creationTime = Date.now();
       this.$emit('updateRoomList', this.currentRoom, this.actionType);
       this.$emit('close');
+    },
+    addUser(userId) {
+      this.users.push({ value: userId });
+    },
+    removeUserField(userId) {
+      this.users = this.users.filter(user => user.value !== userId);
     }
   },
   mounted() {
@@ -126,19 +153,47 @@ export default {
 .modal-body-line {
   display: flex;
   flex-direction: row;
-  width: 80%;
+  width: 90%;
   margin: 20px;
-  justify-content: space-between;
+}
+
+.modal-body-title {
+  width: 150px;
+  justify-self: flex-start;
+  margin-right: auto;
+  text-align: start;
 }
 
 .input-field {
-  width: 150px;
-  transition: width 0.5s ease;
-  margin-left: auto;
+  flex: 2;
 }
 
-.input-field:hover, .input-field:focus {
-  width: 180px;
+.users-input {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+}
+
+.add-user-label {
+  margin-left: 40px;
+  font-size: 12px;
+  align-self: start;
+}
+
+.add-user-button, .delete-user-button {
+  @include button;
+
+  width: 50px;
+  height: 25px;
+  margin: 0 5px;
+}
+
+.delete-user-button {
+  background-color: red;
+}
+
+.input-field-user {
+  margin-bottom: 10px;
 }
 
 .modal-body-line > * {

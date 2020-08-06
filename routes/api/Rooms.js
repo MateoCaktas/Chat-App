@@ -35,13 +35,17 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  const { name, limit } = req.body;
+  const { name, limit, usersIDs } = req.body;
 
   db.models.Room
     .findByPk(req.params.id)
     .then(room => room.update({
       name,
       limit
+    })
+    .then(room => {
+      room.setBelongingUsers(usersIDs);
+      return room;
     })
     .then(room => res.json(room)))
     .catch(err => res.status(400).send(err));
