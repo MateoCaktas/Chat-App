@@ -6,8 +6,10 @@
     <div class="navigation-bar">
       <router-link to="/" class="navigation-link">Home</router-link>
       <router-link to="/about" class="navigation-link" class-active="navigation-link-active">About</router-link>
-      <router-link v-if="isAdmin" to="/admin" class="navigation-link"> Dashboard </router-link>
-      <router-link v-if="isAdmin" to="/admin/rooms" class="navigation-link"> Rooms </router-link>
+      <div v-if="isAdmin" class="admin-navigation-links">
+        <router-link to="/admin" class="navigation-link"> Dashboard </router-link>
+        <router-link to="/admin/rooms" class="navigation-link"> Rooms </router-link>
+      </div>
       <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
       <button v-else @click="logoutUser" class="logout-button">Logout</button>
     </div>
@@ -67,11 +69,11 @@ export default {
 .navigation-bar {
   display: flex;
   flex-direction: row;
-  width: 100%;
+  flex: 1;
 }
 
-.navigation-link {
-  margin: 10px 40px;
+.navigation-link, .admin-navigation-links {
+  margin: 10px 30px;
   color: $secondary-color;
   font-size: 20px;
   text-decoration: none;

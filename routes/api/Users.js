@@ -34,16 +34,16 @@ router.put('/:id', (req, res) => {
   const { firstName, lastName, email, password, isAdmin } = req.body;
 
   db.models.User
-  .findByPk(req.params.id)
-  .then(user => user.update({
-    firstName,
-    lastName,
-    email,
-    password,
-    isAdmin
-  })
-  .then(result => res.json(result)))
-  .catch(err => res.status(400).send(err));
+    .findByPk(req.params.id)
+    .then(user => user.update({
+      firstName,
+      lastName,
+      email,
+      password,
+      isAdmin
+    })
+    .then(result => res.json(result)))
+    .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;

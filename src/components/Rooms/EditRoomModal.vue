@@ -43,13 +43,11 @@
 
 <script>
 export default {
-  name: 'add-room-modal',
+  name: 'edit-room-modal',
   props: {
     room: {
       type: Object,
-      default: function () {
-        return {};
-      }
+      default: () => {}
     }
   },
   data() {
@@ -59,7 +57,7 @@ export default {
     };
   },
   computed: {
-    validateFields: function () {
+    validateFields() {
       return this.currentRoom.name && this.currentRoom.limit;
     }
   },
@@ -74,11 +72,7 @@ export default {
   mounted() {
     this.currentRoom = Object.assign({}, this.room);
 
-    if (this.currentRoom.id) {
-      this.actionType = 'edit';
-    } else {
-      this.actionType = 'add';
-    }
+    this.currentRoom.id ? this.actionType = 'edit' : this.actionType = 'add';
   }
 };
 </script>
@@ -135,7 +129,6 @@ export default {
   width: 80%;
   margin: 20px;
   justify-content: space-between;
-  align-items: center;
 }
 
 .input-field {

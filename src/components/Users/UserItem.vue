@@ -73,13 +73,13 @@ h1 {
 .user-info {
   display: flex;
   justify-content: space-around;
-  width: 60%;
+  flex: 2;
 }
 
 .button-options {
   display: flex;
   justify-content: space-around;
-  width: 40%;
+  flex: 1;
   margin-left: auto;
 }
 

@@ -35,20 +35,16 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  const { creationTime, name, limit } = req.body;
-  db.models.Room.update({
-    creationTime,
-    name,
-    limit
-  }, {
-    where: {
-      id: req.params.id
-    },
-    returning: true,
-    plain: true
-  })
-  .then(room => res.json(room))
-  .catch(err => res.status(400).send(err));
+  const { name, limit } = req.body;
+
+  db.models.Room
+    .findByPk(req.params.id)
+    .then(room => room.update({
+      name,
+      limit
+    })
+    .then(room => res.json(room)))
+    .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;
