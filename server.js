@@ -2,7 +2,6 @@
 
 require('dotenv').config();
 const bodyParser = require('body-parser');
-const connectDB = require('./config/dbConnect');
 const express = require('express');
 const initializePassport = require('./middleware/auth');
 const passport = require('passport');
@@ -29,6 +28,5 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-connectDB()
-  .then(() => initializePassport(passport))
-  .then(() => app.listen(PORT, console.log(`Server started on port ${PORT}`)));
+initializePassport(passport);
+app.listen(PORT, console.log(`Server started on port ${PORT}`));
