@@ -1,11 +1,12 @@
 'use strict';
 
+require('./db');
 const Message = require('../models/Message');
 const Room = require('../models/Room');
 const User = require('../models/User');
 const Users = require('../users.json');
 
-module.exports = function dbSeed() {
+function dbSeed() {
   var usersPromise = Users.map(user => User.create(user));
 
   return Promise
@@ -16,7 +17,7 @@ module.exports = function dbSeed() {
       var message2 = createMessage(Date.now(), 'This is second message.', users[1], room);
       return Promise.all([message1, message2]);
     });
-};
+}
 
 const createMessage = (time, content, user, room) => {
   return Message.create({
@@ -41,3 +42,5 @@ const createRoom = (creationTime, name, limit, users) => {
     .then(() => [room, users]);
   });
 };
+
+dbSeed();
