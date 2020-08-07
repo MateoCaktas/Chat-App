@@ -10,12 +10,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .footer {
+  display: flex;
   position: fixed;
+  align-items: center;
+  justify-content: center;
   bottom: 0;
   width: 100%;
   height: 50px;
-  background-color: rgb(0, 225, 255);
+  color: $secondary-color;
+  font-size: 18px;
+  background-color: $primary-color;
+  border-top: 1px solid $tertiary-color;
+  border-bottom: 1px solid $tertiary-color;
 }
 </style>

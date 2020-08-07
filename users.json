@@ -3,18 +3,63 @@
     "firstName": "First",
     "lastName": "User",
     "email": "first.user@gmail.com",
-    "password": "123456"
+    "password": "123456",
+    "isAdmin": true
   },
   {
     "firstName": "Second",
     "lastName": "User",
     "email": "second.user@gmail.com",
-    "password": "222222"
+    "password": "222222",
+    "isAdmin": false
   },
   {
     "firstName": "Third",
     "lastName": "User",
     "email": "third.user@gmail.com",
-    "password": "333333"
+    "password": "333333",
+    "isAdmin": true
+  },
+  {
+    "firstName": "Fourth",
+    "lastName": "User",
+    "email": "fourth.user@gmail.com",
+    "password": "444444",
+    "isAdmin": false
+  },
+  {
+    "firstName": "Fifth",
+    "lastName": "User",
+    "email": "fifth.user@gmail.com",
+    "password": "555555",
+    "isAdmin": false
+  },
+  {
+    "firstName": "Sixth",
+    "lastName": "User",
+    "email": "sixth.user@gmail.com",
+    "password": "666666",
+    "isAdmin": false
+  },
+  {
+    "firstName": "Seventh",
+    "lastName": "User",
+    "email": "seventh.user@gmail.com",
+    "password": "777777",
+    "isAdmin": true
+  },
+  {
+    "firstName": "Eighth",
+    "lastName": "User",
+    "email": "eighth.user@gmail.com",
+    "password": "888888",
+    "isAdmin": false
+  },
+  {
+    "firstName": "Ninth",
+    "lastName": "User",
+    "email": "ninth.user@gmail.com",
+    "password": "999999",
+    "isAdmin": false
   }
 ]

@@ -5,9 +5,16 @@
     </h1>
     <div class="navigation-bar">
       <router-link to="/" class="navigation-link">Home</router-link>
-      <router-link to="/about" class="navigation-link">About</router-link>
-      <button @click="deleteCookie" to="/" class="logout-button">Logout</button>
-      <router-link to="/login" class="navigation-link"> Login </router-link>
+      <router-link to="/about" class="navigation-link" class-active="navigation-link-active">About</router-link>
+      <div v-if="isAdmin" class="admin-navigation-links">
+        <router-link to="/admin" class="navigation-link"> Dashboard </router-link>
+        <router-link to="/admin/rooms" class="navigation-link"> Rooms </router-link>
+      </div>
+      <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
+      <div v-else>
+        <span class="user-label">Hello, {{ user.fullName }}</span>
+        <button @click="logoutUser" class="logout-button">Logout</button>
+      </div>
     </div>
   </div>
 </template>
@@ -15,25 +22,45 @@
 <script>
 export default {
   name: 'custom-header',
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      isLoggedIn: false,
+      isAdmin: false
+    };
+  },
   methods: {
-    deleteCookie() {
-      document.cookie = 'token=Expired; Expires=expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      if (this.$router.currentRoute.path !== '/login') {
-        this.$router.push('login');
-      }
+    logoutUser() {
+      this.isAdmin = false;
+      this.isLoggedIn = false;
+      return this.$emit('logout');
+    }
+  },
+  watch: {
+    user(user) {
+      this.isAdmin = user.isAdmin;
+      this.isLoggedIn = !!user;
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
 .header {
   display: flex;
   width: 100%;
   height: auto;
-  color: white;
+  color: $secondary-color;
   flex-direction: column;
-  background-color: rgb(0, 225, 255);
+  background-color: $primary-color;
+  border-top: 1px solid $tertiary-color;
+  border-bottom: 1px solid $tertiary-color;
 }
 
 .title {
@@ -45,30 +72,46 @@ export default {
 .navigation-bar {
   display: flex;
   flex-direction: row;
-  width: 100%;
+  flex: 1;
 }
 
-.navigation-link {
-  margin: 10px 40px;
-  color: white;
+.navigation-link, .admin-navigation-links {
+  margin: 10px 30px;
+  color: $secondary-color;
+  font-size: 20px;
+  text-decoration: none;
 }
 
 .navigation-link:hover {
+  transform: scale(1.1);
   cursor: pointer;
 }
 
+.navigation-link.router-link-exact-active {
+  transform: scale(1.25);
+  font-weight: bold;
+}
+
+.user-label {
+  position: absolute;
+  top: 40px;
+  margin-left: 20px;
+  font-size: 14px;
+}
+
 .logout-button {
-  width: 60px;
-  height: 25px;
   margin: 10px 40px;
-  color: black;
+  color: $secondary-color;
+  font-size: 20px;
+  background-color: $primary-color;
+  border: none;
 }
 
 .logout-button:hover {
   cursor: pointer;
 }
 
-.navigation-link:last-child {
+.navigation-bar > *:last-child {
   margin-left: auto;
 }
 

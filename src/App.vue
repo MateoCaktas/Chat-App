@@ -1,8 +1,11 @@
 <template>
   <div id="app">
-    <Header />
+    <Header
+      @logout="logOutUser"
+      :user="user" />
     <transition name="view">
-      <router-view />
+      <router-view
+        @logIn="logInUser" />
     </transition>
     <Footer />
   </div>
@@ -15,6 +18,27 @@ import Header from './components/Header';
 
 export default {
   name: 'app',
+  data() {
+    return {
+      user: {}
+    };
+  },
+  methods: {
+    logInUser(response) {
+      this.user = response.user;
+      localStorage.loggedUser = JSON.stringify(response.user);
+
+      this.$cookie.set('token', response.jwt);
+      this.$router.push({ name: 'Dashboard' })
+        .catch(() => {});
+    },
+    logOutUser() {
+      localStorage.removeItem('loggedUser');
+      document.cookie = 'token=Expired; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      this.$router.push({ name: 'Login' })
+        .catch(err => console.log(err));
+    }
+  },
   components: {
     Header,
     Footer
@@ -24,11 +48,16 @@ export default {
 
 <style>
 #app {
+  margin-bottom: 60px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+body {
+  margin: 0;
 }
 
 .view-enter-active, .view-leave-active {
