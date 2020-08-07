@@ -11,7 +11,10 @@
         <router-link to="/admin/rooms" class="navigation-link"> Rooms </router-link>
       </div>
       <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
-      <button v-else @click="logoutUser" class="logout-button">Logout</button>
+      <div v-else>
+        <span class="user-label">Hello, {{ user.fullName }}</span>
+        <button @click="logoutUser" class="logout-button">Logout</button>
+      </div>
     </div>
   </div>
 </template>
@@ -87,6 +90,13 @@ export default {
 .navigation-link.router-link-exact-active {
   transform: scale(1.25);
   font-weight: bold;
+}
+
+.user-label {
+  position: absolute;
+  top: 40px;
+  margin-left: 20px;
+  font-size: 14px;
 }
 
 .logout-button {

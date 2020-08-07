@@ -26,14 +26,14 @@ export default {
   methods: {
     logInUser(response) {
       this.user = response.user;
-      localStorage.user = JSON.stringify(response.user);
+      localStorage.loggedUser = JSON.stringify(response.user);
 
       this.$cookie.set('token', response.jwt);
       this.$router.push({ name: 'Dashboard' })
         .catch(() => {});
     },
     logOutUser() {
-      localStorage.removeItem('user');
+      localStorage.removeItem('loggedUser');
       document.cookie = 'token=Expired; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       this.$router.push({ name: 'Login' })
         .catch(err => console.log(err));

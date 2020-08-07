@@ -1,6 +1,26 @@
 function sendRequest(path, data, type) {
-  const jwt = getCookie('token');
+  // Not sending anything for GET methods in bodies
+  if (!data) return sendGetRequest(path);
+
   if (data.id) path = `${path}/${data.id}`;
+
+  return httpRequest(path, data, type);
+}
+
+function sendGetRequest(path) {
+  const jwt = getCookie('token');
+
+  return fetch(path, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`
+    }
+  });
+}
+
+function httpRequest(path, data, type) {
+  const jwt = getCookie('token');
 
   return fetch(path, {
     method: `${type}`,

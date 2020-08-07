@@ -12,7 +12,7 @@
           <EditUserModal
             v-if="showModal"
             @close="showModal = false"
-            @updateUserList="(currentUser, action) => $emit('changeUserData', currentUser, action)"
+            @update-user-list="(currentUser, action) => $emit('change-user-data', currentUser, action)"
             :user="user" />
         </transition>
       </div>
@@ -39,16 +39,15 @@ export default {
     };
   },
   computed: {
-    loggedUser: function () {
-      const loggedUser = JSON.parse(localStorage.user);
-      return this.user.id === loggedUser.id;
+    loggedUser() {
+      return this.user.id === JSON.parse(localStorage.loggedUser).id;
     }
   },
   methods: {
     deleteUser() {
       this.isActive = false;
       setTimeout(() => {
-        this.$emit('changeUserData', this.user, 'delete');
+        this.$emit('change-user-data', this.user, 'delete');
       }, 500);
     }
   },

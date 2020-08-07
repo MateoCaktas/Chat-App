@@ -64,9 +64,7 @@ export default {
   props: {
     user: {
       type: Object,
-      default: function () {
-        return {};
-      }
+      default: () => {}
     }
   },
   data() {
@@ -83,18 +81,13 @@ export default {
   },
   methods: {
     saveUser() {
-      this.$emit('updateUserList', this.currentUser, this.actionType);
+      this.$emit('update-user-list', this.currentUser, this.actionType);
       this.$emit('close');
     }
   },
   mounted() {
     this.currentUser = Object.assign({}, this.user);
-
-    if (this.currentUser.id) {
-      this.actionType = 'edit';
-    } else {
-      this.actionType = 'add';
-    }
+    this.actionType = this.currentUser.id ? 'edit' : 'add';
   }
 };
 </script>

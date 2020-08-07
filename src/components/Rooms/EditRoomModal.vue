@@ -85,7 +85,9 @@ export default {
   methods: {
     saveRoom() {
       this.currentRoom.usersEmails = this.users.map(user => user.email);
-      this.currentRoom.creationTime = Date.now();
+
+      if (this.actionType === 'add') this.currentRoom.creationTime = Date.now();
+
       this.$emit('update-room-list', this.currentRoom, this.actionType);
       this.$emit('close');
     },
@@ -99,8 +101,7 @@ export default {
   },
   mounted() {
     this.currentRoom = Object.assign({}, this.room);
-
-    this.currentRoom.id ? this.actionType = 'edit' : this.actionType = 'add';
+    this.actionType = this.currentRoom.id ? 'edit' : 'add';
   }
 };
 </script>

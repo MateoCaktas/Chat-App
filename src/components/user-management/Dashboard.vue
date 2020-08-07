@@ -3,7 +3,7 @@
     <h1>Admin dashboard</h1>
     <div v-for="user in users" :key="user.id">
       <UserItem
-        @changeUserData="changeUserData"
+        @change-user-data="changeUserData"
         :user="user" />
     </div>
     <button @click="showModal = true" class="add-user-button">Add user</button>
@@ -11,7 +11,7 @@
       <EditUserModal
         v-if="showModal"
         @close="showModal = false"
-        @updateUserList="changeUserData" />
+        @update-user-list="changeUserData" />
     </transition>
   </div>
 </template>
@@ -55,11 +55,9 @@ export default {
         return user;
       })
       .then(user => {
-        const loggedUser = JSON.parse(localStorage.user);
-        if (user.id === loggedUser.id) {
+        if (user.id === JSON.parse(localStorage.loggedUser).id) {
           // Save the changes on user if (loggedUser = changedUser) to the localStorage
-          const saveUser = JSON.stringify(user);
-          localStorage.setItem('user', saveUser);
+          localStorage.setItem('loggedUser', JSON.stringify(user));
         }
       });
     },
@@ -74,14 +72,7 @@ export default {
     }
   },
   mounted() {
-    const jwt = this.$cookie.get('token');
-
-    fetch('/users', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
-      }
-    })
+    sendRequest('/users', null, 'get')
     .then(res => res.json())
     .then(res => {
       this.users = res;

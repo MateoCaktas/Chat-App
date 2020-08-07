@@ -18,6 +18,7 @@
 <script>
 
 import EditRoomModal from './EditRoomModal';
+import { sendRequest } from '../../services/index';
 
 export default {
   name: 'room-item',
@@ -34,14 +35,7 @@ export default {
     };
   },
   mounted() {
-    const jwt = this.$cookie.get('token');
-
-    fetch(`/rooms/${this.room.id}/users`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
-      }
-    })
+    sendRequest(`/rooms/${this.room.id}/users`, null, 'get')
       .then(result => result.json())
       .then(result => {
         this.usersLength = result.length;

@@ -5,7 +5,9 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  db.models.User.findAll().then(user => res.json(user));
+  db.models.User.findAll()
+    .then(user => res.json(user))
+    .catch(err => res.status(400).send(err));
 });
 
 router.post('/', (req, res) => {

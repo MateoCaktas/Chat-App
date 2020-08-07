@@ -6,32 +6,29 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   db.models.Room.findAll()
-  .then(room => {
-    res.json(room);
-  })
-  .catch(err => res.status(400).send(err));
+    .then(room => res.json(room))
+    .catch(err => res.status(400).send(err));
 });
 
 router.post('/', (req, res) => {
   const { creationTime, name, limit, usersEmails } = req.body;
 
-  const usersArray = db.models.User.findAll({
+  db.models.User.findAll({
     where: { email: usersEmails }
-  });
-
-  usersArray.then(users => {
-    db.models.Room.create({
-      creationTime,
-      name,
-      limit
-    })
-    .then(room => {
-      room.setBelongingUsers(users);
-      return room;
-    })
-    .then(room => res.send(room))
-    .catch(err => res.status(400).send(err));
-  });
+  })
+    .then(users => {
+      db.models.Room.create({
+        creationTime,
+        name,
+        limit
+      })
+      .then(room => {
+        room.setBelongingUsers(users);
+        return room;
+      })
+      .then(room => res.send(room))
+      .catch(err => res.status(400).send(err));
+    });
 });
 
 router.delete('/:id', (req, res) => {
@@ -45,24 +42,23 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
   const { name, limit, usersEmails } = req.body;
 
-  const usersArray = db.models.User.findAll({
+  db.models.User.findAll({
     where: { email: usersEmails }
-  });
-
-  usersArray.then(users => {
-    db.models.Room
-      .findByPk(req.params.id)
-      .then(room => room.update({
-        name,
-        limit
-      })
-      .then(room => {
-        room.setBelongingUsers(users);
-        return room;
-      })
-      .then(room => res.send(room)))
-      .catch(err => res.status(400).send(err));
-  });
+  })
+    .then(users => {
+      db.models.Room
+        .findByPk(req.params.id)
+        .then(room => room.update({
+          name,
+          limit
+        })
+        .then(room => {
+          room.setBelongingUsers(users);
+          return room;
+        })
+        .then(room => res.send(room)))
+        .catch(err => res.status(400).send(err));
+    });
 });
 
 router.get('/:id/users', (req, res) => {

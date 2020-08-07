@@ -71,18 +71,11 @@ export default {
     }
   },
   mounted() {
-    const jwt = this.$cookie.get('token');
-
-    fetch('/rooms', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
-      }
-    })
-    .then(res => res.json())
-    .then(res => {
-      this.rooms = res;
-    });
+    sendRequest('/rooms', null, 'get')
+      .then(res => res.json())
+      .then(res => {
+        this.rooms = res;
+      });
   },
   components: {
     RoomItem,

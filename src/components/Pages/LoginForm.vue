@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { sendRequest } from '../../services';
 export default {
   data() {
     return {
@@ -21,16 +22,12 @@ export default {
   },
   methods: {
     logIn() {
-      fetch('/login', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: this.email,
-          password: this.password
-        })
-      })
+      const userCredentials = {
+        email: this.email,
+        password: this.password
+      };
+
+      sendRequest('/login', userCredentials, 'post')
         .then(res => res.json())
         .then(res => this.$emit('logIn', res))
         .catch(err => console.log(err));
