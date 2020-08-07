@@ -2,14 +2,14 @@
   <div>
     <div id="room-window">
       <p> {{ room.name }} </p>
-      <p>Users: _ / {{ room.limit }}</p>
+      <p>Users: {{ usersLength }} / {{ room.limit }}</p>
       <button @click="showModal = true" class="edit-room-button"> Edit room </button>
     </div>
     <transition name="fade-edit-room-modal">
       <EditRoomModal
         v-if="showModal"
         @close="showModal = false"
-        @updateRoomList="(currentRoom, action) => $emit('changeRoomData', currentRoom, action)"
+        @update-room-list="(currentRoom, action) => $emit('change-room-data', currentRoom, action)"
         :room="room" />
     </transition>
   </div>
@@ -29,8 +29,23 @@ export default {
   },
   data() {
     return {
-      showModal: false
+      showModal: false,
+      usersLength: 0
     };
+  },
+  mounted() {
+    const jwt = this.$cookie.get('token');
+
+    fetch(`/rooms/${this.room.id}/users`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`
+      }
+    })
+      .then(result => result.json())
+      .then(result => {
+        this.usersLength = result.length;
+      });
   },
   components: {
     EditRoomModal

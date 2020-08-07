@@ -5,7 +5,7 @@
       <div class="room-list">
         <div v-for="room in rooms" :key="room.id">
           <RoomItem
-            @changeRoomData="changeRoomData"
+            @change-room-data="changeRoomData"
             class="room-item"
             :room="room" />
         </div>
@@ -16,7 +16,7 @@
       <EditRoomModal
         v-if="showModal"
         @close="showModal = false"
-        @updateRoomList="changeRoomData" />
+        @update-room-list="changeRoomData" />
     </transition>
   </div>
 </template>

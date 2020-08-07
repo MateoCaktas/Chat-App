@@ -13,17 +13,25 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { creationTime, name, limit, usersIDs } = req.body;
-  db.models.Room.create({
-    creationTime,
-    name,
-    limit
-  }).then(room => {
-    room.setBelongingUsers(usersIDs);
-    return room;
-  })
+  const { creationTime, name, limit, usersEmails } = req.body;
+
+  const usersArray = db.models.User.findAll({
+    where: { email: usersEmails }
+  });
+
+  usersArray.then(users => {
+    db.models.Room.create({
+      creationTime,
+      name,
+      limit
+    })
+    .then(room => {
+      room.setBelongingUsers(users);
+      return room;
+    })
     .then(room => res.send(room))
     .catch(err => res.status(400).send(err));
+  });
 });
 
 router.delete('/:id', (req, res) => {
@@ -35,19 +43,39 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  const { name, limit, usersIDs } = req.body;
+  const { name, limit, usersEmails } = req.body;
 
+  const usersArray = db.models.User.findAll({
+    where: { email: usersEmails }
+  });
+
+  usersArray.then(users => {
+    db.models.Room
+      .findByPk(req.params.id)
+      .then(room => room.update({
+        name,
+        limit
+      })
+      .then(room => {
+        room.setBelongingUsers(users);
+        return room;
+      })
+      .then(room => res.send(room)))
+      .catch(err => res.status(400).send(err));
+  });
+});
+
+router.get('/:id/users', (req, res) => {
   db.models.Room
-    .findByPk(req.params.id)
-    .then(room => room.update({
-      name,
-      limit
+    .findOne({
+      where: {
+        id: req.params.id
+      },
+      include: [{
+        model: db.models.User, as: 'BelongingUsers'
+      }]
     })
-    .then(room => {
-      room.setBelongingUsers(usersIDs);
-      return room;
-    })
-    .then(room => res.json(room)))
+    .then(result => res.send(result.BelongingUsers))
     .catch(err => res.status(400).send(err));
 });
 

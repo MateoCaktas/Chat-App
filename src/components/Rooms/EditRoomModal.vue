@@ -24,22 +24,22 @@
           <div class="modal-body-line">
             <h4 class="modal-body-title">Belonging Users:</h4>
             <div class="users-input">
-              <div v-for="user in users" :key="user.value">
+              <div v-for="user in users" :key="user.email">
                 <input
-                  v-model.number="user.value"
+                  v-model.number="user.email"
                   class="input-field-user"
                   placeholder="User"
-                  type="number">
-                <button @click="removeUserField(user.value)" class="delete-user-button"><span>x</span></button>
+                  type="text">
+                <button @click="removeUserField(user.email)" class="delete-user-button"><span>x</span></button>
               </div>
               <label class="add-user-label">Add user (max {{ currentRoom.limit ? currentRoom.limit : '-' }})</label>
               <div>
                 <input
-                  v-model.number="userID"
+                  v-model.number="userEmail"
                   class="input-field-user"
                   placeholder="User"
-                  type="number">
-                <button @click="addUser(userID)" class="add-user-button"><span>+</span></button>
+                  type="text">
+                <button @click="addUser(userEmail)" class="add-user-button"><span>+</span></button>
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@ export default {
       currentRoom: {},
       actionType: '',
       users: [],
-      userID: 0
+      userEmail: ''
     };
   },
   computed: {
@@ -84,16 +84,17 @@ export default {
   },
   methods: {
     saveRoom() {
-      this.currentRoom.usersIDs = this.users.map(user => user.value);
+      this.currentRoom.usersEmails = this.users.map(user => user.email);
       this.currentRoom.creationTime = Date.now();
-      this.$emit('updateRoomList', this.currentRoom, this.actionType);
+      this.$emit('update-room-list', this.currentRoom, this.actionType);
       this.$emit('close');
     },
-    addUser(userId) {
-      this.users.push({ value: userId });
+    addUser(email) {
+      this.users.push({ email });
+      this.userEmail = '';
     },
-    removeUserField(userId) {
-      this.users = this.users.filter(user => user.value !== userId);
+    removeUserField(email) {
+      this.users = this.users.filter(user => user.email !== email);
     }
   },
   mounted() {
