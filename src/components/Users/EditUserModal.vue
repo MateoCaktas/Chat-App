@@ -74,7 +74,7 @@ export default {
     };
   },
   computed: {
-    validateFields: function () {
+    validateFields() {
       // Check if there are no empty fields
       return this.currentUser.firstName && this.currentUser.lastName && this.currentUser.email && this.currentUser.password;
     }
