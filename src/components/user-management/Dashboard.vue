@@ -19,7 +19,7 @@
 <script>
 
 import EditUserModal from '../Users/EditUserModal';
-import { sendRequest } from '../../services/index';
+import { Request } from '../../services/index';
 import UserItem from '../Users/UserItem';
 
 export default {
@@ -32,14 +32,20 @@ export default {
   },
   methods: {
     addUser(user) {
-      sendRequest('/users', user, 'post')
+      /* sendRequest('/users', user, 'post') */
+      const request = new Request('/users', user, 'post');
+
+      request.sendHttpRequest()
         .then(user => user.json())
         .then(user => {
           this.users.push(user);
         });
     },
     deleteUser(user) {
-      sendRequest('/users', user, 'delete')
+      /* sendRequest('/users', user, 'delete') */
+      const request = new Request('/users', user, 'delete');
+
+      request.sendHttpRequest()
         .then(() => {
           const index = this.users.findIndex(usr => usr.id === user.id);
           this.users.splice(index, 1);
@@ -47,19 +53,22 @@ export default {
     },
 
     editUser(user) {
-      sendRequest('/users', user, 'put')
-      .then(user => user.json())
-      .then(user => {
-        const index = this.users.findIndex(usr => usr.id === user.id);
-        this.users.splice(index, 1, user);
-        return user;
-      })
-      .then(user => {
-        if (user.id === JSON.parse(localStorage.loggedUser).id) {
-          // Save the changes on user if (loggedUser = changedUser) to the localStorage
-          localStorage.setItem('loggedUser', JSON.stringify(user));
-        }
-      });
+      /* sendRequest('/users', user, 'put') */
+      const request = new Request('/users', user, 'put');
+
+      request.sendHttpRequest()
+        .then(user => user.json())
+        .then(user => {
+          const index = this.users.findIndex(usr => usr.id === user.id);
+          this.users.splice(index, 1, user);
+          return user;
+        })
+        .then(user => {
+          if (user.id === JSON.parse(localStorage.loggedUser).id) {
+            // Save the changes on user if (loggedUser = changedUser) to the localStorage
+            localStorage.setItem('loggedUser', JSON.stringify(user));
+          }
+        });
     },
 
     changeUserData(user, actionType) {
@@ -72,11 +81,14 @@ export default {
     }
   },
   mounted() {
-    sendRequest('/users', null, 'get')
-    .then(res => res.json())
-    .then(res => {
-      this.users = res;
-    });
+    /* sendRequest('/users', null, 'get') */
+    const request = new Request('/users', null, 'get');
+
+    request.sendGetRequest()
+      .then(res => res.json())
+      .then(res => {
+        this.users = res;
+      });
   },
   components: {
     UserItem,

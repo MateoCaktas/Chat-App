@@ -18,7 +18,7 @@
 <script>
 
 import EditRoomModal from './EditRoomModal';
-import { sendRequest } from '../../services/index';
+import { Request } from '../../services/index';
 
 export default {
   name: 'room-item',
@@ -35,7 +35,10 @@ export default {
     };
   },
   mounted() {
-    sendRequest(`/rooms/${this.room.id}/users`, null, 'get')
+    /* sendRequest(`/rooms/${this.room.id}/users`, null, 'get') */
+    const request = new Request(`/rooms/${this.room.id}/users`, null, 'get');
+
+    request.sendGetRequest()
       .then(result => result.json())
       .then(result => {
         this.usersLength = result.length;

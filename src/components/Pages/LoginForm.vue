@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { sendRequest } from '../../services';
+import { Request } from '../../services';
 export default {
   data() {
     return {
@@ -27,7 +27,13 @@ export default {
         password: this.password
       };
 
-      sendRequest('/login', userCredentials, 'post')
+      /* sendRequest('/login', userCredentials, 'post')
+        .then(res => res.json())
+        .then(res => this.$emit('logIn', res))
+        .catch(err => console.log(err)); */
+      const test = new Request('/login', userCredentials, 'post');
+
+      test.sendHttpRequest()
         .then(res => res.json())
         .then(res => this.$emit('logIn', res))
         .catch(err => console.log(err));

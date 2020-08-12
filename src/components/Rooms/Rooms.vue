@@ -24,8 +24,9 @@
 <script>
 
 import EditRoomModal from './EditRoomModal';
+import { Request } from '../../services/index';
 import RoomItem from './RoomItem';
-import { sendRequest } from '../../services/index';
+// import { sendRequest } from '../../services/index';
 
 export default {
   name: 'admin-room-list',
@@ -37,7 +38,10 @@ export default {
   },
   methods: {
     addRoom(room) {
-      sendRequest('/rooms', room, 'post')
+      /* sendRequest('/rooms', room, 'post') */
+      const request = new Request('/rooms', room, 'post');
+
+      request.sendHttpRequest()
         .then(room => room.json())
         .then(room => {
           this.rooms.push(room);
@@ -45,15 +49,21 @@ export default {
     },
 
     deleteRoom(room) {
-      sendRequest('/rooms', room, 'delete')
-          .then(() => {
-            const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
-            this.rooms.splice(index, 1);
-          });
+      /* sendRequest('/rooms', room, 'delete') */
+      const myRequest = new Request('/rooms', room, 'delete');
+
+      myRequest.sendHttpRequest()
+        .then(() => {
+          const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
+          this.rooms.splice(index, 1);
+        });
     },
 
     editRoom(room) {
-      sendRequest('/rooms', room, 'put')
+      /* sendRequest('/rooms', room, 'put') */
+      const request = new Request('/rooms', room, 'put');
+
+      request.sendHttpRequest()
         .then(room => room.json())
         .then(room => {
           const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
@@ -71,7 +81,10 @@ export default {
     }
   },
   mounted() {
-    sendRequest('/rooms', null, 'get')
+    /* sendRequest('/rooms', null, 'get') */
+    const request = new Request('/rooms', null, 'get');
+
+    request.sendGetRequest()
       .then(res => res.json())
       .then(res => {
         this.rooms = res;
