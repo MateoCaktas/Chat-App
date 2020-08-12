@@ -41,25 +41,28 @@
   @include button;
 
   width: 50px;
-  height: 25px;
+  height: 30px;
   margin: 0 5px;
 }
 
 @mixin add-user-label {
+  margin-top: 5px;
   font-size: 12px;
   align-self: start;
 }
 
 @mixin input-field {
   width: 150px;
-  transition: flex 1s ease-in-out;
+  height: 20px;
+  transition: color, background-color 0.5s ease-in-out;
   margin-left: auto;
   padding: 5px;
   border: 2px solid $primary-color;
   border-radius: 5px;
   box-shadow: 2px 2px;
 
-  &:hover, &:focus {
-    flex: 1;
+  &:focus {
+    color: $secondary-color;
+    background-color: $primary-color;
   }
 }

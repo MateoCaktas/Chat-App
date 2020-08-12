@@ -130,48 +130,42 @@ export default {
   opacity: 1;
 }
 
-::v-deep .users-input {
-  @include users-input;
+::v-deep {
+  .users-input {
+    @include users-input;
+  }
+
+  .modal-body-line {
+    @include modal-body-line;
+  }
+
+  .save-button {
+    @include button;
+  }
+
+  .add-user-label {
+    @include add-user-label;
+  }
+
+  .input-field {
+    @include input-field;
+  }
+
+  .cancel-button {
+    @include button;
+
+    background-color: red;
+  }
 }
 
 .users-input ::v-deep {
   .user-input-button {
     @include user-input-button;
   }
-
-  .delete-user-button {
-    background-color: red;
-  }
-}
-
-::v-deep .modal-body-line {
-  @include modal-body-line;
 }
 
 .modal-body-line ::v-deep .modal-body-title {
   @include modal-body-title;
-}
-
-::v-deep .add-user-label {
-  @include add-user-label;
-}
-
-::v-deep .input-field {
-  @include input-field;
-}
-
-::v-deep .input-field-user {
-  margin-bottom: 10px;
-}
-
-::v-deep .cancel-button {
-  @include button;
-
-  background-color: red;
-}
-
-::v-deep .save-button {
-  @include button;
 }
 
 </style>

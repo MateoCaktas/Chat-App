@@ -111,48 +111,44 @@ export default {
   opacity: 1;
 }
 
-::v-deep .users-input {
-  @include users-input;
-}
+::v-deep {
+  .modal-body-line {
+    @include modal-body-line;
+  }
 
-.users-input ::v-deep {
-  .user-input-button {
-    @include user-input-button;
+  .users-input {
+    @include users-input;
+  }
+
+  .add-user-label {
+    @include add-user-label;
+  }
+
+  .input-field {
+    @include input-field;
+  }
+
+  .checkbox:hover {
+    cursor: pointer;
+  }
+
+  .cancel-button {
+    @include button;
+
+    background-color: red;
+  }
+
+  .save-button {
+    @include button;
   }
 }
 
-::v-deep .modal-body-line {
-  @include modal-body-line;
+.users-input ::v-deep .user-input-button {
+  @include user-input-button;
 }
 
 .modal-body-line ::v-deep .modal-body-title {
   @include modal-body-title;
-}
-
-::v-deep .add-user-label {
-  @include add-user-label;
-}
-
-::v-deep .input-field {
-  @include input-field;
-}
-
-::v-deep .input-field-user {
-  margin-bottom: 10px;
-}
-
-::v-deep .checkbox:hover {
-  cursor: pointer;
-}
-
-::v-deep .cancel-button {
-  @include button;
-
-  background-color: red;
-}
-
-::v-deep .save-button {
-  @include button;
 }
 
 </style>

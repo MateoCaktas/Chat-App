@@ -127,20 +127,22 @@ export default {
   opacity: 1;
 }
 
+::v-deep {
+  .users-input {
+    @include users-input;
+  }
+
+  .user-input-button {
+    @include user-input-button;
+  }
+
+  .delete-user-button {
+    background-color: red;
+  }
+}
+
 .modal-body-line ::v-deep .modal-body-title {
   @include modal-body-title;
-}
-
-::v-deep .users-input {
-  @include users-input;
-}
-
-::v-deep .user-input-button {
-  @include user-input-button;
-}
-
-::v-deep .delete-user-button {
-  background-color: red;
 }
 
 </style>

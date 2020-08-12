@@ -23,7 +23,7 @@
             type="number">
         </div>
         <div class="modal-body-line">
-          <h4 class="modal-body-title">Belonging Users:</h4>
+          <h4 class="belonging-users-title">Belonging Users:</h4>
           <div class="users-input">
             <div v-for="(mail, index) in usersEmails" :key="mail">
               <input
@@ -130,20 +130,34 @@ export default {
 
 <style lang="scss" scoped>
 
-.modal-body-line ::v-deep .modal-body-title {
-  @include modal-body-title;
+::v-deep {
+  .users-input {
+    @include users-input;
+  }
+
+  .user-input-button {
+    @include user-input-button;
+  }
+
+  .delete-user-button {
+    background-color: red;
+  }
+
+  .input-field-user {
+    @include input-field;
+  }
 }
 
-::v-deep .users-input {
-  @include users-input;
-}
+.modal-body-line ::v-deep {
+  .modal-body-title {
+    @include modal-body-title;
+  }
 
-::v-deep .user-input-button {
-  @include user-input-button;
-}
+  .belonging-users-title {
+    @include modal-body-title;
 
-::v-deep .delete-user-button {
-  background-color: red;
+    align-self: flex-start;
+  }
 }
 
 </style>
