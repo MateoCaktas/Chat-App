@@ -9,11 +9,12 @@
         <button @click="showModal = true" class="edit-button"> Edit user </button>
         <button v-if="!loggedUser" @click="deleteUser" class="delete-button"> Delete user </button>
         <transition name="view-edit-user-modal">
-          <EditUserModal
+          <UserModal
             v-if="showModal"
             @close="showModal = false"
-            @update-user-list="(currentUser, action) => $emit('change-user-data', currentUser, action)"
-            :user="user" />
+            @update-user-list="saveUser"
+            :user="user"
+            :actiontype="actionType" />
         </transition>
       </div>
     </div>
@@ -22,7 +23,7 @@
 
 <script>
 
-import EditUserModal from './EditUserModal';
+import UserModal from './UserModal';
 
 export default {
   name: 'user-item',
@@ -35,12 +36,16 @@ export default {
   data() {
     return {
       showModal: false,
-      isActive: true
+      isActive: true,
+      actionType: 'edit'
     };
   },
   computed: {
     loggedUser() {
       return this.user.id === JSON.parse(localStorage.loggedUser).id;
+    },
+    validateFields() {
+      return this.user.firstName && this.user.lastName && this.user.email && this.user.password;
     }
   },
   methods: {
@@ -49,10 +54,14 @@ export default {
       setTimeout(() => {
         this.$emit('change-user-data', this.user, 'delete');
       }, 500);
+    },
+    saveUser(currentUser) {
+      this.$emit('change-user-data', currentUser, 'edit');
+      this.showModal = false;
     }
   },
   components: {
-    EditUserModal
+    UserModal
   }
 };
 </script>
@@ -102,10 +111,6 @@ h1 {
   opacity: 0;
 }
 
-.fade-user-item-enter-to, .fade-user-item-leave {
-  opacity: 1;
-}
-
 .view-edit-user-modal-enter-active, .view-edit-user-modal-leave-active {
   transition: opacity 1s ease-in-out, transform 1s ease;
 }
@@ -117,4 +122,9 @@ h1 {
 .view-edit-user-modal-enter-to, .view-edit-user-modal-leave {
   opacity: 1;
 }
+
+.modal-body-line ::v-deep .modal-body-title {
+  @include modal-body-title;
+}
+
 </style>

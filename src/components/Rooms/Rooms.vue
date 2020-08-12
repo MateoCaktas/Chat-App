@@ -13,18 +13,19 @@
       <button @click="showModal = true" class="create-room-button">Create a room</button>
     </div>
     <transition name="fade-add-room-modal">
-      <EditRoomModal
+      <RoomModal
         v-if="showModal"
-        @close="showModal = false"
-        @update-room-list="changeRoomData" />
+        @close="cancel"
+        @save-room-data="saveRoom"
+        :actiontype="actionType" />
     </transition>
   </div>
 </template>
 
 <script>
 
-import EditRoomModal from './EditRoomModal';
 import RoomItem from './RoomItem';
+import RoomModal from './RoomModal';
 import { sendRequest } from '../../services/index';
 
 export default {
@@ -32,10 +33,22 @@ export default {
   data() {
     return {
       rooms: [],
-      showModal: false
+      showModal: false,
+      addedRoom: {},
+      actionType: 'add'
     };
   },
   methods: {
+    cancel() {
+      this.addedRoom = {};
+      this.showModal = false;
+    },
+    saveRoom(saveRoom) {
+      this.addedRoom = saveRoom;
+      this.addedRoom.creationTime = Date.now();
+      this.addRoom(this.addedRoom);
+      this.cancel();
+    },
     addRoom(room) {
       sendRequest('/rooms', room, 'post')
         .then(room => room.json())
@@ -43,7 +56,6 @@ export default {
           this.rooms.push(room);
         });
     },
-
     deleteRoom(room) {
       sendRequest('/rooms', room, 'delete')
           .then(() => {
@@ -51,7 +63,6 @@ export default {
             this.rooms.splice(index, 1);
           });
     },
-
     editRoom(room) {
       sendRequest('/rooms', room, 'put')
         .then(room => room.json())
@@ -60,7 +71,6 @@ export default {
           this.rooms.splice(index, 1, room);
         });
     },
-
     changeRoomData(room, actionType) {
       switch (actionType) {
         case 'add': return this.addRoom(room);
@@ -79,7 +89,7 @@ export default {
   },
   components: {
     RoomItem,
-    EditRoomModal
+    RoomModal
   }
 };
 </script>
@@ -118,6 +128,50 @@ export default {
 
 .fade-add-room-modal-enter-to, .fade-add-room-modal-leave {
   opacity: 1;
+}
+
+::v-deep .users-input {
+  @include users-input;
+}
+
+.users-input ::v-deep {
+  .user-input-button {
+    @include user-input-button;
+  }
+
+  .delete-user-button {
+    background-color: red;
+  }
+}
+
+::v-deep .modal-body-line {
+  @include modal-body-line;
+}
+
+.modal-body-line ::v-deep .modal-body-title {
+  @include modal-body-title;
+}
+
+::v-deep .add-user-label {
+  @include add-user-label;
+}
+
+::v-deep .input-field {
+  @include input-field;
+}
+
+::v-deep .input-field-user {
+  margin-bottom: 10px;
+}
+
+::v-deep .cancel-button {
+  @include button;
+
+  background-color: red;
+}
+
+::v-deep .save-button {
+  @include button;
 }
 
 </style>

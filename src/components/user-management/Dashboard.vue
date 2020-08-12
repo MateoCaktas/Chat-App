@@ -8,26 +8,28 @@
     </div>
     <button @click="showModal = true" class="add-user-button">Add user</button>
     <transition name="fade-add-user-modal">
-      <EditUserModal
+      <UserModal
         v-if="showModal"
         @close="showModal = false"
-        @update-user-list="changeUserData" />
+        @update-user-list="changeUserData"
+        :actiontype="actionType" />
     </transition>
   </div>
 </template>
 
 <script>
 
-import EditUserModal from '../Users/EditUserModal';
 import { sendRequest } from '../../services/index';
 import UserItem from '../Users/UserItem';
+import UserModal from '../Users/UserModal';
 
 export default {
   name: 'admin-dashboard',
   data() {
     return {
       users: [],
-      showModal: false
+      showModal: false,
+      actionType: 'add'
     };
   },
   methods: {
@@ -63,6 +65,8 @@ export default {
     },
 
     changeUserData(user, actionType) {
+      this.showModal = false;
+
       switch (actionType) {
         case 'add': return this.addUser(user);
         case 'edit': return this.editUser(user);
@@ -73,22 +77,19 @@ export default {
   },
   mounted() {
     sendRequest('/users', null, 'get')
-    .then(res => res.json())
-    .then(res => {
-      this.users = res;
-    });
+      .then(res => res.json())
+      .then(res => {
+        this.users = res;
+      });
   },
   components: {
     UserItem,
-    EditUserModal
+    UserModal
   }
 };
 </script>
 
 <style lang="scss" scoped>
-h1 {
-  font-size: 30px;
-}
 
 .add-user-button {
   @include button;
@@ -99,18 +100,59 @@ h1 {
 }
 
 .fade-add-user-modal-enter-active, .fade-add-user-modal-leave-active {
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+  transition: opacity 1s ease-in-out, transform 1s ease;
 }
 
 .fade-add-user-modal-enter, .fade-add-user-modal-leave-to {
   opacity: 0;
 }
 
-.fade-add-user-modal-enter-active {
-  transition-delay: 0.3s;
-}
-
 .fade-add-user-modal-enter-to, .fade-add-user-modal-leave {
   opacity: 1;
 }
+
+::v-deep .users-input {
+  @include users-input;
+}
+
+.users-input ::v-deep {
+  .user-input-button {
+    @include user-input-button;
+  }
+}
+
+::v-deep .modal-body-line {
+  @include modal-body-line;
+}
+
+.modal-body-line ::v-deep .modal-body-title {
+  @include modal-body-title;
+}
+
+::v-deep .add-user-label {
+  @include add-user-label;
+}
+
+::v-deep .input-field {
+  @include input-field;
+}
+
+::v-deep .input-field-user {
+  margin-bottom: 10px;
+}
+
+::v-deep .checkbox:hover {
+  cursor: pointer;
+}
+
+::v-deep .cancel-button {
+  @include button;
+
+  background-color: red;
+}
+
+::v-deep .save-button {
+  @include button;
+}
+
 </style>

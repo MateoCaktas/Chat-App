@@ -10,3 +10,56 @@
     cursor: pointer;
   }
 }
+
+@mixin modal-body-title {
+  width: 150px;
+  justify-self: flex-start;
+  margin-right: auto;
+  text-align: start;
+}
+
+@mixin modal-body-line {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  margin: 20px;
+  justify-content: space-between;
+  align-items: center;
+
+  > * {
+    margin: 5px;
+  }
+}
+
+@mixin users-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+@mixin user-input-button {
+  @include button;
+
+  width: 50px;
+  height: 25px;
+  margin: 0 5px;
+}
+
+@mixin add-user-label {
+  font-size: 12px;
+  align-self: start;
+}
+
+@mixin input-field {
+  width: 150px;
+  transition: flex 1s ease-in-out;
+  margin-left: auto;
+  padding: 5px;
+  border: 2px solid $primary-color;
+  border-radius: 5px;
+  box-shadow: 2px 2px;
+
+  &:hover, &:focus {
+    flex: 1;
+  }
+}
