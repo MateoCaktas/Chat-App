@@ -26,7 +26,6 @@
 import EditRoomModal from './EditRoomModal';
 import { Request } from '../../services/index';
 import RoomItem from './RoomItem';
-// import { sendRequest } from '../../services/index';
 
 export default {
   name: 'admin-room-list',
