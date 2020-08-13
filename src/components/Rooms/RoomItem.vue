@@ -2,8 +2,8 @@
   <div>
     <transition name="fade-room-item">
       <div id="room-window">
-        <p> {{ currentRoom.name }} </p>
-        <p>Users: {{ usersLength }} / {{ currentRoom.limit }}</p>
+        <p> {{ room.name }} </p>
+        <p>Users: {{ usersLength }} / {{ room.limit }}</p>
         <button @click="showModal = true" class="edit-room-button"> Edit Room </button>
       </div>
     </transition>
@@ -37,14 +37,12 @@ export default {
       showModal: false,
       usersLength: 0,
       usersEmails: [],
-      currentRoom: {},
       actionType: 'edit'
     };
   },
   methods: {
     saveRoom(newRoom) {
-      this.currentRoom = newRoom;
-      this.$emit('change-room-data', this.currentRoom, this.actionType);
+      this.$emit('change-room-data', newRoom, this.actionType);
       this.showModal = false;
     },
     getUsers() {
@@ -60,14 +58,7 @@ export default {
     room: {
       handler: 'getUsers',
       immediate: true
-    },
-    currentRoom: {
-      handler: 'getUsers',
-      immediate: true
     }
-  },
-  mounted() {
-    this.currentRoom = this.room;
   },
   components: {
     RoomModal
@@ -104,15 +95,11 @@ export default {
 }
 
 .fade-edit-room-modal-enter-active, .fade-edit-room-modal-leave-active {
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+  transition: opacity 1s ease-in-out, transform 1s ease;
 }
 
 .fade-edit-room-modal-enter, .fade-edit-room-modal-leave-to {
   opacity: 0;
-}
-
-.fade-edit-room-modal-enter-to, .fade-edit-room-modal-leave {
-  opacity: 1;
 }
 
 .fade-room-item-enter-active, .fade-room-item-leave-active {
@@ -121,28 +108,6 @@ export default {
 
 .fade-room-item-enter {
   opacity: 0;
-}
-
-.fade-room-item-leave {
-  opacity: 1;
-}
-
-::v-deep {
-  .users-input {
-    @include users-input;
-  }
-
-  .user-input-button {
-    @include user-input-button;
-  }
-
-  .delete-user-button {
-    background-color: red;
-  }
-}
-
-.modal-body-line ::v-deep .modal-body-title {
-  @include modal-body-title;
 }
 
 </style>

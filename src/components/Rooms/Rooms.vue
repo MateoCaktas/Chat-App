@@ -126,29 +126,9 @@ export default {
   opacity: 0;
 }
 
-.fade-add-room-modal-enter-to, .fade-add-room-modal-leave {
-  opacity: 1;
-}
-
 ::v-deep {
-  .users-input {
-    @include users-input;
-  }
-
-  .modal-body-line {
-    @include modal-body-line;
-  }
-
   .save-button {
     @include button;
-  }
-
-  .add-user-label {
-    @include add-user-label;
-  }
-
-  .input-field {
-    @include input-field;
   }
 
   .cancel-button {
@@ -156,16 +136,6 @@ export default {
 
     background-color: red;
   }
-}
-
-.users-input ::v-deep {
-  .user-input-button {
-    @include user-input-button;
-  }
-}
-
-.modal-body-line ::v-deep .modal-body-title {
-  @include modal-body-title;
 }
 
 </style>

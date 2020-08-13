@@ -91,14 +91,6 @@ export default {
 
 <style lang="scss" scoped>
 
-.add-user-button {
-  @include button;
-
-  width: 20%;
-  margin: 30px 0;
-  font-size: 20px;
-}
-
 .fade-add-user-modal-enter-active, .fade-add-user-modal-leave-active {
   transition: opacity 1s ease-in-out, transform 1s ease;
 }
@@ -107,27 +99,15 @@ export default {
   opacity: 0;
 }
 
-.fade-add-user-modal-enter-to, .fade-add-user-modal-leave {
-  opacity: 1;
+.add-user-button {
+  @include button;
+
+  width: 20%;
+  margin: 30px 0;
+  font-size: 20px;
 }
 
 ::v-deep {
-  .modal-body-line {
-    @include modal-body-line;
-  }
-
-  .users-input {
-    @include users-input;
-  }
-
-  .add-user-label {
-    @include add-user-label;
-  }
-
-  .input-field {
-    @include input-field;
-  }
-
   .checkbox:hover {
     cursor: pointer;
   }
@@ -141,14 +121,6 @@ export default {
   .save-button {
     @include button;
   }
-}
-
-.users-input ::v-deep .user-input-button {
-  @include user-input-button;
-}
-
-.modal-body-line ::v-deep .modal-body-title {
-  @include modal-body-title;
 }
 
 </style>

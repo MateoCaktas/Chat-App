@@ -23,9 +23,9 @@
             type="number">
         </div>
         <div class="modal-body-line">
-          <h4 class="belonging-users-title">Belonging Users:</h4>
+          <h4 class="modal-body-title belonging-users-title">Belonging Users:</h4>
           <div class="users-input">
-            <div v-for="(mail, index) in usersEmails" :key="mail">
+            <div v-for="(mail, index) in usersEmails" :key="mail" class="user-input">
               <input
                 v-model="usersEmails[index]"
                 class="input-field-user"
@@ -33,7 +33,7 @@
                 type="text">
               <button @click="removeUserField(mail)" class="user-input-button delete-user-button"><span>x</span></button>
             </div>
-            <label class="add-user-label">Add user (max {{ currentRoom.limit ? currentRoom.limit : '-' }})</label>
+            <label class="add-user-label">Add user (max {{ currentRoom.limit || '-' }})</label>
             <div>
               <input
                 v-model="userEmail"
@@ -131,33 +131,13 @@ export default {
 <style lang="scss" scoped>
 
 ::v-deep {
-  .users-input {
-    @include users-input;
-  }
-
-  .user-input-button {
-    @include user-input-button;
-  }
-
   .delete-user-button {
     background-color: red;
   }
-
-  .input-field-user {
-    @include input-field;
-  }
 }
 
-.modal-body-line ::v-deep {
-  .modal-body-title {
-    @include modal-body-title;
-  }
-
-  .belonging-users-title {
-    @include modal-body-title;
-
-    align-self: flex-start;
-  }
+.belonging-users-title {
+  align-self: flex-start;
 }
 
 </style>

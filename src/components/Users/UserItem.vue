@@ -119,12 +119,4 @@ h1 {
   opacity: 0;
 }
 
-.view-edit-user-modal-enter-to, .view-edit-user-modal-leave {
-  opacity: 1;
-}
-
-.modal-body-line ::v-deep .modal-body-title {
-  @include modal-body-title;
-}
-
 </style>

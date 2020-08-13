@@ -105,11 +105,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-.modal-body-line ::v-deep .modal-body-title {
-  @include modal-body-title;
-}
-
-</style>

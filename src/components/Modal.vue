@@ -51,6 +51,7 @@ export default {
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
   border: 1px solid $tertiary-color;
+  overflow: scroll;
 }
 
 .modal-header {
@@ -61,6 +62,7 @@ export default {
   background-color: $primary-color;
   justify-content: center;
   align-items: center;
+  border-bottom: 1px solid $tertiary-color;
 
   h3 {
     margin-top: 0;
@@ -68,11 +70,22 @@ export default {
   }
 }
 
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  overflow: scroll;
+  margin-bottom: 5px;
+  align-items: center;
+}
+
 .modal-footer {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  padding: 20px;
+  padding: 10px;
+  border-top: 1px solid $tertiary-color;
+  background-color: lightgray;
 }
 
 @media only screen and (max-width: 600px) {
