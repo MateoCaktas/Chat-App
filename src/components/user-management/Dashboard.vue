@@ -33,14 +33,14 @@ export default {
   },
   methods: {
     addUser(user) {
-      this.httpRequest.sendRequest(user, 'post')
+      this.httpRequest.sendRequest('post', user)
         .then(user => user.json())
         .then(user => {
           this.users.push(user);
         });
     },
     deleteUser(user) {
-      this.httpRequest.sendRequest(user, 'delete')
+      this.httpRequest.sendRequest('delete', user)
         .then(() => {
           const index = this.users.findIndex(usr => usr.id === user.id);
           this.users.splice(index, 1);
@@ -48,7 +48,7 @@ export default {
     },
 
     editUser(user) {
-      this.httpRequest.sendRequest(user, 'put')
+      this.httpRequest.sendRequest('put', user)
         .then(user => user.json())
         .then(user => {
           const index = this.users.findIndex(usr => usr.id === user.id);
@@ -75,7 +75,7 @@ export default {
   mounted() {
     this.httpRequest = new Request('/users');
 
-    this.httpRequest.sendRequest(null, 'get')
+    this.httpRequest.sendRequest('get')
       .then(res => res.json())
       .then(res => {
         this.users = res;

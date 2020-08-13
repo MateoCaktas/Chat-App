@@ -38,7 +38,7 @@ export default {
   mounted() {
     this.httpRequest = new Request(`/rooms/${this.room.id}/users`);
 
-    this.httpRequest.sendRequest(null, 'get')
+    this.httpRequest.sendRequest('get')
       .then(result => result.json())
       .then(result => {
         this.usersLength = result.length;

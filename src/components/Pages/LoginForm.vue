@@ -30,7 +30,7 @@ export default {
         password: this.password
       };
 
-      this.httpRequest.sendRequest(userCredentials, 'post')
+      this.httpRequest.sendRequest('post', userCredentials)
         .then(res => res.json())
         .then(res => this.$emit('logIn', res))
         .catch(err => console.log(err));

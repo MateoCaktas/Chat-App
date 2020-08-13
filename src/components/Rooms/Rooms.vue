@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     addRoom(room) {
-      this.httpRequest.sendRequest(room, 'post')
+      this.httpRequest.sendRequest('post', room)
         .then(room => room.json())
         .then(room => {
           this.rooms.push(room);
@@ -47,7 +47,7 @@ export default {
     },
 
     deleteRoom(room) {
-      this.httpRequest.sendRequest(room, 'delete')
+      this.httpRequest.sendRequest('delete', room)
         .then(() => {
           const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
           this.rooms.splice(index, 1);
@@ -55,7 +55,7 @@ export default {
     },
 
     editRoom(room) {
-      this.httpRequest.sendRequest(room, 'put')
+      this.httpRequest.sendRequest('put', room)
         .then(room => room.json())
         .then(room => {
           const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
@@ -75,7 +75,7 @@ export default {
   mounted() {
     this.httpRequest = new Request('/rooms');
 
-    this.httpRequest.sendRequest(null, 'get')
+    this.httpRequest.sendRequest('get')
       .then(res => res.json())
       .then(res => {
         this.rooms = res;

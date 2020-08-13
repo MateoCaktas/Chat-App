@@ -4,7 +4,7 @@ class Request {
     this.basePath = basePath;
   }
 
-  setRequestObject(data, type) {
+  setRequestObject(type, data) {
     const req = {
       method: `${type}`,
       headers: {
@@ -34,12 +34,12 @@ class Request {
     return '';
   }
 
-  sendRequest(data, type) {
+  sendRequest(type, data) {
     let path = this.basePath;
 
     if (data && data.id) path = `${path}/${data.id}`;
 
-    const req = this.setRequestObject(data, type);
+    const req = this.setRequestObject(type, data);
 
     return fetch(path, req);
   }
