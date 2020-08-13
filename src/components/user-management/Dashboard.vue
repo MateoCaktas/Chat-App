@@ -27,25 +27,20 @@ export default {
   data() {
     return {
       users: [],
-      showModal: false
+      showModal: false,
+      httpRequest: {}
     };
   },
   methods: {
     addUser(user) {
-      /* sendRequest('/users', user, 'post') */
-      const request = new Request('/users', user, 'post');
-
-      request.sendHttpRequest()
+      this.httpRequest.sendRequest(user, 'post')
         .then(user => user.json())
         .then(user => {
           this.users.push(user);
         });
     },
     deleteUser(user) {
-      /* sendRequest('/users', user, 'delete') */
-      const request = new Request('/users', user, 'delete');
-
-      request.sendHttpRequest()
+      this.httpRequest.sendRequest(user, 'delete')
         .then(() => {
           const index = this.users.findIndex(usr => usr.id === user.id);
           this.users.splice(index, 1);
@@ -53,10 +48,7 @@ export default {
     },
 
     editUser(user) {
-      /* sendRequest('/users', user, 'put') */
-      const request = new Request('/users', user, 'put');
-
-      request.sendHttpRequest()
+      this.httpRequest.sendRequest(user, 'put')
         .then(user => user.json())
         .then(user => {
           const index = this.users.findIndex(usr => usr.id === user.id);
@@ -81,10 +73,9 @@ export default {
     }
   },
   mounted() {
-    /* sendRequest('/users', null, 'get') */
-    const request = new Request('/users', null, 'get');
+    this.httpRequest = new Request('/users');
 
-    request.sendGetRequest()
+    this.httpRequest.sendRequest(null, 'get')
       .then(res => res.json())
       .then(res => {
         this.users = res;

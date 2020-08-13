@@ -12,12 +12,15 @@
 </template>
 
 <script>
+
 import { Request } from '../../services';
+
 export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      httpRequest: {}
     };
   },
   methods: {
@@ -27,17 +30,14 @@ export default {
         password: this.password
       };
 
-      /* sendRequest('/login', userCredentials, 'post')
-        .then(res => res.json())
-        .then(res => this.$emit('logIn', res))
-        .catch(err => console.log(err)); */
-      const test = new Request('/login', userCredentials, 'post');
-
-      test.sendHttpRequest()
+      this.httpRequest.sendRequest(userCredentials, 'post')
         .then(res => res.json())
         .then(res => this.$emit('logIn', res))
         .catch(err => console.log(err));
     }
+  },
+  mounted() {
+    this.httpRequest = new Request('/login');
   }
 };
 </script>

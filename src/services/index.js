@@ -1,9 +1,21 @@
 class Request {
-  constructor(path, data, type) {
+  constructor(basePath) {
     this.jwt = this.getCookie('token');
-    this.path = data && data.id ? `${path}/${data.id}` : path;
-    this.data = data;
-    this.type = type;
+    this.basePath = basePath;
+  }
+
+  setRequestObject(data, type) {
+    const req = {
+      method: `${type}`,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.jwt}`
+      }
+    };
+
+    if (data) req.body = JSON.stringify(data);
+
+    return req;
   }
 
   getCookie(cookieName) {
@@ -22,25 +34,14 @@ class Request {
     return '';
   }
 
-  sendGetRequest() {
-    return fetch(this.path, {
-      method: `${this.type}`,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.jwt}`
-      }
-    });
-  }
+  sendRequest(data, type) {
+    let path = this.basePath;
 
-  sendHttpRequest() {
-    return fetch(this.path, {
-      method: `${this.type}`,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.jwt}`
-      },
-      body: JSON.stringify(this.data)
-    });
+    if (data && data.id) path = `${path}/${data.id}`;
+
+    const req = this.setRequestObject(data, type);
+
+    return fetch(path, req);
   }
 }
 

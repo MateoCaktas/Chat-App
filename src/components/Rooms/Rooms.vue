@@ -33,15 +33,13 @@ export default {
   data() {
     return {
       rooms: [],
-      showModal: false
+      showModal: false,
+      httpRequest: {}
     };
   },
   methods: {
     addRoom(room) {
-      /* sendRequest('/rooms', room, 'post') */
-      const request = new Request('/rooms', room, 'post');
-
-      request.sendHttpRequest()
+      this.httpRequest.sendRequest(room, 'post')
         .then(room => room.json())
         .then(room => {
           this.rooms.push(room);
@@ -49,10 +47,7 @@ export default {
     },
 
     deleteRoom(room) {
-      /* sendRequest('/rooms', room, 'delete') */
-      const myRequest = new Request('/rooms', room, 'delete');
-
-      myRequest.sendHttpRequest()
+      this.httpRequest.sendRequest(room, 'delete')
         .then(() => {
           const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
           this.rooms.splice(index, 1);
@@ -60,10 +55,7 @@ export default {
     },
 
     editRoom(room) {
-      /* sendRequest('/rooms', room, 'put') */
-      const request = new Request('/rooms', room, 'put');
-
-      request.sendHttpRequest()
+      this.httpRequest.sendRequest(room, 'put')
         .then(room => room.json())
         .then(room => {
           const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
@@ -81,10 +73,9 @@ export default {
     }
   },
   mounted() {
-    /* sendRequest('/rooms', null, 'get') */
-    const request = new Request('/rooms', null, 'get');
+    this.httpRequest = new Request('/rooms');
 
-    request.sendGetRequest()
+    this.httpRequest.sendRequest(null, 'get')
       .then(res => res.json())
       .then(res => {
         this.rooms = res;

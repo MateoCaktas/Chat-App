@@ -31,14 +31,14 @@ export default {
   data() {
     return {
       showModal: false,
-      usersLength: 0
+      usersLength: 0,
+      httpRequest: {}
     };
   },
   mounted() {
-    /* sendRequest(`/rooms/${this.room.id}/users`, null, 'get') */
-    const request = new Request(`/rooms/${this.room.id}/users`, null, 'get');
+    this.httpRequest = new Request(`/rooms/${this.room.id}/users`);
 
-    request.sendGetRequest()
+    this.httpRequest.sendRequest(null, 'get')
       .then(result => result.json())
       .then(result => {
         this.usersLength = result.length;
