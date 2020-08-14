@@ -35,10 +35,14 @@ export default {
   data() {
     return {
       showModal: false,
-      usersLength: 0,
       usersEmails: [],
       actionType: 'edit'
     };
+  },
+  computed: {
+    usersLength() {
+      return this.usersEmails.length;
+    }
   },
   methods: {
     saveRoom(newRoom) {
@@ -49,7 +53,6 @@ export default {
       sendRequest(`/rooms/${this.room.id}/users`, null, 'get')
         .then(result => result.json())
         .then(result => {
-          this.usersLength = result.length;
           this.usersEmails = result.map(user => user.email);
         });
     }

@@ -10,3 +10,10 @@
     cursor: pointer;
   }
 }
+
+@mixin modal-body-title {
+  width: 150px;
+  justify-self: flex-start;
+  margin-right: auto;
+  text-align: start;
+}

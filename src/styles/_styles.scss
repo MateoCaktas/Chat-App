@@ -1,4 +1,4 @@
-.input-field, .input-field-user {
+.input-field {
   width: 150px;
   height: 20px;
   transition: color, background-color 0.5s ease-in-out;
@@ -15,10 +15,7 @@
 }
 
 .modal-body-title {
-  width: 150px;
-  justify-self: flex-start;
-  margin-right: auto;
-  text-align: start;
+  @include modal-body-title;
 }
 
 .modal-body-line {

@@ -28,7 +28,7 @@
             class="input-field"
             placeholder="Email">
         </div>
-        <div v-if="actiontype === 'add'" class="modal-body-line">
+        <div v-if="!isEditing" class="modal-body-line">
           <h4 class="modal-body-title">Password:</h4>
           <input
             v-model="currentUser.password"

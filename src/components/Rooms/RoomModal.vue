@@ -23,28 +23,30 @@
             type="number">
         </div>
         <div class="modal-body-line">
-          <h4 class="modal-body-title belonging-users-title">Belonging Users:</h4>
+          <h4 class="belonging-users-title">Belonging Users:</h4>
           <div class="users-input">
             <div v-for="(mail, index) in usersEmails" :key="mail" class="user-input">
               <input
                 v-model="usersEmails[index]"
-                class="input-field-user"
+                class="input-field"
                 placeholder="User"
                 type="text">
-              <button @click="removeUserField(mail)" class="user-input-button delete-user-button"><span>x</span></button>
+              <button @click="removeUserField(mail)" class="user-input-button delete-user-button">
+                <span>x</span>
+              </button>
             </div>
             <label class="add-user-label">Add user (max {{ currentRoom.limit || '-' }})</label>
             <div>
               <input
                 v-model="userEmail"
-                class="input-field-user"
+                class="input-field"
                 placeholder="User"
                 type="text">
               <button @click="addUser" class="user-input-button"><span>+</span></button>
             </div>
           </div>
         </div>
-        <div v-if="actiontype === 'edit'" class="modal-body-line">
+        <div v-if="isEditing" class="modal-body-line">
           <h4>Room ID: {{ currentRoom.id }}</h4>
         </div>
       </template>
@@ -137,7 +139,9 @@ export default {
 }
 
 .belonging-users-title {
+  @include modal-body-title;
+
+  margin-top: 5px;
   align-self: flex-start;
 }
-
 </style>
