@@ -18,7 +18,7 @@
 <script>
 
 import EditRoomModal from './EditRoomModal';
-import { Request } from '../../services/index';
+import Request from '../../services/index';
 
 export default {
   name: 'room-item',

@@ -19,7 +19,7 @@
 <script>
 
 import EditUserModal from '../Users/EditUserModal';
-import { Request } from '../../services/index';
+import Request from '../../services/index';
 import UserItem from '../Users/UserItem';
 
 export default {

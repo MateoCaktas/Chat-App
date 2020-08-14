@@ -13,7 +13,7 @@
 
 <script>
 
-import { Request } from '../../services';
+import Request from '../../services';
 
 export default {
   data() {
