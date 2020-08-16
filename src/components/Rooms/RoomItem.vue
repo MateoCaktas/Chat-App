@@ -1,23 +1,27 @@
 <template>
   <div>
-    <div id="room-window">
-      <p> {{ room.name }} </p>
-      <p>Users: {{ usersLength }} / {{ room.limit }}</p>
-      <button @click="showModal = true" class="edit-room-button"> Edit room </button>
-    </div>
+    <transition name="fade-room-item">
+      <div id="room-window">
+        <p> {{ room.name }} </p>
+        <p>Users: {{ usersLength }} / {{ room.limit }}</p>
+        <button @click="showModal = true" class="edit-room-button"> Edit Room </button>
+      </div>
+    </transition>
     <transition name="fade-edit-room-modal">
-      <EditRoomModal
+      <RoomModal
         v-if="showModal"
         @close="showModal = false"
-        @update-room-list="(currentRoom, action) => $emit('change-room-data', currentRoom, action)"
-        :room="room" />
+        @save-room-data="saveRoom"
+        :room="room"
+        :emailslist="usersEmails"
+        :actiontype="actionType" />
     </transition>
   </div>
 </template>
 
 <script>
 
-import EditRoomModal from './EditRoomModal';
+import RoomModal from './RoomModal';
 import { sendRequest } from '../../services/index';
 
 export default {
@@ -31,18 +35,36 @@ export default {
   data() {
     return {
       showModal: false,
-      usersLength: 0
+      usersEmails: [],
+      actionType: 'edit'
     };
   },
-  mounted() {
-    sendRequest(`/rooms/${this.room.id}/users`, null, 'get')
-      .then(result => result.json())
-      .then(result => {
-        this.usersLength = result.length;
-      });
+  computed: {
+    usersLength() {
+      return this.usersEmails.length;
+    }
+  },
+  methods: {
+    saveRoom(newRoom) {
+      this.$emit('change-room-data', newRoom, this.actionType);
+      this.showModal = false;
+    },
+    getUsers() {
+      sendRequest(`/rooms/${this.room.id}/users`, null, 'get')
+        .then(result => result.json())
+        .then(result => {
+          this.usersEmails = result.map(user => user.email);
+        });
+    }
+  },
+  watch: {
+    room: {
+      handler: 'getUsers',
+      immediate: true
+    }
   },
   components: {
-    EditRoomModal
+    RoomModal
   }
 };
 </script>
@@ -83,8 +105,12 @@ export default {
   opacity: 0;
 }
 
-.fade-edit-room-modal-enter-to, .fade-edit-room-modal-leave {
-  opacity: 1;
+.fade-room-item-enter-active, .fade-room-item-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-room-item-enter {
+  opacity: 0;
 }
 
 </style>
