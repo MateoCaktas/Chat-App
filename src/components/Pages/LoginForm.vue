@@ -6,13 +6,19 @@
       <input v-model="email" type="text" class="login-input-field" placeholder="email">
       <p>Please enter your password</p>
       <input v-model="password" type="password" class="login-input-field" placeholder="password" autocomplete="on">
-      <input class="submit-button" value="Log in" type="submit">
+      <CustomButton
+        class="login-button"
+        value="Log In"
+        type="submit" />
     </form>
   </div>
 </template>
 
 <script>
+
+import CustomButton from '../common/Button';
 import Request from '../../services';
+
 export default {
   data() {
     return {
@@ -33,6 +39,9 @@ export default {
         .then(res => this.$emit('logIn', res))
         .catch(err => console.log(err));
     }
+  },
+  components: {
+    CustomButton
   }
 };
 </script>
@@ -59,12 +68,11 @@ export default {
   outline: none;
 }
 
-.submit-button {
-  @include button;
-
+.login-button {
   width: 40%;
   margin: 30px 0;
   font-size: 18px;
   align-self: center;
 }
+
 </style>

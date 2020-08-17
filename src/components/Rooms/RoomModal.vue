@@ -31,9 +31,10 @@
                 class="input-field"
                 placeholder="User"
                 type="text">
-              <button @click="removeUserField(mail)" class="user-input-button delete-user-button">
-                <span>x</span>
-              </button>
+              <CustomButton
+                :onclick="removeUserField(mail)"
+                class="user-input-button delete-user-button"
+                value="x" />
             </div>
             <label class="add-user-label">Add user (max {{ currentRoom.limit || '-' }})</label>
             <div>
@@ -42,9 +43,10 @@
                 class="input-field"
                 placeholder="User"
                 type="text">
-              <button @click="addUser" class="user-input-button">
-                <span>+</span>
-              </button>
+              <CustomButton
+                :onclick="addUser"
+                class="user-input-button"
+                value="+" />
             </div>
           </div>
         </div>
@@ -54,12 +56,15 @@
       </template>
 
       <template slot="modal-footer">
-        <button @click="$emit('close')" class="cancel-button">
-          Cancel
-        </button>
-        <button @click="saveRoom" :disabled="!validateFields" class="save-button">
-          Save
-        </button>
+        <CustomButton
+          :onclick="close"
+          class="cancel-button"
+          value="Cancel" />
+        <CustomButton
+          :onclick="saveRoom"
+          :disabled="!validateFields"
+          class="save-button"
+          value="Save" />
       </template>
     </template>
   </Modal>
@@ -67,7 +72,8 @@
 
 <script>
 
-import Modal from '../Modal';
+import CustomButton from '../common/Button';
+import Modal from '../common/Modal';
 
 export default {
   name: 'room-modal',
@@ -107,6 +113,9 @@ export default {
     }
   },
   methods: {
+    close() {
+      this.$emit('close');
+    },
     addUser() {
       this.usersEmails.push(this.userEmail);
       this.userEmail = '';
@@ -125,6 +134,7 @@ export default {
     this.currentRoom = Object.assign({}, this.room);
   },
   components: {
+    CustomButton,
     Modal
   }
 };

@@ -4,7 +4,9 @@
       <div id="room-window">
         <p> {{ room.name }} </p>
         <p>Users: {{ usersLength }} / {{ room.limit }}</p>
-        <button @click="showModal = true" class="edit-room-button"> Edit Room </button>
+        <CustomButton
+          :onclick="openModal"
+          value="Edit Room" />
       </div>
     </transition>
     <transition name="fade-edit-room-modal">
@@ -21,6 +23,7 @@
 
 <script>
 
+import CustomButton from '../common/Button';
 import Request from '../../services/index';
 import RoomModal from './RoomModal';
 
@@ -46,6 +49,9 @@ export default {
     }
   },
   methods: {
+    openModal() {
+      this.showModal = true;
+    },
     saveRoom(newRoom, actionType) {
       this.$emit('save-room-data', newRoom, actionType);
       this.showModal = false;
@@ -73,6 +79,7 @@ export default {
       });
   },
   components: {
+    CustomButton,
     RoomModal
   }
 };
@@ -100,10 +107,6 @@ export default {
 #room-window:hover {
   transform: scale(1.1);
   cursor: pointer;
-}
-
-.edit-room-button {
-  @include button;
 }
 
 .fade-edit-room-modal-enter-active, .fade-edit-room-modal-leave-active {

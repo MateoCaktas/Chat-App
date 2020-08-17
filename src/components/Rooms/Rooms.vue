@@ -10,7 +10,10 @@
             :room="room" />
         </div>
       </div>
-      <button @click="showModal = true" class="create-room-button">Create a room</button>
+      <CustomButton
+        :onclick="openModal"
+        class="create-room-button"
+        value="Create a room" />
     </div>
     <transition name="fade-add-room-modal">
       <RoomModal
@@ -24,6 +27,7 @@
 
 <script>
 
+import CustomButton from '../common/Button';
 import Request from '../../services/index';
 import RoomItem from './RoomItem';
 import RoomModal from './RoomModal';
@@ -40,6 +44,9 @@ export default {
     };
   },
   methods: {
+    openModal() {
+      this.showModal = true;
+    },
     cancel() {
       this.addedRoom = {};
       this.showModal = false;
@@ -85,6 +92,7 @@ export default {
       });
   },
   components: {
+    CustomButton,
     RoomItem,
     RoomModal
   }
@@ -129,8 +137,6 @@ export default {
   }
 
   .cancel-button {
-    @include button;
-
     background-color: red;
   }
 }

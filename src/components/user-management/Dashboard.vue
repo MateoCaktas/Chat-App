@@ -6,7 +6,10 @@
         @change-user-data="changeUserData"
         :user="user" />
     </div>
-    <button @click="showModal = true" class="add-user-button">Add user</button>
+    <CustomButton
+      :onclick="openModal"
+      class="add-user-button"
+      value="Add User" />
     <transition name="fade-add-user-modal">
       <UserModal
         v-if="showModal"
@@ -19,9 +22,10 @@
 
 <script>
 
+import CustomButton from '../common/Button';
 import Request from '../../services/index';
-import UserItem from '../Users/UserItem';
-import UserModal from '../Users/UserModal';
+import UserItem from '../users/UserItem';
+import UserModal from '../users/UserModal';
 
 export default {
   name: 'admin-dashboard',
@@ -34,6 +38,9 @@ export default {
     };
   },
   methods: {
+    openModal() {
+      this.showModal = true;
+    },
     addUser(user) {
       this.httpRequest.sendRequest('post', user)
         .then(user => user.json())
@@ -86,6 +93,7 @@ export default {
       });
   },
   components: {
+    CustomButton,
     UserItem,
     UserModal
   }

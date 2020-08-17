@@ -6,8 +6,15 @@
         <p> {{ user.email }}</p>
       </div>
       <div class="button-options">
-        <button @click="showModal = true" class="edit-button"> Edit user </button>
-        <button v-if="!loggedUser" @click="deleteUser" class="delete-button"> Delete user </button>
+        <CustomButton
+          :onclick="openModal"
+          class="edit-button"
+          value="Edit User" />
+        <CustomButton
+          v-if="!loggedUser"
+          :onclick="deleteUser"
+          class="delete-button"
+          value="Delete User" />
         <transition name="view-edit-user-modal">
           <UserModal
             v-if="showModal"
@@ -23,6 +30,7 @@
 
 <script>
 
+import CustomButton from '../common/Button';
 import UserModal from './UserModal';
 
 export default {
@@ -49,6 +57,9 @@ export default {
     }
   },
   methods: {
+    openModal() {
+      this.showModal = true;
+    },
     deleteUser() {
       this.isActive = false;
       setTimeout(() => {
@@ -61,6 +72,7 @@ export default {
     }
   },
   components: {
+    CustomButton,
     UserModal
   }
 };

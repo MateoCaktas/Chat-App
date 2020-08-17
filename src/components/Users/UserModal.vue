@@ -45,12 +45,15 @@
       </template>
 
       <template slot="modal-footer">
-        <button @click="$emit('close')" class="cancel-button">
-          Cancel
-        </button>
-        <button @click="saveUser" :disabled="!validateFields" class="save-button">
-          Save
-        </button>
+        <CustomButton
+          :onclick="close"
+          class="cancel-button"
+          value="Cancel" />
+        <CustomButton
+          :onclick="saveUser"
+          :disabled="!validateFields"
+          class="save-button"
+          value="Save" />
       </template>
     </template>
   </Modal>
@@ -58,7 +61,8 @@
 
 <script>
 
-import Modal from '../Modal';
+import CustomButton from '../common/Button';
+import Modal from '../common/Modal';
 
 export default {
   name: 'user-modal',
@@ -93,6 +97,9 @@ export default {
     }
   },
   methods: {
+    close() {
+      this.$emit('close');
+    },
     saveUser() {
       this.$emit('update-user-list', this.currentUser, this.actiontype);
     }
@@ -101,6 +108,7 @@ export default {
     this.currentUser = Object.assign({}, this.user);
   },
   components: {
+    CustomButton,
     Modal
   }
 };

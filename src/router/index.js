@@ -1,8 +1,8 @@
-import About from '../components/Pages/About';
+import About from '../components/pages/About';
 import Dashboard from '../components/user-management/Dashboard';
-import Home from '../components/Pages/Home.vue';
-import LoginForm from '../components/Pages/LoginForm.vue';
-import Rooms from '../components/Rooms/Rooms.vue';
+import Home from '../components/pages/Home.vue';
+import LoginForm from '../components/pages/LoginForm.vue';
+import Rooms from '../components/rooms/Rooms.vue';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
