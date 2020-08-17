@@ -5,7 +5,7 @@
       <div class="room-list">
         <div v-for="room in rooms" :key="room.id">
           <RoomItem
-            @change-room-data="changeRoomData"
+            @save-room-data="saveRoomData"
             class="room-item"
             :room="room" />
         </div>
@@ -16,7 +16,7 @@
       <RoomModal
         v-if="showModal"
         @close="cancel"
-        @save-room-data="saveRoom"
+        @save-room-data="saveRoomData"
         :actiontype="actionType" />
     </transition>
   </div>
@@ -24,9 +24,9 @@
 
 <script>
 
+import Request from '../../services/index';
 import RoomItem from './RoomItem';
 import RoomModal from './RoomModal';
-import { sendRequest } from '../../services/index';
 
 export default {
   name: 'admin-room-list',
@@ -35,7 +35,8 @@ export default {
       rooms: [],
       showModal: false,
       addedRoom: {},
-      actionType: 'add'
+      actionType: 'add',
+      httpRequest: {}
     };
   },
   methods: {
@@ -43,35 +44,29 @@ export default {
       this.addedRoom = {};
       this.showModal = false;
     },
-    saveRoom(saveRoom) {
-      this.addedRoom = saveRoom;
-      this.addedRoom.creationTime = Date.now();
-      this.addRoom(this.addedRoom);
-      this.cancel();
-    },
     addRoom(room) {
-      sendRequest('/rooms', room, 'post')
+      this.httpRequest.sendRequest('post', room)
         .then(room => room.json())
         .then(room => {
           this.rooms.push(room);
         });
     },
     deleteRoom(room) {
-      sendRequest('/rooms', room, 'delete')
+      this.httpRequest.sendRequest('delete', room)
           .then(() => {
             const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
             this.rooms.splice(index, 1);
           });
     },
     editRoom(room) {
-      sendRequest('/rooms', room, 'put')
+      this.httpRequest.sendRequest('put', room)
         .then(room => room.json())
         .then(room => {
           const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
           this.rooms.splice(index, 1, room);
         });
     },
-    changeRoomData(room, actionType) {
+    saveRoomData(room, actionType) {
       switch (actionType) {
         case 'add': return this.addRoom(room);
         case 'edit': return this.editRoom(room);
@@ -81,7 +76,9 @@ export default {
     }
   },
   mounted() {
-    sendRequest('/rooms', null, 'get')
+    this.httpRequest = new Request('/rooms');
+
+    this.httpRequest.sendRequest('get')
       .then(res => res.json())
       .then(res => {
         this.rooms = res;
