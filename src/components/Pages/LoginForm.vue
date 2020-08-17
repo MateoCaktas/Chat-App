@@ -12,12 +12,13 @@
 </template>
 
 <script>
-import { sendRequest } from '../../services';
+import Request from '../../services';
 export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      httpRequest: {}
     };
   },
   methods: {
@@ -26,8 +27,8 @@ export default {
         email: this.email,
         password: this.password
       };
-
-      sendRequest('/login', userCredentials, 'post')
+      this.httpRequest = new Request('/login');
+      this.httpRequest.sendRequest('post', userCredentials)
         .then(res => res.json())
         .then(res => this.$emit('logIn', res))
         .catch(err => console.log(err));
