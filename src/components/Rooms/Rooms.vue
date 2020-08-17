@@ -24,9 +24,9 @@
 
 <script>
 
-import Request from '../../services/index';
 import RoomItem from './RoomItem';
-import RoomModal from './EditRoomModal';
+import RoomModal from './RoomModal';
+import { sendRequest } from '../../services/index';
 
 export default {
   name: 'admin-room-list',
@@ -35,8 +35,7 @@ export default {
       rooms: [],
       showModal: false,
       addedRoom: {},
-      actionType: 'add',
-      httpRequest: {}
+      actionType: 'add'
     };
   },
   methods: {
@@ -51,21 +50,21 @@ export default {
       this.cancel();
     },
     addRoom(room) {
-      this.httpRequest.sendRequest('post', room)
+      sendRequest('/rooms', room, 'post')
         .then(room => room.json())
         .then(room => {
           this.rooms.push(room);
         });
     },
     deleteRoom(room) {
-      this.httpRequest.sendRequest('delete', room)
-        .then(() => {
-          const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
-          this.rooms.splice(index, 1);
-        });
+      sendRequest('/rooms', room, 'delete')
+          .then(() => {
+            const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
+            this.rooms.splice(index, 1);
+          });
     },
     editRoom(room) {
-      this.httpRequest.sendRequest('put', room)
+      sendRequest('/rooms', room, 'put')
         .then(room => room.json())
         .then(room => {
           const index = this.rooms.findIndex(currentRoom => currentRoom.id === room.id);
@@ -82,9 +81,7 @@ export default {
     }
   },
   mounted() {
-    this.httpRequest = new Request('/rooms');
-
-    this.httpRequest.sendRequest('get')
+    sendRequest('/rooms', null, 'get')
       .then(res => res.json())
       .then(res => {
         this.rooms = res;
