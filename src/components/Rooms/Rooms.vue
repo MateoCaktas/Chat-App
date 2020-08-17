@@ -5,7 +5,7 @@
       <div class="room-list">
         <div v-for="room in rooms" :key="room.id">
           <RoomItem
-            @change-room-data="changeRoomData"
+            @save-room-data="saveRoomData"
             class="room-item"
             :room="room" />
         </div>
@@ -16,7 +16,7 @@
       <RoomModal
         v-if="showModal"
         @close="cancel"
-        @save-room-data="saveRoom"
+        @save-room-data="saveRoomData"
         :actiontype="actionType" />
     </transition>
   </div>
@@ -44,12 +44,6 @@ export default {
       this.addedRoom = {};
       this.showModal = false;
     },
-    saveRoom(saveRoom) {
-      this.addedRoom = saveRoom;
-      this.addedRoom.creationTime = Date.now();
-      this.addRoom(this.addedRoom);
-      this.cancel();
-    },
     addRoom(room) {
       this.httpRequest.sendRequest('post', room)
         .then(room => room.json())
@@ -72,7 +66,7 @@ export default {
           this.rooms.splice(index, 1, room);
         });
     },
-    changeRoomData(room, actionType) {
+    saveRoomData(room, actionType) {
       switch (actionType) {
         case 'add': return this.addRoom(room);
         case 'edit': return this.editRoom(room);

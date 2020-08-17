@@ -42,7 +42,9 @@
                 class="input-field"
                 placeholder="User"
                 type="text">
-              <button @click="addUser" class="user-input-button"><span>+</span></button>
+              <button @click="addUser" class="user-input-button">
+                <span>+</span>
+              </button>
             </div>
           </div>
         </div>
@@ -52,7 +54,7 @@
       </template>
 
       <template slot="modal-footer">
-        <button @click="cancel" class="cancel-button">
+        <button @click="$emit('close')" class="cancel-button">
           Cancel
         </button>
         <button @click="saveRoom" :disabled="!validateFields" class="save-button">
@@ -105,9 +107,6 @@ export default {
     }
   },
   methods: {
-    cancel() {
-      this.$emit('close');
-    },
     addUser() {
       this.usersEmails.push(this.userEmail);
       this.userEmail = '';
@@ -117,11 +116,12 @@ export default {
     },
     saveRoom() {
       this.currentRoom.usersEmails = this.usersEmails;
-      this.$emit('save-room-data', this.currentRoom);
+      this.$emit('save-room-data', this.currentRoom, this.actiontype);
+      this.$emit('close');
     }
   },
   mounted() {
-    this.usersEmails = this.emailslist;
+    this.usersEmails = [...this.emailslist];
     this.currentRoom = Object.assign({}, this.room);
   },
   components: {

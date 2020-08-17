@@ -46,8 +46,8 @@ export default {
     }
   },
   methods: {
-    saveRoom(newRoom) {
-      this.$emit('change-room-data', newRoom, this.actionType);
+    saveRoom(newRoom, actionType) {
+      this.$emit('save-room-data', newRoom, actionType);
       this.showModal = false;
     },
     getUsers() {
