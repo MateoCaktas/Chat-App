@@ -19,7 +19,7 @@
 
 <script>
 
-import Request from '../../services/index';
+import { sendRequest } from '../../services/index';
 import UserItem from '../Users/UserItem';
 import UserModal from '../Users/UserModal';
 
@@ -29,20 +29,19 @@ export default {
     return {
       users: [],
       showModal: false,
-      actionType: 'add',
-      httpRequest: {}
+      actionType: 'add'
     };
   },
   methods: {
     addUser(user) {
-      this.httpRequest.sendRequest('post', user)
+      sendRequest('/users', user, 'post')
         .then(user => user.json())
         .then(user => {
           this.users.push(user);
         });
     },
     deleteUser(user) {
-      this.httpRequest.sendRequest('delete', user)
+      sendRequest('/users', user, 'delete')
         .then(() => {
           const index = this.users.findIndex(usr => usr.id === user.id);
           this.users.splice(index, 1);
@@ -50,19 +49,19 @@ export default {
     },
 
     editUser(user) {
-      this.httpRequest.sendRequest('put', user)
-        .then(user => user.json())
-        .then(user => {
-          const index = this.users.findIndex(usr => usr.id === user.id);
-          this.users.splice(index, 1, user);
-          return user;
-        })
-        .then(user => {
-          if (user.id === JSON.parse(localStorage.loggedUser).id) {
-            // Save the changes on user if (loggedUser = changedUser) to the localStorage
-            localStorage.setItem('loggedUser', JSON.stringify(user));
-          }
-        });
+      sendRequest('/users', user, 'put')
+      .then(user => user.json())
+      .then(user => {
+        const index = this.users.findIndex(usr => usr.id === user.id);
+        this.users.splice(index, 1, user);
+        return user;
+      })
+      .then(user => {
+        if (user.id === JSON.parse(localStorage.loggedUser).id) {
+          // Save the changes on user if (loggedUser = changedUser) to the localStorage
+          localStorage.setItem('loggedUser', JSON.stringify(user));
+        }
+      });
     },
 
     changeUserData(user, actionType) {
@@ -77,9 +76,7 @@ export default {
     }
   },
   mounted() {
-    this.httpRequest = new Request('/users');
-
-    this.httpRequest.sendRequest('get')
+    sendRequest('/users', null, 'get')
       .then(res => res.json())
       .then(res => {
         this.users = res;

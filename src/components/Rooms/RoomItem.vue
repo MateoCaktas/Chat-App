@@ -21,8 +21,8 @@
 
 <script>
 
-import Request from '../../services/index';
-import RoomModal from './EditRoomModal';
+import RoomModal from './RoomModal';
+import { sendRequest } from '../../services/index';
 
 export default {
   name: 'room-item',
@@ -35,18 +35,33 @@ export default {
   data() {
     return {
       showModal: false,
-      usersLength: 0,
-      httpRequest: {}
+      usersEmails: [],
+      actionType: 'edit'
     };
   },
-  mounted() {
-    this.httpRequest = new Request(`/rooms/${this.room.id}/users`);
-
-    this.httpRequest.sendRequest('get')
-      .then(result => result.json())
-      .then(result => {
-        this.usersLength = result.length;
-      });
+  computed: {
+    usersLength() {
+      return this.usersEmails.length;
+    }
+  },
+  methods: {
+    saveRoom(newRoom) {
+      this.$emit('change-room-data', newRoom, this.actionType);
+      this.showModal = false;
+    },
+    getUsers() {
+      sendRequest(`/rooms/${this.room.id}/users`, null, 'get')
+        .then(result => result.json())
+        .then(result => {
+          this.usersEmails = result.map(user => user.email);
+        });
+    }
+  },
+  watch: {
+    room: {
+      handler: 'getUsers',
+      immediate: true
+    }
   },
   components: {
     RoomModal
