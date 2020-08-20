@@ -31,7 +31,7 @@
                 class="input-field"
                 placeholder="User"
                 type="text">
-              <CustomButton
+              <custom-button
                 :onclick="removeUserField(mail)"
                 class="user-input-button delete-user-button"
                 value="x" />
@@ -43,7 +43,7 @@
                 class="input-field"
                 placeholder="User"
                 type="text">
-              <CustomButton
+              <custom-button
                 :onclick="addUser"
                 class="user-input-button"
                 value="+" />
@@ -56,11 +56,11 @@
       </template>
 
       <template slot="modal-footer">
-        <CustomButton
+        <custom-button
           :onclick="close"
           class="cancel-button"
           value="Cancel" />
-        <CustomButton
+        <custom-button
           :onclick="saveRoom"
           :disabled="!validateFields"
           class="save-button"
@@ -72,7 +72,6 @@
 
 <script>
 
-import CustomButton from '../common/Button';
 import Modal from '../common/Modal';
 
 export default {
@@ -134,7 +133,6 @@ export default {
     this.currentRoom = Object.assign({}, this.room);
   },
   components: {
-    CustomButton,
     Modal
   }
 };

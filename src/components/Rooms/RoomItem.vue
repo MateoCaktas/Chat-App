@@ -4,7 +4,7 @@
       <div id="room-window">
         <p> {{ room.name }} </p>
         <p>Users: {{ usersLength }} / {{ room.limit }}</p>
-        <CustomButton
+        <custom-button
           :onclick="openModal"
           value="Edit Room" />
       </div>
@@ -23,7 +23,6 @@
 
 <script>
 
-import CustomButton from '../common/Button';
 import Request from '../../services/index';
 import RoomModal from './RoomModal';
 
@@ -79,7 +78,6 @@ export default {
       });
   },
   components: {
-    CustomButton,
     RoomModal
   }
 };

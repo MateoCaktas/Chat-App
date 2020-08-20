@@ -6,7 +6,7 @@
       <input v-model="email" type="text" class="login-input-field" placeholder="email">
       <p>Please enter your password</p>
       <input v-model="password" type="password" class="login-input-field" placeholder="password" autocomplete="on">
-      <CustomButton
+      <custom-button
         class="login-button"
         value="Log In"
         type="submit" />
@@ -16,7 +16,6 @@
 
 <script>
 
-import CustomButton from '../common/Button';
 import Request from '../../services';
 
 export default {
@@ -39,9 +38,6 @@ export default {
         .then(res => this.$emit('logIn', res))
         .catch(err => console.log(err));
     }
-  },
-  components: {
-    CustomButton
   }
 };
 </script>

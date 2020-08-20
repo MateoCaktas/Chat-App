@@ -10,7 +10,7 @@
             :room="room" />
         </div>
       </div>
-      <CustomButton
+      <custom-button
         :onclick="openModal"
         class="create-room-button"
         value="Create a room" />
@@ -27,7 +27,6 @@
 
 <script>
 
-import CustomButton from '../common/Button';
 import Request from '../../services/index';
 import RoomItem from './RoomItem';
 import RoomModal from './RoomModal';
@@ -92,7 +91,6 @@ export default {
       });
   },
   components: {
-    CustomButton,
     RoomItem,
     RoomModal
   }

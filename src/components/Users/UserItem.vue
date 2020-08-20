@@ -6,11 +6,11 @@
         <p> {{ user.email }}</p>
       </div>
       <div class="button-options">
-        <CustomButton
+        <custom-button
           :onclick="openModal"
           class="edit-button"
           value="Edit User" />
-        <CustomButton
+        <custom-button
           v-if="!loggedUser"
           :onclick="deleteUser"
           class="delete-button"
@@ -30,7 +30,6 @@
 
 <script>
 
-import CustomButton from '../common/Button';
 import UserModal from './UserModal';
 
 export default {
@@ -72,7 +71,6 @@ export default {
     }
   },
   components: {
-    CustomButton,
     UserModal
   }
 };

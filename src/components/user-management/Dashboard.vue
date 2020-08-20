@@ -6,7 +6,7 @@
         @change-user-data="changeUserData"
         :user="user" />
     </div>
-    <CustomButton
+    <custom-button
       :onclick="openModal"
       class="add-user-button"
       value="Add User" />
@@ -22,7 +22,6 @@
 
 <script>
 
-import CustomButton from '../common/Button';
 import Request from '../../services/index';
 import UserItem from '../users/UserItem';
 import UserModal from '../users/UserModal';
@@ -93,7 +92,6 @@ export default {
       });
   },
   components: {
-    CustomButton,
     UserItem,
     UserModal
   }

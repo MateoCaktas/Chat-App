@@ -13,7 +13,7 @@
       <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
       <div v-else>
         <span class="user-label">Hello, {{ user.fullName }}</span>
-        <CustomButton
+        <custom-button
           :onclick="logoutUser"
           class="logout-button"
           value="Logout" />
@@ -23,8 +23,6 @@
 </template>
 
 <script>
-
-import CustomButton from './Button';
 
 export default {
   name: 'custom-header',
@@ -52,9 +50,6 @@ export default {
       this.isAdmin = user.isAdmin;
       this.isLoggedIn = !!user;
     }
-  },
-  components: {
-    CustomButton
   }
 };
 </script>

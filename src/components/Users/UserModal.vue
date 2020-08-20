@@ -45,11 +45,11 @@
       </template>
 
       <template slot="modal-footer">
-        <CustomButton
+        <custom-button
           :onclick="close"
           class="cancel-button"
           value="Cancel" />
-        <CustomButton
+        <custom-button
           :onclick="saveUser"
           :disabled="!validateFields"
           class="save-button"
@@ -61,7 +61,6 @@
 
 <script>
 
-import CustomButton from '../common/Button';
 import Modal from '../common/Modal';
 
 export default {
@@ -108,7 +107,6 @@ export default {
     this.currentUser = Object.assign({}, this.user);
   },
   components: {
-    CustomButton,
     Modal
   }
 };
