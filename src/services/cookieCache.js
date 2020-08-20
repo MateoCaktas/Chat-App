@@ -8,6 +8,10 @@ class CookieCache {
     return this.cookie;
   }
 
+  resetCookie() {
+    this.cookie = '';
+  }
+
   generateCookie() {
     const name = 'token=';
     const decodedCookie = decodeURIComponent(document.cookie);
