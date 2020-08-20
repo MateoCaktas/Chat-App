@@ -1,11 +1,11 @@
 'use strict';
 
-const authAdmin = require('../../middleware/authAdmin');
+const { authAdmin, checkIfAdminOrUser } = require('../../middleware/authAdmin');
 const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', authAdmin, (req, res) => {
+router.get('/', checkIfAdminOrUser, (req, res) => {
   if (req.isAdmin) {
     db.models.Room.findAll()
       .then(room => res.json(room))
@@ -28,7 +28,7 @@ router.get('/', authAdmin, (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', authAdmin, (req, res) => {
   const { creationTime, name, limit, usersEmails } = req.body;
 
   db.models.User.findAll({
@@ -49,7 +49,7 @@ router.post('/', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authAdmin, (req, res) => {
   db.models.Room.destroy({
     where: { id: req.params.id }
   })

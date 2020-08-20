@@ -1,5 +1,6 @@
 'use strict';
 
+const { authAdmin } = require('../../middleware/authAdmin');
 const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
@@ -10,7 +11,7 @@ router.get('/', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.post('/', (req, res) => {
+router.post('/', authAdmin, (req, res) => {
   const { firstName, lastName, email, password, isAdmin } = req.body;
 
   db.models.User.create({
@@ -24,7 +25,7 @@ router.post('/', (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authAdmin, (req, res) => {
   db.models.User.destroy({
     where: { id: req.params.id }
   })
@@ -32,7 +33,7 @@ router.delete('/:id', (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', authAdmin, (req, res) => {
   const { firstName, lastName, email, password, isAdmin } = req.body;
 
   db.models.User
