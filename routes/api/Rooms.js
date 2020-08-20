@@ -93,4 +93,25 @@ router.get('/:id/users', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+router.delete('/:id/users/:userID', (req, res) => {
+  db.models.User
+    .findOne({
+      where: {
+        id: req.body.id
+      }
+    })
+    .then(user => {
+      db.models.Room.findOne({
+        where: {
+          id: req.params.id
+        }
+      })
+        .then(room => {
+          room.removeBelongingUsers(user);
+        })
+        .then(() => res.send('User successfully deleted.'));
+    })
+    .catch(err => res.send(err));
+});
+
 module.exports = router;

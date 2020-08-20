@@ -1,17 +1,20 @@
 <template>
   <div class="room-container">
+    <div class="background-image"></div>
     <div class="messages-container">
       <div class="messages-container-header">
         <button @click="$router.go('-1')" class="messages-container-back-button">Back</button>
         <h1 class="messages-container-title">Room {{ id }}</h1>
-        <button class="messages-container-leave-button">Leave Room</button>
+        <button @click="leaveRoom" class="messages-container-leave-button">Leave Room</button>
       </div>
-      <div v-for="message in messages" :key="message.id" class="message">
-        <div class="user">
-          <img class="user-image" src="@/assets/user.png">
-          <div class="user-name">{{ message.userMessage.fullName }} </div>
+      <div class="messages">
+        <div v-for="message in messages" :key="message.id" class="message">
+          <div class="user">
+            <img class="user-image" src="@/assets/user.png">
+            <div class="user-name">{{ message.userMessage.fullName }} </div>
+          </div>
+          <div class="user-message-content">{{ message.content }}</div>
         </div>
-        <div class="user-message-content">{{ message.content }}</div>
       </div>
     </div>
 
@@ -34,12 +37,18 @@ export default {
   data() {
     return {
       id: 0,
-      httpRequest: {},
       messages: [],
-      usersList: []
+      usersList: [],
+      httpRequest: {},
+      getUsersBelongingToRoom: {}
     };
   },
   methods: {
+    leaveRoom() {
+      const user = JSON.parse(localStorage.loggedUser);
+      this.getUsersBelongingToRoom.sendRequest('delete', user);
+      this.$router.push({ name: 'Home' });
+    }
   },
   mounted() {
     this.id = this.$route.params.id;
@@ -51,8 +60,8 @@ export default {
         this.messages = result;
       });
 
-    const getUsersBelongingToRoom = new Request(`/rooms/${this.id}/users`);
-    getUsersBelongingToRoom.sendRequest('get')
+    this.getUsersBelongingToRoom = new Request(`/rooms/${this.id}/users`);
+    this.getUsersBelongingToRoom.sendRequest('get')
       .then(result => result.json())
       .then(result => {
         this.usersList = result.map(user => user);
@@ -62,6 +71,15 @@ export default {
 </script>
 
 <style lang="scss">
+
+.background-image {
+  position: absolute;
+  z-index: -5;
+  opacity: 0.5;
+  width: 100%;
+  height: 80%;
+  background-image: url("../../assets/background-image.jpg");
+}
 
 .room-container {
   display: flex;
@@ -79,6 +97,7 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  border-bottom: 1px solid $tertiary-color;
 }
 
 .messages-container-title {
@@ -95,6 +114,14 @@ export default {
 
   width: 100px;
   background-color: red;
+}
+
+.messages {
+  display: flex;
+  height: 350px;
+  flex-direction: column;
+  overflow: scroll;
+  border-bottom: 1px solid $tertiary-color;
 }
 
 .message {
@@ -122,8 +149,9 @@ export default {
   padding: 10px;
   color: white;
   font-size: 20px;
-  border-radius: 10px;
   background-color: $primary-color;
+  border: 1px solid $tertiary-color;
+  border-radius: 10px;
 }
 
 .users-list {
@@ -133,7 +161,6 @@ export default {
   right: 0;
   width: 20%;
   height: 80%;
-  margin-bottom: 50px;
   border-left: 1px solid $primary-color;
 }
 
