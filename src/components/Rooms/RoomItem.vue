@@ -4,7 +4,8 @@
       <div id="room-window">
         <p> {{ room.name }} </p>
         <p>Users: {{ usersLength }} / {{ room.limit }}</p>
-        <button @click="showModal = true" class="edit-room-button"> Edit Room </button>
+        <button @click="goToRoom" class="edit-room-button"> Enter </button>
+        <button v-if="isAdmin" @click="showModal = true" class="edit-room-button"> Edit Room </button>
       </div>
     </transition>
     <transition name="fade-edit-room-modal">
@@ -37,7 +38,8 @@ export default {
       showModal: false,
       usersEmails: [],
       actionType: 'edit',
-      httpRequest: {}
+      httpRequest: {},
+      isAdmin: false
     };
   },
   computed: {
@@ -46,6 +48,9 @@ export default {
     }
   },
   methods: {
+    goToRoom() {
+      this.$router.push({ path: `/rooms/${this.room.id}` });
+    },
     saveRoom(newRoom, actionType) {
       this.$emit('save-room-data', newRoom, actionType);
       this.showModal = false;
@@ -64,6 +69,7 @@ export default {
     }
   },
   mounted() {
+    this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.httpRequest = new Request(`/rooms/${this.room.id}/users`);
 
     this.httpRequest.sendRequest('get')
@@ -99,7 +105,6 @@ export default {
 
 #room-window:hover {
   transform: scale(1.1);
-  cursor: pointer;
 }
 
 .edit-room-button {

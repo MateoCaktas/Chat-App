@@ -50,4 +50,18 @@ router.put('/:id', (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
+router.get('/:id', (req, res) => {
+  db.models.Message
+    .findAll({
+      where: {
+        FK_room: req.params.id
+      },
+      include: [{
+        model: db.models.User, as: 'userMessage'
+      }]
+    })
+    .then(result => res.send(result))
+    .catch(err => res.status(400).send(err));
+});
+
 module.exports = router;

@@ -6,10 +6,8 @@
     <div class="navigation-bar">
       <router-link to="/" class="navigation-link">Home</router-link>
       <router-link to="/about" class="navigation-link" class-active="navigation-link-active">About</router-link>
-      <div v-if="isAdmin" class="admin-navigation-links">
-        <router-link to="/admin" class="navigation-link"> Dashboard </router-link>
-        <router-link to="/admin/rooms" class="navigation-link"> Rooms </router-link>
-      </div>
+      <router-link to="/rooms" class="navigation-link"> Rooms </router-link>
+      <router-link v-if="isAdmin" to="/admin" class="navigation-link"> Dashboard </router-link>
       <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
       <div v-else>
         <span class="user-label">Hello, {{ user.fullName }}</span>
@@ -75,7 +73,7 @@ export default {
   flex: 1;
 }
 
-.navigation-link, .admin-navigation-links {
+.navigation-link {
   margin: 10px 30px;
   color: $secondary-color;
   font-size: 20px;
