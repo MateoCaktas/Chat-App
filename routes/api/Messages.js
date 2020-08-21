@@ -1,6 +1,6 @@
 'use strict';
 
-const { authAdmin } = require('../../middleware/authAdmin');
+const authAdmin = require('../../middleware/authAdmin');
 const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
@@ -61,7 +61,7 @@ router.get('/:id', (req, res) => {
         model: db.models.User, as: 'userMessage'
       }]
     })
-    .then(result => res.send(result))
+    .then(result => res.json(result))
     .catch(err => res.status(400).send(err));
 });
 

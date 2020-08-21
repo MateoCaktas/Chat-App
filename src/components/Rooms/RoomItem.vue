@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     goToRoom() {
-      this.$router.push({ path: `/rooms/${this.room.id}` });
+      this.$router.push({ name: 'Room', params: { id: this.room.id } });
     },
     saveRoom(newRoom, actionType) {
       this.$emit('save-room-data', newRoom, actionType);

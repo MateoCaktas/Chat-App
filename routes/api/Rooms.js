@@ -1,29 +1,19 @@
 'use strict';
 
-const { authAdmin, checkIfAdminOrUser } = require('../../middleware/authAdmin');
+const authAdmin = require('../../middleware/authAdmin');
 const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', checkIfAdminOrUser, (req, res) => {
-  if (req.isAdmin) {
-    db.models.Room.findAll()
-      .then(room => res.json(room))
+router.get('/', (req, res) => {
+  if (req.user.dataValues.isAdmin) {
+    getRooms()
+      .then(rooms => res.json(rooms))
       .catch(err => res.status(400).send(err));
   } else {
     // If the user is not admin, get only HIS rooms
-    db.models.Room
-      .findAll({
-        where: {},
-        include: [{
-          model: db.models.User,
-          as: 'BelongingUsers',
-          where: {
-            id: req.user.id
-          }
-        }]
-      })
-      .then(room => res.json(room))
+    getRooms(req.user.id)
+      .then(rooms => res.json(rooms))
       .catch(err => res.status(400).send(err));
   }
 });
@@ -92,5 +82,23 @@ router.get('/:id/users', (req, res) => {
     .then(result => res.send(result.BelongingUsers))
     .catch(err => res.status(400).send(err));
 });
+
+function getRooms(id) {
+  let requestObject = {};
+
+  if (id) {
+    requestObject = {
+      include: [{
+        model: db.models.User,
+        as: 'BelongingUsers',
+        where: {
+          id
+        }
+      }]
+    };
+  }
+
+  return db.models.Room.findAll(requestObject);
+}
 
 module.exports = router;

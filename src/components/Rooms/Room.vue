@@ -39,8 +39,6 @@ export default {
       usersList: []
     };
   },
-  methods: {
-  },
   mounted() {
     this.id = this.$route.params.id;
     this.httpRequest = new Request(`/messages/${this.id}`);
@@ -61,7 +59,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .room-container {
   display: flex;
