@@ -5,8 +5,9 @@
         <p> {{ room.name }} </p>
         <p>Users: {{ usersLength }} / {{ room.limit }}</p>
         <custom-button
-          :onclick="openModal"
-          value="Edit Room" />
+          @click="openModal">
+          <div slot="value">Edit</div>
+        </custom-button>
       </div>
     </transition>
     <transition name="fade-edit-room-modal">

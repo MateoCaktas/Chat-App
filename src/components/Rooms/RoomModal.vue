@@ -32,9 +32,10 @@
                 placeholder="User"
                 type="text">
               <custom-button
-                :onclick="removeUserField(mail)"
-                class="user-input-button delete-user-button"
-                value="x" />
+                @click="removeUserField(mail)"
+                class="user-input-button delete-user-button">
+                <div slot="value">x</div>
+              </custom-button>
             </div>
             <label class="add-user-label">Add user (max {{ currentRoom.limit || '-' }})</label>
             <div>
@@ -44,9 +45,10 @@
                 placeholder="User"
                 type="text">
               <custom-button
-                :onclick="addUser"
-                class="user-input-button"
-                value="+" />
+                @click="addUser"
+                class="user-input-button">
+                <div slot="value">+</div>
+              </custom-button>
             </div>
           </div>
         </div>
@@ -57,14 +59,16 @@
 
       <template slot="modal-footer">
         <custom-button
-          :onclick="close"
-          class="cancel-button"
-          value="Cancel" />
+          @click="close"
+          class="cancel-button">
+          <div slot="value">Cancel</div>
+        </custom-button>
         <custom-button
-          :onclick="saveRoom"
+          @click="saveRoom"
           :disabled="!validateFields"
-          class="save-button"
-          value="Save" />
+          class="save-button">
+          <div slot="value">Save</div>
+        </custom-button>
       </template>
     </template>
   </Modal>

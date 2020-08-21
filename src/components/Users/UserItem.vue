@@ -7,14 +7,16 @@
       </div>
       <div class="button-options">
         <custom-button
-          :onclick="openModal"
-          class="edit-button"
-          value="Edit User" />
+          @click="openModal"
+          class="edit-button">
+          <div slot="value">Edit User</div>
+        </custom-button>
         <custom-button
           v-if="!loggedUser"
-          :onclick="deleteUser"
-          class="delete-button"
-          value="Delete User" />
+          @click="deleteUser"
+          class="delete-button">
+          <div slot="value">Delete User</div>
+        </custom-button>
         <transition name="view-edit-user-modal">
           <UserModal
             v-if="showModal"
@@ -101,15 +103,7 @@ h1 {
   margin-left: auto;
 }
 
-.edit-button {
-  @include button;
-
-  background-color: $primary-color;
-}
-
 .delete-button {
-  @include button;
-
   background-color: red;
 }
 

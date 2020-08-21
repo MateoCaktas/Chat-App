@@ -11,9 +11,11 @@
         </div>
       </div>
       <custom-button
-        :onclick="openModal"
+        @click="openModal"
         class="create-room-button"
-        value="Create a room" />
+        value="Create a room">
+        <div slot="value">Create a room</div>
+      </custom-button>
     </div>
     <transition name="fade-add-room-modal">
       <RoomModal
@@ -114,8 +116,6 @@ export default {
 }
 
 .create-room-button {
-  @include button;
-
   width: 30%;
   margin-top: 50px;
   font-size: 20px;
@@ -130,8 +130,10 @@ export default {
 }
 
 ::v-deep {
-  .save-button {
-    @include button;
+  .user-input-button {
+    width: 50px;
+    height: 30px;
+    margin: 0 5px;
   }
 
   .cancel-button {
