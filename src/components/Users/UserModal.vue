@@ -46,14 +46,16 @@
 
       <template slot="modal-footer">
         <custom-button
-          :onclick="close"
-          class="cancel-button"
-          value="Cancel" />
+          @click="close"
+          class="cancel-button">
+          <div slot="value">Cancel</div>
+        </custom-button>
         <custom-button
-          :onclick="saveUser"
+          @click="saveUser"
           :disabled="!validateFields"
-          class="save-button"
-          value="Save" />
+          class="save-button">
+          <div slot="value">Save</div>
+        </custom-button>
       </template>
     </template>
   </Modal>

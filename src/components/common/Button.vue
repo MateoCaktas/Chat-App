@@ -1,22 +1,14 @@
 <template>
-  <button @click="onclick" class="button">
-    {{ value }}
+  <button @click="$emit('click')" class="button">
+    <slot name="value">
+      Default value
+    </slot>
   </button>
 </template>
 
 <script>
 export default {
-  name: 'custom-button',
-  props: {
-    value: {
-      type: String,
-      required: true
-    },
-    onclick: {
-      type: Function,
-      default: () => {}
-    }
-  }
+  name: 'custom-button'
 };
 </script>
 

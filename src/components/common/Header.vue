@@ -14,9 +14,10 @@
       <div v-else>
         <span class="user-label">Hello, {{ user.fullName }}</span>
         <custom-button
-          :onclick="logoutUser"
-          class="logout-button"
-          value="Logout" />
+          @click="logoutUser"
+          class="logout-button">
+          <div slot="value">Logout</div>
+        </custom-button>
       </div>
     </div>
   </div>
@@ -105,14 +106,8 @@ export default {
 
 .logout-button {
   margin: 10px 40px;
-  color: $secondary-color;
   font-size: 20px;
-  background-color: $primary-color;
   border: none;
-}
-
-.logout-button:hover {
-  cursor: pointer;
 }
 
 .navigation-bar > *:last-child {

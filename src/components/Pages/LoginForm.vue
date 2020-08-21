@@ -8,8 +8,9 @@
       <input v-model="password" type="password" class="login-input-field" placeholder="password" autocomplete="on">
       <custom-button
         class="login-button"
-        value="Log In"
-        type="submit" />
+        type="submit">
+        <div slot="value">Log In</div>
+      </custom-button>
     </form>
   </div>
 </template>

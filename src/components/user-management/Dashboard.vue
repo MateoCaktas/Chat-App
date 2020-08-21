@@ -7,9 +7,10 @@
         :user="user" />
     </div>
     <custom-button
-      :onclick="openModal"
-      class="add-user-button"
-      value="Add User" />
+      @click="openModal"
+      class="add-user-button">
+      <div slot="value">Add an user</div>
+    </custom-button>
     <transition name="fade-add-user-modal">
       <UserModal
         v-if="showModal"
@@ -109,8 +110,6 @@ export default {
 }
 
 .add-user-button {
-  @include button;
-
   width: 20%;
   margin: 30px 0;
   font-size: 20px;
@@ -122,13 +121,7 @@ export default {
   }
 
   .cancel-button {
-    @include button;
-
     background-color: red;
-  }
-
-  .save-button {
-    @include button;
   }
 }
 
