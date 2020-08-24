@@ -34,7 +34,11 @@
               <custom-button
                 @click="removeUserField(mail)"
                 class="user-input-button delete-user-button">
+<<<<<<< HEAD
                 <div slot>x</div>
+=======
+                <div slot="value">x</div>
+>>>>>>> 203be6a523037b9f038248766f375be3e7330fc3
               </custom-button>
             </div>
             <label class="add-user-label">Add user (max {{ currentRoom.limit || '-' }})</label>
@@ -47,7 +51,11 @@
               <custom-button
                 @click="addUser"
                 class="user-input-button">
+<<<<<<< HEAD
                 <div slot>+</div>
+=======
+                <div slot="value">+</div>
+>>>>>>> 203be6a523037b9f038248766f375be3e7330fc3
               </custom-button>
             </div>
           </div>
@@ -61,13 +69,21 @@
         <custom-button
           @click="close"
           class="cancel-button">
+<<<<<<< HEAD
           <div slot>Cancel</div>
+=======
+          <div slot="value">Cancel</div>
+>>>>>>> 203be6a523037b9f038248766f375be3e7330fc3
         </custom-button>
         <custom-button
           @click="saveRoom"
           :disabled="!validateFields"
           class="save-button">
+<<<<<<< HEAD
           <div slot>Save</div>
+=======
+          <div slot="value">Save</div>
+>>>>>>> 203be6a523037b9f038248766f375be3e7330fc3
         </custom-button>
       </template>
     </template>

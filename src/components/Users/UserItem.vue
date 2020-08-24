@@ -9,13 +9,21 @@
         <custom-button
           @click="openModal"
           class="edit-button">
+<<<<<<< HEAD
           <div slot>Edit User</div>
+=======
+          <div slot="value">Edit User</div>
+>>>>>>> 203be6a523037b9f038248766f375be3e7330fc3
         </custom-button>
         <custom-button
           v-if="!loggedUser"
           @click="deleteUser"
           class="delete-button">
+<<<<<<< HEAD
           <div slot>Delete User</div>
+=======
+          <div slot="value">Delete User</div>
+>>>>>>> 203be6a523037b9f038248766f375be3e7330fc3
         </custom-button>
         <transition name="view-edit-user-modal">
           <UserModal
