@@ -6,16 +6,14 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  if (req.user.dataValues.isAdmin) {
-    getRooms()
+  let id = 0;
+
+  // If the user is not Admin, set the ID and retrieve only his rooms
+  id = !req.user.isAdmin ? req.user.id : null;
+
+  getRooms(id)
       .then(rooms => res.json(rooms))
       .catch(err => res.status(400).send(err));
-  } else {
-    // If the user is not admin, get only HIS rooms
-    getRooms(req.user.id)
-      .then(rooms => res.json(rooms))
-      .catch(err => res.status(400).send(err));
-  }
 });
 
 router.post('/', authAdmin, (req, res) => {
@@ -84,21 +82,17 @@ router.get('/:id/users', (req, res) => {
 });
 
 function getRooms(id) {
-  let requestObject = {};
+  const include = [];
 
   if (id) {
-    requestObject = {
-      include: [{
-        model: db.models.User,
-        as: 'BelongingUsers',
-        where: {
-          id
-        }
-      }]
-    };
+    include.push({
+      model: db.models.User,
+      as: 'BelongingUsers',
+      where: { id }
+    });
   }
 
-  return db.models.Room.findAll(requestObject);
+  return db.models.Room.findAll({ include });
 }
 
 module.exports = router;

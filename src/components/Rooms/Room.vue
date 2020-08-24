@@ -27,7 +27,7 @@
 
 <script>
 
-import Request from '../../services/index';
+import Request from '../../services';
 
 export default {
   name: 'room',
