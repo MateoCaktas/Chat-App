@@ -6,7 +6,7 @@
         <p>Users: {{ usersLength }} / {{ room.limit }}</p>
         <custom-button
           @click="openModal">
-          <div slot="value">Edit</div>
+          <div slot>Edit</div>
         </custom-button>
       </div>
     </transition>

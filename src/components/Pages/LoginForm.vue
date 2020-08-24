@@ -9,7 +9,7 @@
       <custom-button
         class="login-button"
         type="submit">
-        <div slot="value">Log In</div>
+        <div slot>Log In</div>
       </custom-button>
     </form>
   </div>

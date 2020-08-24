@@ -9,7 +9,7 @@
     <custom-button
       @click="openModal"
       class="add-user-button">
-      <div slot="value">Add an user</div>
+      <div slot>Add an user</div>
     </custom-button>
     <transition name="fade-add-user-modal">
       <UserModal
