@@ -5,12 +5,6 @@ const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  db.models.Message.findAll()
-    .then(msg => res.json(msg))
-    .catch(err => res.status(400).send(err));
-});
-
 router.post('/', (req, res) => {
   const { time, content, fkRoom, fkUser } = req.body;
 
@@ -24,9 +18,9 @@ router.post('/', (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.delete('/:id', authAdmin, (req, res) => {
+router.delete('/:roomID/:id', authAdmin, (req, res) => {
   db.models.Message.destroy({
-    where: { id: req.params.id }
+    where: { id: req.body.id }
   })
   .then(() => res.send('Message deleted'))
   .catch(err => res.status(400).send(err));
@@ -51,11 +45,11 @@ router.put('/:id', (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:roomID', (req, res) => {
   db.models.Message
     .findAll({
       where: {
-        FK_room: req.params.id
+        FK_room: req.params.roomID
       },
       include: [{
         model: db.models.User, as: 'userMessage'

@@ -6,12 +6,11 @@
         <h1 class="messages-container-title">Room {{ id }}</h1>
         <button class="messages-container-leave-button">Leave Room</button>
       </div>
-      <div v-for="message in messages" :key="message.id" class="message">
-        <div class="user">
-          <img class="user-image" src="@/assets/user.png">
-          <div class="user-name">{{ message.userMessage.fullName }} </div>
-        </div>
-        <div class="user-message-content">{{ message.content }}</div>
+      <div v-for="message in messages" :key="message.id">
+        <MessageItem
+          @delete="deleteMessage"
+          :message="message"
+          :is-admin="isAdmin" />
       </div>
     </div>
 
@@ -27,6 +26,7 @@
 
 <script>
 
+import MessageItem from '../messages/MessageItem';
 import Request from '../../services';
 
 export default {
@@ -36,10 +36,21 @@ export default {
       id: 0,
       httpRequest: {},
       messages: [],
-      usersList: []
+      usersList: [],
+      isAdmin: false
     };
   },
+  methods: {
+    deleteMessage(message) {
+      this.httpRequest.sendRequest('delete', message)
+        .then(() => {
+          const index = this.messages.findIndex(msg => msg.id === message.id);
+          this.messages.splice(index, 1);
+        });
+    }
+  },
   mounted() {
+    this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.id = this.$route.params.id;
     this.httpRequest = new Request(`/messages/${this.id}`);
 
@@ -55,6 +66,9 @@ export default {
       .then(result => {
         this.usersList = result.map(user => user);
       });
+  },
+  components: {
+    MessageItem
   }
 };
 </script>
@@ -96,32 +110,9 @@ export default {
 }
 
 .message {
+  position: relative;
   margin: 10px;
   margin-right: auto;
-}
-
-.user {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 5px;
-}
-
-.user-name {
-  margin: 5px;
-}
-
-.user-image {
-  width: 30px;
-  height: 30px;
-}
-
-.user-message-content {
-  padding: 10px;
-  color: white;
-  font-size: 20px;
-  border-radius: 10px;
-  background-color: $primary-color;
 }
 
 .users-list {
