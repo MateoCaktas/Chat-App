@@ -10,7 +10,7 @@
             :room="room" />
         </div>
       </div>
-      <button @click="showModal = true" class="create-room-button">Create a room</button>
+      <button v-if="isAdmin" @click="showModal = true" class="create-room-button">Create a room</button>
     </div>
     <transition name="fade-add-room-modal">
       <RoomModal
@@ -36,7 +36,8 @@ export default {
       showModal: false,
       addedRoom: {},
       actionType: 'add',
-      httpRequest: {}
+      httpRequest: {},
+      isAdmin: false
     };
   },
   methods: {
@@ -76,6 +77,7 @@ export default {
     }
   },
   mounted() {
+    this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.httpRequest = new Request('/rooms');
 
     this.httpRequest.sendRequest('get')

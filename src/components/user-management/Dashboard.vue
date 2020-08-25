@@ -20,8 +20,8 @@
 <script>
 
 import Request from '../../services/index';
-import UserItem from '../Users/UserItem';
-import UserModal from '../Users/UserModal';
+import UserItem from '../users/UserItem';
+import UserModal from '../users/UserModal';
 
 export default {
   name: 'admin-dashboard',
