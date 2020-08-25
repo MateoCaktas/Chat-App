@@ -5,7 +5,7 @@
       <div class="messages-container-header">
         <button @click="$router.go('-1')" class="messages-container-back-button">Back</button>
         <h1 class="messages-container-title">Room {{ id }}</h1>
-        <button @click="leaveRoom" class="messages-container-leave-button">Leave Room</button>
+        <button v-if="belongsToRoom" @click="leaveRoom" class="messages-container-leave-button">Leave Room</button>
       </div>
       <div class="messages">
         <div v-for="message in messages" :key="message.id" class="message">
@@ -30,7 +30,7 @@
 
 <script>
 
-import Request from '../../services/index';
+import Request from '../../services';
 
 export default {
   name: 'room',
@@ -42,6 +42,13 @@ export default {
       httpRequest: {},
       getUsersBelongingToRoom: {}
     };
+  },
+  computed: {
+    belongsToRoom() {
+      // Checks if the user is part of the room (admins can go to a room which they are not part of)
+      const loggedUserEmail = JSON.parse(localStorage.loggedUser).email;
+      return this.usersList.filter(user => user.email === loggedUserEmail).length > 0;
+    }
   },
   methods: {
     leaveRoom() {
@@ -70,7 +77,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .background-image {
   position: absolute;
