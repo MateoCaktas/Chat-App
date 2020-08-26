@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.post('/', (req, res) => {
+router.post('/:roomID', (req, res) => {
   const { time, content, fkRoom, fkUser } = req.body;
 
   db.models.Message.create({

@@ -4,11 +4,15 @@
     <div class="messages-container">
       <div class="messages-container-header">
         <button @click="$router.go('-1')" class="messages-container-back-button">Back</button>
-        <h1 class="messages-container-title">Room {{ id }}</h1>
+        <h1 class="messages-container-title">Room {{ roomID }}</h1>
         <button v-if="belongsToRoom" @click="leaveRoom" class="messages-container-leave-button">Leave Room</button>
       </div>
-      <div class="messages">
-        <div v-for="message in messages" :key="message.id" class="message">
+
+      <div ref="messages" class="messages">
+        <div
+          v-for="message in messages"
+          :key="message.id" class="message"
+          :class="{ loggedUserMessage: message.userMessage.id === loggedUser.id }">
           <div class="user">
             <img class="user-image" src="@/assets/user.png">
             <div class="user-name">{{ message.userMessage.fullName }} </div>
@@ -16,6 +20,11 @@
           <div class="user-message-content">{{ message.content }}</div>
         </div>
       </div>
+
+      <form @submit.prevent="sendMessage" id="input-message-form">
+        <input v-model="inputMessage" type="text" class="input-message-window">
+        <button type="submit" :disabled="!inputMessage" class="send-message-button">Send</button>
+      </form>
     </div>
 
     <div class="users-list">
@@ -36,30 +45,56 @@ export default {
   name: 'room',
   data() {
     return {
-      id: 0,
+      roomID: 0,
       messages: [],
       usersList: [],
       httpRequest: {},
-      getUsersBelongingToRoom: {}
+      getUsersBelongingToRoom: {},
+      inputMessage: '',
+      loggedUser: {}
     };
   },
   computed: {
     belongsToRoom() {
       // Checks if the user is part of the room (admins can go to a room which they are not part of)
-      const loggedUserEmail = JSON.parse(localStorage.loggedUser).email;
-      return this.usersList.filter(user => user.email === loggedUserEmail).length > 0;
+      return this.usersList.filter(user => user.email === this.loggedUser.email).length > 0;
     }
   },
   methods: {
     leaveRoom() {
-      const user = JSON.parse(localStorage.loggedUser);
-      this.getUsersBelongingToRoom.sendRequest('delete', user);
+      this.getUsersBelongingToRoom.sendRequest('delete', this.loggedUser);
       this.$router.push({ name: 'Home' });
+    },
+    sendMessage() {
+      const message = {};
+      message.content = this.inputMessage;
+      message.time = Date.now();
+      message.fkRoom = parseInt(this.$route.params.id);
+      message.fkUser = this.loggedUser.id;
+
+      this.httpRequest.sendRequest('post', message)
+        .then(() => {
+          this.httpRequest.sendRequest('get')
+            .then(result => result.json())
+            .then(result => {
+              this.messages = result;
+              return this.messages;
+            })
+              .then(() => {
+                this.inputMessage = '';
+                this.scrollToEnd();
+              });
+        });
+    },
+    scrollToEnd() {
+      var container = this.$refs.messages;
+      container.scrollTop = container.scrollHeight;
     }
   },
   mounted() {
-    this.id = this.$route.params.id;
-    this.httpRequest = new Request(`/messages/${this.id}`);
+    this.loggedUser = JSON.parse(localStorage.loggedUser);
+    this.roomID = this.$route.params.id;
+    this.httpRequest = new Request(`/messages/${this.roomID}`);
 
     this.httpRequest.sendRequest('get')
       .then(result => result.json())
@@ -67,7 +102,7 @@ export default {
         this.messages = result;
       });
 
-    this.getUsersBelongingToRoom = new Request(`/rooms/${this.id}/users`);
+    this.getUsersBelongingToRoom = new Request(`/rooms/${this.roomID}/users`);
     this.getUsersBelongingToRoom.sendRequest('get')
       .then(result => result.json())
       .then(result => {
@@ -78,6 +113,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+#input-message-form {
+  display: flex;
+  flex-direction: row;
+}
+
+.input-message-window {
+  margin: 5px;
+  flex: 1;
+  resize: none !important;
+}
+
+.send-message-button {
+  @include button;
+
+  margin: 5px;
+}
 
 .background-image {
   position: absolute;
@@ -104,11 +156,12 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin: 0;
   border-bottom: 1px solid $tertiary-color;
 }
 
 .messages-container-title {
-  font-size: 25px;
+  font-size: 20px;
   flex: 1;
 }
 
@@ -125,15 +178,22 @@ export default {
 
 .messages {
   display: flex;
-  height: 350px;
+  height: 60vh;
   flex-direction: column;
   overflow: scroll;
   border-bottom: 1px solid $tertiary-color;
+  padding-right: 10px;
 }
 
 .message {
+  max-width: 60%;
   margin: 10px;
   margin-right: auto;
+}
+
+.loggedUserMessage {
+  margin-right: 0;
+  margin-left: auto;
 }
 
 .user {
