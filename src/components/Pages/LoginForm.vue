@@ -9,11 +9,7 @@
       <custom-button
         class="login-button"
         type="submit">
-<<<<<<< HEAD
         <div slot>Log In</div>
-=======
-        <div slot="value">Log In</div>
->>>>>>> 203be6a523037b9f038248766f375be3e7330fc3
       </custom-button>
     </form>
   </div>

@@ -14,11 +14,7 @@
         @click="openModal"
         class="create-room-button"
         value="Create a room">
-<<<<<<< HEAD
         <div slot>Create a room</div>
-=======
-        <div slot="value">Create a room</div>
->>>>>>> 203be6a523037b9f038248766f375be3e7330fc3
       </custom-button>
     </div>
     <transition name="fade-add-room-modal">
