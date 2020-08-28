@@ -2,6 +2,7 @@ import About from '../components/pages/About';
 import Dashboard from '../components/user-management/Dashboard';
 import Home from '../components/pages/Home.vue';
 import LoginForm from '../components/pages/LoginForm.vue';
+import Room from '../components/rooms/Room.vue';
 import Rooms from '../components/rooms/Rooms.vue';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -19,6 +20,11 @@ const routes = [
     component: About
   },
   {
+    path: '/rooms/:id',
+    name: 'Room',
+    component: Room
+  },
+  {
     path: '/login',
     name: 'Login',
     component: LoginForm
@@ -29,7 +35,7 @@ const routes = [
     component: Dashboard
   },
   {
-    path: '/admin/rooms',
+    path: '/rooms',
     name: 'Rooms',
     component: Rooms
   }
@@ -47,7 +53,7 @@ router.beforeEach((to, from, next) => {
   if (document.cookie.split(';').filter(item => item.trim().startsWith('token=')).length === 0) return next('login');
   const user = JSON.parse(localStorage.loggedUser);
 
-  if (to.name !== 'Dashboard' && to.name !== 'Rooms') return next();
+  if (to.name !== 'Dashboard') return next();
   if (!user.isAdmin) return next('/');
 
   next();

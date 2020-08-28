@@ -1,5 +1,6 @@
 'use strict';
 
+const authAdmin = require('../../middleware/authAdmin');
 const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
@@ -23,7 +24,7 @@ router.post('/', (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authAdmin, (req, res) => {
   db.models.Message.destroy({
     where: { id: req.params.id }
   })
@@ -48,6 +49,20 @@ router.put('/:id', (req, res) => {
   })
   .then(msg => res.json(msg))
   .catch(err => res.status(400).send(err));
+});
+
+router.get('/:id', (req, res) => {
+  db.models.Message
+    .findAll({
+      where: {
+        FK_room: req.params.id
+      },
+      include: [{
+        model: db.models.User, as: 'userMessage'
+      }]
+    })
+    .then(result => res.json(result))
+    .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;

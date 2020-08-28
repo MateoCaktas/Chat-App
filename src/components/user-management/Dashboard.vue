@@ -23,7 +23,7 @@
 
 <script>
 
-import Request from '../../services/index';
+import Request from '../../services';
 import UserItem from '../users/UserItem';
 import UserModal from '../users/UserModal';
 

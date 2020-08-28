@@ -127,6 +127,7 @@ export default {
       this.usersEmails = this.usersEmails.filter(it => it !== email);
     },
     saveRoom() {
+      if (this.actiontype === 'add') this.currentRoom.creationTime = Date.now();
       this.currentRoom.usersEmails = this.usersEmails;
       this.$emit('save-room-data', this.currentRoom, this.actiontype);
       this.$emit('close');
