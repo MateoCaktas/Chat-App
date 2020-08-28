@@ -3,7 +3,7 @@
     <div class="messages-container">
       <div class="messages-container-header">
         <button @click="$router.go('-1')" class="messages-container-back-button">Back</button>
-        <h1 class="messages-container-title">Room {{ id }}</h1>
+        <h1 class="messages-container-title">Room {{ roomId }}</h1>
         <button class="messages-container-leave-button">Leave Room</button>
       </div>
       <div v-for="message in messages" :key="message.id">
@@ -33,7 +33,7 @@ export default {
   name: 'room',
   data() {
     return {
-      id: 0,
+      roomId: 0,
       httpRequest: {},
       messages: [],
       usersList: [],
@@ -51,16 +51,16 @@ export default {
   },
   mounted() {
     this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
-    this.id = this.$route.params.id;
-    this.httpRequest = new Request(`/messages/${this.id}`);
+    this.roomId = this.$route.params.id;
+    this.httpRequest = new Request('/messages');
 
-    this.httpRequest.sendRequest('get')
+    this.httpRequest.sendRequest('get', `roomId=${this.roomId}`)
       .then(result => result.json())
       .then(result => {
         this.messages = result;
       });
 
-    const getUsersBelongingToRoom = new Request(`/rooms/${this.id}/users`);
+    const getUsersBelongingToRoom = new Request(`/rooms/${this.roomId}/users`);
     getUsersBelongingToRoom.sendRequest('get')
       .then(result => result.json())
       .then(result => {
@@ -83,11 +83,13 @@ export default {
 .messages-container {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   width: 80%;
 }
 
 .messages-container-header {
   display: flex;
+  width: 100%;
   flex-direction: row;
   justify-content: center;
   align-items: center;

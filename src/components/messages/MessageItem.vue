@@ -3,10 +3,10 @@
     <div class="message">
       <div class="user">
         <img class="user-image" src="@/assets/user.png">
-        <div class="user-name">{{ message.userMessage.fullName }} </div>
+        <div class="user-name">{{ userName }} </div>
       </div>
       <button v-if="isAdmin" @click="deleteMessage(message)" class="delete-message-button">+</button>
-      <div class="user-message-content">{{ message.content }}</div>
+      <div class="user-message-content" :class="{ 'deleted-user-message': isDeleted}">{{ message.content }}</div>
     </div>
   </transition>
 </template>
@@ -26,6 +26,8 @@ export default {
   },
   data() {
     return {
+      userName: 'Deleted User',
+      isDeleted: false,
       isActive: true
     };
   },
@@ -36,6 +38,10 @@ export default {
         this.$emit('delete', message);
       }, 1000);
     }
+  },
+  mounted() {
+    if (this.message.userMessage) this.userName = this.message.userMessage.fullName;
+    this.isDeleted = !this.message.userMessage;
   }
 };
 </script>
@@ -46,7 +52,6 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
-  float: left;
 }
 
 .user {
@@ -73,6 +78,10 @@ export default {
   border-radius: 10px;
   background-color: $primary-color;
   float: left;
+}
+
+.deleted-user-message {
+  background-color: gray;
 }
 
 .delete-message-button {

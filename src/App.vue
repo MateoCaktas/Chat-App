@@ -27,6 +27,7 @@ export default {
   methods: {
     logInUser(response) {
       this.user = response.user;
+      localStorage.removeItem('loggedUser');
       localStorage.loggedUser = JSON.stringify(response.user);
 
       this.$cookie.set('token', response.jwt);

@@ -5,6 +5,20 @@ const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  db.models.Message
+    .findAll({
+      where: {
+        FK_room: req.query.roomId
+      },
+      include: [{
+        model: db.models.User, as: 'userMessage'
+      }]
+    })
+    .then(result => res.json(result))
+    .catch(err => res.status(400).send(err));
+});
+
 router.post('/', (req, res) => {
   const { time, content, fkRoom, fkUser } = req.body;
 
@@ -18,7 +32,7 @@ router.post('/', (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.delete('/:roomID/:id', authAdmin, (req, res) => {
+router.delete('/:id', authAdmin, (req, res) => {
   db.models.Message.destroy({
     where: { id: req.body.id }
   })
@@ -43,20 +57,6 @@ router.put('/:id', (req, res) => {
   })
   .then(msg => res.json(msg))
   .catch(err => res.status(400).send(err));
-});
-
-router.get('/:roomID', (req, res) => {
-  db.models.Message
-    .findAll({
-      where: {
-        FK_room: req.params.roomID
-      },
-      include: [{
-        model: db.models.User, as: 'userMessage'
-      }]
-    })
-    .then(result => res.json(result))
-    .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;
