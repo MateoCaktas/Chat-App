@@ -49,7 +49,7 @@ export default {
     belongsToRoom() {
       // Checks if the user is part of the room (admins can go to a room which they are not part of)
       const loggedUserEmail = JSON.parse(localStorage.loggedUser).email;
-      return this.usersList.filter(user => user.email === loggedUserEmail).length > 0;
+      return this.usersList.filter(user => user.email === loggedUserEmail).length;
     }
   },
   methods: {
