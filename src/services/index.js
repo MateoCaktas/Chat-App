@@ -25,6 +25,7 @@ class Request {
     let path = this.basePath;
 
     if (data && data.id) path = `${path}/${data.id}`;
+
     const req = this.setRequestObject(type, data);
 
     return fetch(path, req);

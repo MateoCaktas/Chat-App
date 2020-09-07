@@ -1,6 +1,6 @@
 'use strict';
 
-const authAdmin = require('../../middleware/authAdmin');
+const { authAdmin, authUser } = require('../../middleware/authUser');
 const db = require('../../config/db');
 const express = require('express');
 const router = express.Router();
@@ -79,6 +79,27 @@ router.get('/:id/users', (req, res) => {
     })
     .then(result => res.send(result.BelongingUsers))
     .catch(err => res.status(400).send(err));
+});
+
+router.delete('/:id/users/:userId', authUser, (req, res) => {
+  const user = db.models.User.findOne({
+    where: {
+      id: req.params.userId
+    }
+  });
+
+  const room = db.models.Room.findOne({
+    where: {
+      id: req.params.id
+    }
+  });
+  Promise.all([user, room])
+    .then(userRoom => {
+      const [user, room] = userRoom;
+      room.removeBelongingUsers(user);
+    })
+    .then(() => res.send('User successfuly deleted.'))
+    .catch(err => res.send(err));
 });
 
 function getRooms(id) {
