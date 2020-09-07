@@ -48,13 +48,13 @@
         <custom-button
           @click="close"
           class="cancel-button">
-          <div slot>Cancel</div>
+          Cancel
         </custom-button>
         <custom-button
           @click="saveUser"
           :disabled="!validateFields"
           class="save-button">
-          <div slot>Save</div>
+          Save
         </custom-button>
       </template>
     </template>

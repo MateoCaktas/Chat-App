@@ -7,13 +7,13 @@
         <custom-button
           @click="goToRoom"
           class="edit-room-button">
-          <div slot> Enter </div>
+          Enter
         </custom-button>
         <custom-button
           v-if="isAdmin"
           @click="openModal"
           class="edit-room-button">
-          <div slot> Edit </div>
+          Edit
         </custom-button>
       </div>
     </transition>

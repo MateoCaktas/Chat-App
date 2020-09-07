@@ -14,7 +14,7 @@
         @click="openModal"
         class="create-room-button"
         value="Create a room">
-        <div slot>Create a room</div>
+        Create a room
       </custom-button>
     </div>
     <transition name="fade-add-room-modal">

@@ -5,12 +5,12 @@
         <custom-button
           @click="goBack"
           class="messages-container-back-button">
-          <div slot>Back</div>
+          Back
         </custom-button>
         <h1 class="messages-container-title">Room {{ id }}</h1>
         <custom-button
           class="messages-container-leave-button">
-          <div slot>Leave Room</div>
+          Leave Room
         </custom-button>
       </div>
       <div v-for="message in messages" :key="message.id" class="message">

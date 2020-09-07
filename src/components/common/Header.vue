@@ -14,7 +14,7 @@
         <custom-button
           @click="logoutUser"
           class="logout-button">
-          <div slot>Logout</div>
+          Logout
         </custom-button>
       </div>
     </div>
