@@ -5,7 +5,7 @@
       <div class="messages-container-header">
         <button @click="$router.go('-1')" class="messages-container-back-button">Back</button>
         <h1 class="messages-container-title">Room {{ roomID }}</h1>
-        <button v-if="belongsToRoom" @click="leaveRoom" class="messages-container-leave-button">Leave Room</button>
+        <button v-if="belongsToRoom" @click="leaveRoom()" class="messages-container-leave-button">Leave Room</button>
       </div>
 
       <div ref="messages" class="messages">
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <form @submit.prevent="sendMessage" id="input-message-form">
+      <form v-show="belongsToRoom" @submit.prevent="sendMessage" id="input-message-form">
         <input v-model="inputMessage" type="text" class="input-message-window">
         <button type="submit" :disabled="!inputMessage" class="send-message-button">Send</button>
       </form>
@@ -32,6 +32,7 @@
       <div v-for="user in usersList" :key="user.email" class="user-list-item">
         <img class="user-list-image" src="@/assets/user.png">
         <div class="user-list-name">{{ user.fullName }}</div>
+        <div v-if="isAdmin" @click="leaveRoom(user)" class="delete-user-button">+</div>
       </div>
     </div>
   </div>
@@ -51,19 +52,34 @@ export default {
       httpRequest: {},
       getUsersBelongingToRoom: {},
       inputMessage: '',
-      loggedUser: {}
+      loggedUser: {},
+      isAdmin: false
     };
   },
   computed: {
     belongsToRoom() {
       // Checks if the user is part of the room (admins can go to a room which they are not part of)
-      return this.usersList.filter(user => user.email === this.loggedUser.email).length > 0;
+      return this.usersList.filter(user => user.email === this.loggedUser.email).length;
     }
   },
   methods: {
-    leaveRoom() {
-      this.getUsersBelongingToRoom.sendRequest('delete', this.loggedUser);
-      this.$router.push({ name: 'Home' });
+    getMessages() {
+      return this.httpRequest.sendRequest('get')
+        .then(result => result.json())
+        .then(result => {
+          this.messages = result;
+        });
+    },
+    leaveRoom(user) {
+      if (!user) user = JSON.parse(localStorage.loggedUser);
+
+      this.getUsersBelongingToRoom.sendRequest('delete', user)
+        .then(() => {
+          const index = this.usersList.findIndex(currentUser => currentUser.id === user.id);
+          this.usersList.splice(index, 1);
+          // If the user himself leaves the room, redirect him to Home page
+          if (user.id === JSON.parse(localStorage.loggedUser).id) this.$router.push({ name: 'Home' });
+        });
     },
     sendMessage() {
       const message = {};
@@ -74,16 +90,11 @@ export default {
 
       this.httpRequest.sendRequest('post', message)
         .then(() => {
-          this.httpRequest.sendRequest('get')
-            .then(result => result.json())
-            .then(result => {
-              this.messages = result;
-              return this.messages;
-            })
-              .then(() => {
-                this.inputMessage = '';
-                this.scrollToEnd();
-              });
+          this.getMessages()
+            .then(() => {
+              this.inputMessage = '';
+              this.scrollToEnd();
+            });
         });
     },
     scrollToEnd() {
@@ -92,15 +103,12 @@ export default {
     }
   },
   mounted() {
+    this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.loggedUser = JSON.parse(localStorage.loggedUser);
     this.roomID = this.$route.params.id;
     this.httpRequest = new Request(`/messages/${this.roomID}`);
 
-    this.httpRequest.sendRequest('get')
-      .then(result => result.json())
-      .then(result => {
-        this.messages = result;
-      });
+    this.getMessages();
 
     this.getUsersBelongingToRoom = new Request(`/rooms/${this.roomID}/users`);
     this.getUsersBelongingToRoom.sendRequest('get')
@@ -246,4 +254,25 @@ export default {
 .user-list-name {
   margin: 5px;
 }
+
+.delete-user-button {
+  @include button;
+
+  text-align: center;
+  transform: rotate(-45deg);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 5px;
+  margin-left: auto;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 1.5s;
+  background-color: red;
+}
+
+.delete-user-button:hover {
+  transform: rotate(135deg);
+}
+
 </style>

@@ -72,11 +72,7 @@ export default {
     this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.httpRequest = new Request(`/rooms/${this.room.id}/users`);
 
-    this.httpRequest.sendRequest('get')
-      .then(result => result.json())
-      .then(result => {
-        this.usersEmails = result.map(user => user.email);
-      });
+    this.getUsers();
   },
   components: {
     RoomModal
