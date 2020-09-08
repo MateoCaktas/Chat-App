@@ -3,9 +3,18 @@
     <div class="background-image"></div>
     <div class="messages-container">
       <div class="messages-container-header">
-        <button @click="$router.go('-1')" class="messages-container-back-button">Back</button>
-        <h1 class="messages-container-title">Room {{ id }}</h1>
-        <button v-if="belongsToRoom" @click="leaveRoom()" class="messages-container-leave-button">Leave Room</button>
+        <custom-button
+          @click="goBack"
+          class="messages-container-back-button">
+          Back
+        </custom-button>
+        <h1 class="messages-container-title">Room {{ roomId }}</h1>
+        <custom-button
+          v-if="belongsToRoom"
+          @click="leaveRoom()"
+          class="messages-container-leave-button">
+          Leave Room
+        </custom-button>
       </div>
       <div class="messages">
         <div v-for="message in messages" :key="message.id" class="message">
@@ -37,7 +46,7 @@ export default {
   name: 'room',
   data() {
     return {
-      id: 0,
+      roomId: 0,
       messages: [],
       usersList: [],
       httpRequest: {},
@@ -53,6 +62,9 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.go('-1');
+    },
     leaveRoom(user) {
       if (!user) user = JSON.parse(localStorage.loggedUser);
 
@@ -67,8 +79,8 @@ export default {
   },
   mounted() {
     this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
-    this.id = this.$route.params.id;
-    this.httpRequest = new Request(`/messages/${this.id}`);
+    this.roomId = this.$route.params.id;
+    this.httpRequest = new Request(`/messages/${this.roomId}`);
 
     this.httpRequest.sendRequest('get')
       .then(result => result.json())
@@ -76,7 +88,7 @@ export default {
         this.messages = result;
       });
 
-    this.getUsersBelongingToRoom = new Request(`/rooms/${this.id}/users`);
+    this.getUsersBelongingToRoom = new Request(`/rooms/${this.roomId}/users`);
     this.getUsersBelongingToRoom.sendRequest('get')
       .then(result => result.json())
       .then(result => {

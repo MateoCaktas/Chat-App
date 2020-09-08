@@ -6,7 +6,11 @@
         @change-user-data="changeUserData"
         :user="user" />
     </div>
-    <button @click="showModal = true" class="add-user-button">Add user</button>
+    <custom-button
+      @click="openModal"
+      class="add-user-button">
+      Add an user
+    </custom-button>
     <transition name="fade-add-user-modal">
       <UserModal
         v-if="showModal"
@@ -19,7 +23,7 @@
 
 <script>
 
-import Request from '../../services/index';
+import Request from '../../services';
 import UserItem from '../users/UserItem';
 import UserModal from '../users/UserModal';
 
@@ -34,6 +38,9 @@ export default {
     };
   },
   methods: {
+    openModal() {
+      this.showModal = true;
+    },
     addUser(user) {
       this.httpRequest.sendRequest('post', user)
         .then(user => user.json())
@@ -103,8 +110,6 @@ export default {
 }
 
 .add-user-button {
-  @include button;
-
   width: 20%;
   margin: 30px 0;
   font-size: 20px;
@@ -116,13 +121,7 @@ export default {
   }
 
   .cancel-button {
-    @include button;
-
     background-color: red;
-  }
-
-  .save-button {
-    @include button;
   }
 }
 
