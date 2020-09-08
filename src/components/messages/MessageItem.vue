@@ -85,9 +85,10 @@ export default {
   padding: 10px;
   color: white;
   font-size: 18px;
-  border-radius: 10px;
   background-color: $primary-color;
   float: left;
+  border: 1px solid $tertiary-color;
+  border-radius: 10px;
 }
 
 .deleted-user-message {

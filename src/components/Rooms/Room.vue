@@ -67,8 +67,8 @@ export default {
     }
   },
   methods: {
-    getMessages(query) {
-      return this.httpRequest.sendRequest('get', query)
+    getMessages() {
+      return this.httpRequest.sendRequest('get', `roomId=${this.roomId}`)
         .then(result => result.json())
         .then(result => {
           this.messages = result;
@@ -121,7 +121,7 @@ export default {
     this.roomId = this.$route.params.id;
     this.httpRequest = new Request('/messages');
 
-    this.getMessages(`roomId=${this.roomId}`);
+    this.getMessages();
 
     this.getUsersBelongingToRoom = new Request(`/rooms/${this.roomId}/users`);
     this.getUsersBelongingToRoom.sendRequest('get')
@@ -215,31 +215,7 @@ export default {
   .logged-user-message {
     margin-right: 0;
     margin-left: auto;
-  }
-
-  .user {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 5px;
-  }
-
-  .user-name {
-    margin: 5px;
-  }
-
-  .user-image {
-    width: 30px;
-    height: 30px;
-  }
-
-  .user-message-content {
-    padding: 10px;
-    color: white;
-    font-size: 20px;
-    background-color: $primary-color;
-    border: 1px solid $tertiary-color;
-    border-radius: 10px;
+    padding-right: 10px;
   }
 }
 
