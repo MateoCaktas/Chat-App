@@ -5,7 +5,12 @@
         <img class="user-image" src="@/assets/user.png">
         <div class="user-name">{{ userName }} </div>
       </div>
-      <button v-if="isAdmin" @click="deleteMessage(message)" class="delete-message-button">+</button>
+      <custom-button
+        v-if="isAdmin"
+        @click="deleteMessage(message)"
+        class="delete-message-button">
+        +
+      </custom-button>
       <div class="user-message-content" :class="{ 'deleted-user-message': isDeleted }">{{ message.content }}</div>
     </div>
   </transition>

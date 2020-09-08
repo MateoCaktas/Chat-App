@@ -31,9 +31,11 @@
                 class="input-field"
                 placeholder="User"
                 type="text">
-              <button @click="removeUserField(mail)" class="user-input-button delete-user-button">
-                <span>x</span>
-              </button>
+              <custom-button
+                @click="removeUserField(mail)"
+                class="user-input-button delete-user-button">
+                x
+              </custom-button>
             </div>
             <label class="add-user-label">Add user (max {{ currentRoom.limit || '-' }})</label>
             <div>
@@ -42,9 +44,11 @@
                 class="input-field"
                 placeholder="User"
                 type="text">
-              <button @click="addUser" class="user-input-button">
-                <span>+</span>
-              </button>
+              <custom-button
+                @click="addUser"
+                class="user-input-button">
+                +
+              </custom-button>
             </div>
           </div>
         </div>
@@ -54,12 +58,17 @@
       </template>
 
       <template slot="modal-footer">
-        <button @click="$emit('close')" class="cancel-button">
+        <custom-button
+          @click="close"
+          class="cancel-button">
           Cancel
-        </button>
-        <button @click="saveRoom" :disabled="!validateFields" class="save-button">
+        </custom-button>
+        <custom-button
+          @click="saveRoom"
+          :disabled="!validateFields"
+          class="save-button">
           Save
-        </button>
+        </custom-button>
       </template>
     </template>
   </Modal>
@@ -67,7 +76,7 @@
 
 <script>
 
-import Modal from '../Modal';
+import Modal from '../common/Modal';
 
 export default {
   name: 'room-modal',
@@ -107,6 +116,9 @@ export default {
     }
   },
   methods: {
+    close() {
+      this.$emit('close');
+    },
     addUser() {
       this.usersEmails.push(this.userEmail);
       this.userEmail = '';

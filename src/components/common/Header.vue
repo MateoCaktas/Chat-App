@@ -11,13 +11,18 @@
       <router-link v-if="!isLoggedIn" to="/login" class="navigation-link"> Login </router-link>
       <div v-else>
         <span class="user-label">Hello, {{ user.fullName }}</span>
-        <button @click="logoutUser" class="logout-button">Logout</button>
+        <custom-button
+          @click="logoutUser"
+          class="logout-button">
+          Logout
+        </custom-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'custom-header',
   props: {
@@ -99,14 +104,8 @@ export default {
 
 .logout-button {
   margin: 10px 40px;
-  color: $secondary-color;
   font-size: 20px;
-  background-color: $primary-color;
   border: none;
-}
-
-.logout-button:hover {
-  cursor: pointer;
 }
 
 .navigation-bar > *:last-child {

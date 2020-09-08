@@ -4,8 +4,17 @@
       <div id="room-window">
         <p> {{ room.name }} </p>
         <p>Users: {{ usersLength }} / {{ room.limit }}</p>
-        <button @click="goToRoom" class="edit-room-button"> Enter </button>
-        <button v-if="isAdmin" @click="showModal = true" class="edit-room-button"> Edit Room </button>
+        <custom-button
+          @click="goToRoom"
+          class="edit-room-button">
+          Enter
+        </custom-button>
+        <custom-button
+          v-if="isAdmin"
+          @click="openModal"
+          class="edit-room-button">
+          Edit
+        </custom-button>
       </div>
     </transition>
     <transition name="fade-edit-room-modal">
@@ -48,6 +57,9 @@ export default {
     }
   },
   methods: {
+    openModal() {
+      this.showModal = true;
+    },
     goToRoom() {
       this.$router.push({ name: 'Room', params: { id: this.room.id } });
     },
@@ -105,10 +117,6 @@ export default {
 
 #room-window:hover {
   transform: scale(1.1);
-}
-
-.edit-room-button {
-  @include button;
 }
 
 .fade-edit-room-modal-enter-active, .fade-edit-room-modal-leave-active {

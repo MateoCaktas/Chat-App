@@ -45,12 +45,17 @@
       </template>
 
       <template slot="modal-footer">
-        <button @click="$emit('close')" class="cancel-button">
+        <custom-button
+          @click="close"
+          class="cancel-button">
           Cancel
-        </button>
-        <button @click="saveUser" :disabled="!validateFields" class="save-button">
+        </custom-button>
+        <custom-button
+          @click="saveUser"
+          :disabled="!validateFields"
+          class="save-button">
           Save
-        </button>
+        </custom-button>
       </template>
     </template>
   </Modal>
@@ -58,7 +63,7 @@
 
 <script>
 
-import Modal from '../Modal';
+import Modal from '../common/Modal';
 
 export default {
   name: 'user-modal',
@@ -93,6 +98,9 @@ export default {
     }
   },
   methods: {
+    close() {
+      this.$emit('close');
+    },
     saveUser() {
       this.$emit('update-user-list', this.currentUser, this.actiontype);
     }

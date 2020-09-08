@@ -3,9 +3,18 @@
     <div class="background-image"></div>
     <div class="messages-container">
       <div class="messages-container-header">
-        <button @click="$router.go('-1')" class="messages-container-back-button">Back</button>
+        <custom-button
+          @click="goBack"
+          class="messages-container-back-button">
+          Back
+        </custom-button>
         <h1 class="messages-container-title">Room {{ roomId }}</h1>
-        <button v-if="belongsToRoom" @click="leaveRoom()" class="messages-container-leave-button">Leave Room</button>
+        <custom-button
+          v-if="belongsToRoom"
+          @click="leaveRoom()"
+          class="messages-container-leave-button">
+          Leave Room
+        </custom-button>
       </div>
       <div v-for="message in messages" :key="message.id">
         <MessageItem
@@ -39,7 +48,8 @@ export default {
       httpRequest: {},
       messages: [],
       usersList: [],
-      isAdmin: false
+      isAdmin: false,
+      getUsersBelongingToRoom: {}
     };
   },
   computed: {
@@ -57,7 +67,9 @@ export default {
           this.messages.splice(index, 1);
         });
     },
-
+    goBack() {
+      this.$router.go('-1');
+    },
     leaveRoom(user) {
       if (!user) user = JSON.parse(localStorage.loggedUser);
 
@@ -81,8 +93,8 @@ export default {
         this.messages = result;
       });
 
-    const getUsersBelongingToRoom = new Request(`/rooms/${this.roomId}/users`);
-    getUsersBelongingToRoom.sendRequest('get')
+    this.getUsersBelongingToRoom = new Request(`/rooms/${this.roomId}/users`);
+    this.getUsersBelongingToRoom.sendRequest('get')
       .then(result => result.json())
       .then(result => {
         this.usersList = result.map(user => user);
