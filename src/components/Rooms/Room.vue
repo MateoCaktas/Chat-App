@@ -16,14 +16,11 @@
           Leave Room
         </custom-button>
       </div>
-      <div class="messages">
-        <div v-for="message in messages" :key="message.id" class="message">
-          <div class="user">
-            <img class="user-image" src="@/assets/user.png">
-            <div class="user-name">{{ message.userMessage.fullName }} </div>
-          </div>
-          <div class="user-message-content">{{ message.content }}</div>
-        </div>
+      <div v-for="message in messages" :key="message.id">
+        <MessageItem
+          @delete="deleteMessage"
+          :message="message"
+          :is-admin="isAdmin" />
       </div>
     </div>
 
@@ -40,6 +37,7 @@
 
 <script>
 
+import MessageItem from '../messages/MessageItem';
 import Request from '../../services';
 
 export default {
@@ -47,11 +45,11 @@ export default {
   data() {
     return {
       roomId: 0,
+      httpRequest: {},
       messages: [],
       usersList: [],
-      httpRequest: {},
-      getUsersBelongingToRoom: {},
-      isAdmin: false
+      isAdmin: false,
+      getUsersBelongingToRoom: {}
     };
   },
   computed: {
@@ -62,6 +60,13 @@ export default {
     }
   },
   methods: {
+    deleteMessage(message) {
+      this.httpRequest.sendRequest('delete', message)
+        .then(() => {
+          const index = this.messages.findIndex(msg => msg.id === message.id);
+          this.messages.splice(index, 1);
+        });
+    },
     goBack() {
       this.$router.go('-1');
     },
@@ -80,9 +85,9 @@ export default {
   mounted() {
     this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.roomId = this.$route.params.id;
-    this.httpRequest = new Request(`/messages/${this.roomId}`);
+    this.httpRequest = new Request('/messages');
 
-    this.httpRequest.sendRequest('get')
+    this.httpRequest.sendRequest('get', `roomId=${this.roomId}`)
       .then(result => result.json())
       .then(result => {
         this.messages = result;
@@ -94,6 +99,9 @@ export default {
       .then(result => {
         this.usersList = result.map(user => user);
       });
+  },
+  components: {
+    MessageItem
   }
 };
 </script>
@@ -117,11 +125,13 @@ export default {
 .messages-container {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   width: 80%;
 }
 
 .messages-container-header {
   display: flex;
+  width: 100%;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -153,33 +163,9 @@ export default {
 }
 
 .message {
+  position: relative;
   margin: 10px;
   margin-right: auto;
-}
-
-.user {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 5px;
-}
-
-.user-name {
-  margin: 5px;
-}
-
-.user-image {
-  width: 30px;
-  height: 30px;
-}
-
-.user-message-content {
-  padding: 10px;
-  color: white;
-  font-size: 20px;
-  background-color: $primary-color;
-  border: 1px solid $tertiary-color;
-  border-radius: 10px;
 }
 
 .users-list {
