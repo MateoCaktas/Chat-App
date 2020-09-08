@@ -10,7 +10,12 @@
             :room="room" />
         </div>
       </div>
-      <button v-if="isAdmin" @click="showModal = true" class="create-room-button">Create a room</button>
+      <custom-button
+        @click="openModal"
+        class="create-room-button"
+        value="Create a room">
+        Create a room
+      </custom-button>
     </div>
     <transition name="fade-add-room-modal">
       <RoomModal
@@ -36,11 +41,13 @@ export default {
       showModal: false,
       addedRoom: {},
       actionType: 'add',
-      httpRequest: {},
-      isAdmin: false
+      httpRequest: {}
     };
   },
   methods: {
+    openModal() {
+      this.showModal = true;
+    },
     cancel() {
       this.addedRoom = {};
       this.showModal = false;
@@ -77,7 +84,6 @@ export default {
     }
   },
   mounted() {
-    this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.httpRequest = new Request('/rooms');
 
     this.httpRequest.sendRequest('get')
@@ -110,8 +116,6 @@ export default {
 }
 
 .create-room-button {
-  @include button;
-
   width: 30%;
   margin-top: 50px;
   font-size: 20px;
@@ -126,13 +130,13 @@ export default {
 }
 
 ::v-deep {
-  .save-button {
-    @include button;
+  .user-input-button {
+    width: 50px;
+    height: 30px;
+    margin: 0 5px;
   }
 
   .cancel-button {
-    @include button;
-
     background-color: red;
   }
 }

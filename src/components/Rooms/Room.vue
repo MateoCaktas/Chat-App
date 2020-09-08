@@ -3,27 +3,31 @@
     <div class="background-image"></div>
     <div class="messages-container">
       <div class="messages-container-header">
-        <button @click="$router.go('-1')" class="messages-container-back-button">Back</button>
-        <h1 class="messages-container-title">Room {{ roomID }}</h1>
-        <button v-if="belongsToRoom" @click="leaveRoom()" class="messages-container-leave-button">Leave Room</button>
+        <custom-button
+          @click="goBack"
+          class="messages-container-back-button">
+          Back
+        </custom-button>
+        <h1 class="messages-container-title">Room {{ roomId }}</h1>
+        <custom-button
+          v-if="belongsToRoom"
+          @click="leaveRoom()"
+          class="messages-container-leave-button">
+          Leave Room
+        </custom-button>
       </div>
-
       <div ref="messages" class="messages">
-        <div
-          v-for="message in messages"
-          :key="message.id" class="message"
-          :class="{ loggedUserMessage: message.userMessage.id === loggedUser.id }">
-          <div class="user">
-            <img class="user-image" src="@/assets/user.png">
-            <div class="user-name">{{ message.userMessage.fullName }} </div>
-          </div>
-          <div class="user-message-content">{{ message.content }}</div>
-        </div>
+        <MessageItem
+          v-for="message in messages" :key="message.id"
+          @delete="deleteMessage"
+          :message="message"
+          :is-admin="loggedUser.isAdmin"
+          :class="{ 'logged-user-message': message.userMessage.id === loggedUser.id }" />
       </div>
 
       <form v-show="belongsToRoom" @submit.prevent="sendMessage" id="input-message-form">
         <input v-model="inputMessage" type="text" class="input-message-window">
-        <button type="submit" :disabled="!inputMessage" class="send-message-button">Send</button>
+        <custom-button type="submit" :disabled="!inputMessage" class="send-message-button">Send</custom-button>
       </form>
     </div>
 
@@ -32,7 +36,7 @@
       <div v-for="user in usersList" :key="user.email" class="user-list-item">
         <img class="user-list-image" src="@/assets/user.png">
         <div class="user-list-name">{{ user.fullName }}</div>
-        <div v-if="isAdmin" @click="leaveRoom(user)" class="delete-user-button">+</div>
+        <div v-if="loggedUser.isAdmin" @click="leaveRoom(user)" class="delete-user-button">+</div>
       </div>
     </div>
   </div>
@@ -40,20 +44,20 @@
 
 <script>
 
+import MessageItem from '../messages/MessageItem';
 import Request from '../../services';
 
 export default {
   name: 'room',
   data() {
     return {
-      roomID: 0,
-      messages: [],
-      usersList: [],
-      httpRequest: {},
-      getUsersBelongingToRoom: {},
       inputMessage: '',
       loggedUser: {},
-      isAdmin: false
+      roomId: 0,
+      httpRequest: {},
+      messages: [],
+      usersList: [],
+      getUsersBelongingToRoom: {}
     };
   },
   computed: {
@@ -63,12 +67,22 @@ export default {
     }
   },
   methods: {
-    getMessages() {
-      return this.httpRequest.sendRequest('get')
+    getMessages(query) {
+      return this.httpRequest.sendRequest('get', query)
         .then(result => result.json())
         .then(result => {
           this.messages = result;
         });
+    },
+    deleteMessage(message) {
+      this.httpRequest.sendRequest('delete', message)
+        .then(() => {
+          const index = this.messages.findIndex(msg => msg.id === message.id);
+          this.messages.splice(index, 1);
+        });
+    },
+    goBack() {
+      this.$router.go('-1');
     },
     leaveRoom(user) {
       if (!user) user = JSON.parse(localStorage.loggedUser);
@@ -98,24 +112,26 @@ export default {
         });
     },
     scrollToEnd() {
-      var container = this.$refs.messages;
+      const container = this.$refs.messages;
       container.scrollTop = container.scrollHeight;
     }
   },
   mounted() {
-    this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.loggedUser = JSON.parse(localStorage.loggedUser);
-    this.roomID = this.$route.params.id;
-    this.httpRequest = new Request(`/messages/${this.roomID}`);
+    this.roomId = this.$route.params.id;
+    this.httpRequest = new Request('/messages');
 
-    this.getMessages();
+    this.getMessages(`roomId=${this.roomId}`);
 
-    this.getUsersBelongingToRoom = new Request(`/rooms/${this.roomID}/users`);
+    this.getUsersBelongingToRoom = new Request(`/rooms/${this.roomId}/users`);
     this.getUsersBelongingToRoom.sendRequest('get')
       .then(result => result.json())
       .then(result => {
         this.usersList = result.map(user => user);
       });
+  },
+  components: {
+    MessageItem
   }
 };
 </script>
@@ -124,7 +140,7 @@ export default {
 
 #input-message-form {
   display: flex;
-  flex-direction: row;
+  width: 100%;
 }
 
 .input-message-window {
@@ -156,11 +172,13 @@ export default {
 .messages-container {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   width: 80%;
 }
 
 .messages-container-header {
   display: flex;
+  width: 100%;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -186,47 +204,43 @@ export default {
 
 .messages {
   display: flex;
+  width: 100%;
   height: 60vh;
   flex-direction: column;
   overflow: scroll;
   border-bottom: 1px solid $tertiary-color;
-  padding-right: 10px;
 }
 
-.message {
-  max-width: 60%;
-  margin: 10px;
-  margin-right: auto;
-}
+::v-deep {
+  .logged-user-message {
+    margin-right: 0;
+    margin-left: auto;
+  }
 
-.loggedUserMessage {
-  margin-right: 0;
-  margin-left: auto;
-}
+  .user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 5px;
+  }
 
-.user {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 5px;
-}
+  .user-name {
+    margin: 5px;
+  }
 
-.user-name {
-  margin: 5px;
-}
+  .user-image {
+    width: 30px;
+    height: 30px;
+  }
 
-.user-image {
-  width: 30px;
-  height: 30px;
-}
-
-.user-message-content {
-  padding: 10px;
-  color: white;
-  font-size: 20px;
-  background-color: $primary-color;
-  border: 1px solid $tertiary-color;
-  border-radius: 10px;
+  .user-message-content {
+    padding: 10px;
+    color: white;
+    font-size: 20px;
+    background-color: $primary-color;
+    border: 1px solid $tertiary-color;
+    border-radius: 10px;
+  }
 }
 
 .users-list {
