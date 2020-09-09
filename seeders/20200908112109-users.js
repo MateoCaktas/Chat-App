@@ -6,10 +6,10 @@ const saltRounds = 10;
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     function getFullName(firstName, lastName) {
-      return firstName + ' ' + lastName;
+      return `${firstName} ${lastName}`;
     }
 
-    return queryInterface.bulkInsert('users', [
+    await queryInterface.bulkInsert('users', [
       {
         first_name: 'First',
         last_name: 'User',
