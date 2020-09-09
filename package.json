@@ -5,8 +5,6 @@
   "description": "",
   "author": "",
   "scripts": {
-    "resetDB":"node ./config/dbReset",
-    "seedDB":"node ./config/dbSeed",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "dev": "concurrently \"nodemon server.js\" \"npm run serve\"",
@@ -26,7 +24,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "pg": "^8.2.1",
+    "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.2",
