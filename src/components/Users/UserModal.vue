@@ -36,7 +36,7 @@
             placeholder="Password">
         </div>
         <div>
-          <input v-model="currentUser.isAdmin" class="checkbox" type="checkbox">
+          <input v-model="isAdmin" class="checkbox" type="checkbox">
           <label for="checkbox"> Admin </label>
         </div>
         <div v-if="currentUser.id" class="modal-body-line">
@@ -83,7 +83,8 @@ export default {
         firstName: '',
         lastName: '',
         email: ''
-      }
+      },
+      isAdmin: false
     };
   },
   computed: {
@@ -102,6 +103,7 @@ export default {
       this.$emit('close');
     },
     saveUser() {
+      this.currentUser.isAdmin = this.isAdmin;
       this.$emit('update-user-list', this.currentUser, this.actiontype);
     }
   },
