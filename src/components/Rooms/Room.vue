@@ -18,7 +18,8 @@
       </div>
       <div ref="messages" class="messages">
         <MessageItem
-          v-for="message in messages" :key="message.id"
+          v-for="message in messages"
+          :key="message.id"
           @delete="deleteMessage"
           :message="message"
           :is-admin="loggedUser.isAdmin"
