@@ -52,9 +52,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.test {
-  width: 200px;
-}
 
 .message {
   display: flex;

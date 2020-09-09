@@ -104,11 +104,11 @@ export default {
 
       this.httpRequest.sendRequest('post', message)
         .then(() => {
-          this.getMessages()
-            .then(() => {
-              this.inputMessage = '';
-              this.scrollToEnd();
-            });
+          return this.getMessages();
+        })
+        .then(() => {
+          this.inputMessage = '';
+          this.scrollToEnd();
         });
     },
     scrollToEnd() {
