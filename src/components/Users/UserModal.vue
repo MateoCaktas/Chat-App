@@ -82,7 +82,8 @@ export default {
       currentUser: {
         firstName: '',
         lastName: '',
-        email: ''
+        email: '',
+        isAdmin: false
       }
     };
   },

@@ -27,7 +27,7 @@ router.post('/', authAdmin, (req, res) => {
 
 router.delete('/:id', authAdmin, (req, res) => {
   db.models.User.destroy({
-    where: { id: req.params.id }
+    where: { id: req.body.id }
   })
   .then(() => res.send('User deleted'))
   .catch(err => res.status(400).send(err));
