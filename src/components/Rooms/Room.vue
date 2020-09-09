@@ -16,12 +16,20 @@
           Leave Room
         </custom-button>
       </div>
-      <div v-for="message in messages" :key="message.id">
+      <div ref="messages" class="messages">
         <MessageItem
+          v-for="message in messages"
+          :key="message.id"
           @delete="deleteMessage"
           :message="message"
-          :is-admin="isAdmin" />
+          :is-admin="loggedUser.isAdmin"
+          :class="{ 'logged-user-message': message.userMessage.id === loggedUser.id }" />
       </div>
+
+      <form v-show="belongsToRoom" @submit.prevent="sendMessage" id="input-message-form">
+        <input v-model="inputMessage" type="text" class="input-message-window">
+        <custom-button type="submit" :disabled="!inputMessage" class="send-message-button">Send</custom-button>
+      </form>
     </div>
 
     <div class="users-list">
@@ -29,7 +37,7 @@
       <div v-for="user in usersList" :key="user.email" class="user-list-item">
         <img class="user-list-image" src="@/assets/user.png">
         <div class="user-list-name">{{ user.fullName }}</div>
-        <div v-if="isAdmin" @click="leaveRoom(user)" class="delete-user-button">+</div>
+        <div v-if="loggedUser.isAdmin" @click="leaveRoom(user)" class="delete-user-button">+</div>
       </div>
     </div>
   </div>
@@ -44,22 +52,29 @@ export default {
   name: 'room',
   data() {
     return {
+      inputMessage: '',
+      loggedUser: {},
       roomId: 0,
       httpRequest: {},
       messages: [],
       usersList: [],
-      isAdmin: false,
       getUsersBelongingToRoom: {}
     };
   },
   computed: {
     belongsToRoom() {
       // Checks if the user is part of the room (admins can go to a room which they are not part of)
-      const loggedUserEmail = JSON.parse(localStorage.loggedUser).email;
-      return this.usersList.filter(user => user.email === loggedUserEmail).length;
+      return this.usersList.filter(user => user.email === this.loggedUser.email).length;
     }
   },
   methods: {
+    getMessages() {
+      return this.httpRequest.sendRequest('get', `roomId=${this.roomId}`)
+        .then(result => result.json())
+        .then(result => {
+          this.messages = result;
+        });
+    },
     deleteMessage(message) {
       this.httpRequest.sendRequest('delete', message)
         .then(() => {
@@ -80,18 +95,34 @@ export default {
           // If the user himself leaves the room, redirect him to Home page
           if (user.id === JSON.parse(localStorage.loggedUser).id) this.$router.push({ name: 'Home' });
         });
+    },
+    sendMessage() {
+      const message = {};
+      message.content = this.inputMessage;
+      message.time = Date.now();
+      message.fkRoom = parseInt(this.$route.params.id);
+      message.fkUser = this.loggedUser.id;
+
+      this.httpRequest.sendRequest('post', message)
+        .then(() => {
+          return this.getMessages();
+        })
+        .then(() => {
+          this.inputMessage = '';
+          this.scrollToEnd();
+        });
+    },
+    scrollToEnd() {
+      const container = this.$refs.messages;
+      container.scrollTop = container.scrollHeight;
     }
   },
   mounted() {
-    this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
+    this.loggedUser = JSON.parse(localStorage.loggedUser);
     this.roomId = this.$route.params.id;
     this.httpRequest = new Request('/messages');
 
-    this.httpRequest.sendRequest('get', `roomId=${this.roomId}`)
-      .then(result => result.json())
-      .then(result => {
-        this.messages = result;
-      });
+    this.getMessages();
 
     this.getUsersBelongingToRoom = new Request(`/rooms/${this.roomId}/users`);
     this.getUsersBelongingToRoom.sendRequest('get')
@@ -107,6 +138,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+#input-message-form {
+  display: flex;
+  width: 100%;
+}
+
+.input-message-window {
+  margin: 5px;
+  flex: 1;
+  resize: none !important;
+}
+
+.send-message-button {
+  @include button;
+
+  margin: 5px;
+}
 
 .background-image {
   position: absolute;
@@ -135,11 +183,12 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin: 0;
   border-bottom: 1px solid $tertiary-color;
 }
 
 .messages-container-title {
-  font-size: 25px;
+  font-size: 20px;
   flex: 1;
 }
 
@@ -156,16 +205,19 @@ export default {
 
 .messages {
   display: flex;
-  height: 350px;
+  width: 100%;
+  height: 60vh;
   flex-direction: column;
   overflow: scroll;
   border-bottom: 1px solid $tertiary-color;
 }
 
-.message {
-  position: relative;
-  margin: 10px;
-  margin-right: auto;
+::v-deep {
+  .logged-user-message {
+    margin-right: 0;
+    margin-left: auto;
+    padding-right: 10px;
+  }
 }
 
 .users-list {

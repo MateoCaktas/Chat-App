@@ -24,9 +24,9 @@ class Request {
   sendRequest(type, data) {
     let path = this.basePath;
 
+    // Adding query parameters for get requests (if they have any)
     if (type === 'get' && data) path = `${path}?${data}`;
 
-    // Adding query parameters for get requests (if they have any)
     else if (data && data.id) path = `${path}/${data.id}`;
 
     const req = this.setRequestObject(type, data);

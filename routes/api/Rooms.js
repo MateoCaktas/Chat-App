@@ -12,8 +12,8 @@ router.get('/', (req, res) => {
   id = !req.user.isAdmin ? req.user.id : null;
 
   getRooms(id)
-      .then(rooms => res.json(rooms))
-      .catch(err => res.status(400).send(err));
+    .then(rooms => res.json(rooms))
+    .catch(err => res.status(400).send(err));
 });
 
 router.post('/', authAdmin, (req, res) => {
