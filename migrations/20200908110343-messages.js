@@ -19,7 +19,8 @@ module.exports = {
         references: {
           model: 'users',
           key: 'id'
-        }
+        },
+        onDelete: 'SET NULL'
       },
       f_k_room: {
         type: Sequelize.INTEGER,

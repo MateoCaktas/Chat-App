@@ -23,7 +23,7 @@
           @delete="deleteMessage"
           :message="message"
           :is-admin="loggedUser.isAdmin"
-          :class="{ 'logged-user-message': message.userMessage.id === loggedUser.id }" />
+          :class="{ 'logged-user-message': message.FK_user === loggedUser.id }" />
       </div>
 
       <form v-show="belongsToRoom" @submit.prevent="sendMessage" id="input-message-form">
@@ -73,6 +73,8 @@ export default {
         .then(result => result.json())
         .then(result => {
           this.messages = result;
+          console.log(result);
+          console.log(this.messages);
         });
     },
     deleteMessage(message) {
