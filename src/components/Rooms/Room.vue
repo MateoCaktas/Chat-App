@@ -73,8 +73,6 @@ export default {
         .then(result => result.json())
         .then(result => {
           this.messages = result;
-          console.log(result);
-          console.log(this.messages);
         });
     },
     deleteMessage(message) {
