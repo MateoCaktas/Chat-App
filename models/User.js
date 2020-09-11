@@ -16,7 +16,9 @@ class User extends Model {
           type: DataTypes.STRING
         },
         email: {
-          type: DataTypes.STRING
+          type: DataTypes.STRING,
+          unique: true,
+          isEmail: true
         },
         fullName: {
           type: DataTypes.STRING
