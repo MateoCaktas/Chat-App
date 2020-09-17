@@ -40,23 +40,4 @@ router.delete('/:id', authAdmin, (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.put('/:id', (req, res) => {
-  const { time, content, fkRoom, fkUser } = req.body;
-
-  db.models.Message.update({
-    time,
-    content,
-    FK_room: fkRoom,
-    FK_user: fkUser
-  }, {
-    where: {
-      id: req.params.id
-    },
-    returning: true,
-    plain: true
-  })
-  .then(msg => res.json(msg))
-  .catch(err => res.status(400).send(err));
-});
-
 module.exports = router;
