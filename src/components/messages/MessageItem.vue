@@ -25,7 +25,11 @@
 </template>
 
 <script>
+
+import LikedIcon from '@/assets/liked.png';
+import LikeIcon from '@/assets/like.png';
 import Request from '../../services';
+
 export default {
   name: 'message-item',
   props: {
@@ -50,12 +54,17 @@ export default {
     };
   },
   computed: {
-    isLiked() {
-      const path = this.isLikedByLoggedUser
-        ? require('@/assets/liked.png')
-        : require('@/assets/like.png');
+    isLiked: {
+      get() {
+        const path = this.isLikedByLoggedUser
+          ? LikedIcon
+          : LikeIcon;
 
-      return path;
+        return path;
+      },
+      set(value) {
+        this.isLikedByLoggedUser = value;
+      }
     },
     likesCount() {
       return this.usersLikes.length;
@@ -65,8 +74,14 @@ export default {
     sendLikesRequest(type, req) {
       return this.userLikesRequest.sendRequest(type, req)
         .then(() => {
-          this.isLikedByLoggedUser = !this.isLikedByLoggedUser;
-          this.getMessageLikes();
+          this.isLiked = !this.isLikedByLoggedUser;
+
+          if (type === 'post') {
+            this.usersLikes.push({
+              user_id: this.loggedUser.id,
+              message_id: this.message.id
+            });
+          } else this.usersLikes = this.usersLikes.filter(it => it.user_id !== this.loggedUser.id);
         });
     },
     getMessageLikes() {
@@ -85,9 +100,7 @@ export default {
     likeMessage() {
       const req = {};
       let type = 'delete';
-      req.userId = this.loggedUser.id;
-      req.messageId = this.message.id;
-      if (this.isLikedByLoggedUser) req.id = this.message.id;
+      req.id = this.loggedUser.id;
 
       if (!this.isLikedByLoggedUser) type = 'post';
 
@@ -95,14 +108,12 @@ export default {
     }
   },
   mounted() {
-    this.userLikesRequest = new Request('/likes');
-
-    this.getMessageLikes()
-      .then(() => {
-        this.isLikedByLoggedUser = this.usersLikes.filter(it => it.user_id === this.loggedUser.id).length;
-      });
+    this.userLikesRequest = new Request(`/messages/${this.message.id}/likes`);
+    this.usersLikes = this.message.userLikes;
 
     this.loggedUser = JSON.parse(localStorage.loggedUser);
+
+    this.isLikedByLoggedUser = this.usersLikes.filter(it => it.user_id === this.loggedUser.id).length;
 
     if (this.message.userMessage) this.userName = this.message.userMessage.fullName;
     this.isDeleted = !this.message.userMessage;

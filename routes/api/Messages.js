@@ -13,6 +13,8 @@ router.get('/', (req, res) => {
       },
       include: [{
         model: db.models.User, as: 'userMessage'
+      }, {
+        model: db.models.UserLikes, as: 'userLikes'
       }]
     })
     .then(result => res.json(result))
@@ -38,6 +40,26 @@ router.delete('/:id', authAdmin, (req, res) => {
   })
   .then(() => res.send('Message deleted'))
   .catch(err => res.status(400).send(err));
+});
+
+router.delete('/:id/likes/:userId', authAdmin, (req, res) => {
+  db.models.UserLikes.destroy({
+    where: {
+      message_id: req.params.id,
+      user_id: req.params.userId
+    }
+  })
+  .then(() => res.send('User like deleted'))
+  .catch(err => res.status(400).send(err));
+});
+
+router.post('/:id/likes/:userId', (req, res) => {
+  db.models.UserLikes.create({
+    message_id: req.params.id,
+    user_id: req.params.userId
+  })
+    .then(like => res.json(like))
+    .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;
