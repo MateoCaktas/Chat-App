@@ -22,8 +22,10 @@ class Message extends Model {
   }
 
   static associate(models) {
-    this.MessageRoom = this.belongsTo(models.Room, { as: 'messageRoom', foreignKey: 'FK_room' });
-    this.UserMessage = this.belongsTo(models.User, { as: 'userMessage', foreignKey: 'FK_user' });
+    this.belongsTo(models.Room, { as: 'messageRoom', foreignKey: 'FK_room' });
+    this.belongsTo(models.User, { as: 'userMessage', foreignKey: 'FK_user' });
+    this.belongsToMany(models.User, { as: 'users', through: 'user_likes' });
+    this.hasMany(models.UserLikes, { as: 'userLikes' });
   }
 }
 

@@ -12,11 +12,24 @@
         +
       </custom-button>
       <div class="user-message-content" :class="{ 'deleted-user-message': isDeleted }">{{ message.content }}</div>
+      <div class="user-likes">
+        <custom-button
+          @click="likeMessage"
+          class="user-like-button">
+          <img class="like-image" :src="likedStatusIcon">
+        </custom-button>
+        <span class="user-likes-number"> {{ likesCount }} likes</span>
+      </div>
     </div>
   </transition>
 </template>
 
 <script>
+
+import LikedIcon from '@/assets/liked.png';
+import LikeIcon from '@/assets/like.png';
+import Request from '@/services';
+
 export default {
   name: 'message-item',
   props: {
@@ -33,18 +46,62 @@ export default {
     return {
       userName: 'Deleted User',
       isDeleted: false,
-      isActive: true
+      isActive: true,
+      loggedUser: {},
+      usersLikes: [],
+      userLikesRequest: {}
     };
   },
+  computed: {
+    isLiked() {
+      return this.usersLikes.find(it => it.user_id === this.loggedUser.id);
+    },
+    likedStatusIcon() {
+      return this.isLiked ? LikedIcon : LikeIcon;
+    },
+    likesCount() {
+      return this.usersLikes.length;
+    }
+  },
   methods: {
+    sendLikesRequest(type, req) {
+      return this.userLikesRequest.sendRequest(type, req)
+        .then(() => {
+          if (type === 'post') {
+            this.usersLikes.push({
+              user_id: this.loggedUser.id,
+              message_id: this.message.id
+            });
+          } else this.usersLikes = this.usersLikes.filter(it => it.user_id !== this.loggedUser.id);
+        });
+    },
+    getMessageLikes() {
+      return this.userLikesRequest.sendRequest('get', `messageId=${this.message.id}`)
+        .then(result => result.json())
+        .then(result => {
+          this.usersLikes = result;
+        });
+    },
     deleteMessage(message) {
       this.isActive = false;
       setTimeout(() => {
         this.$emit('delete', message);
       }, 1000);
+    },
+    likeMessage() {
+      const req = {};
+      const type = this.isLiked ? 'delete' : 'post';
+      req.id = this.loggedUser.id;
+
+      this.sendLikesRequest(type, req);
     }
   },
   mounted() {
+    this.userLikesRequest = new Request(`/messages/${this.message.id}/likes`);
+    this.usersLikes = this.message.userLikes;
+
+    this.loggedUser = JSON.parse(localStorage.loggedUser);
+
     if (this.message.userMessage) this.userName = this.message.userMessage.fullName;
     this.isDeleted = !this.message.userMessage;
   }
@@ -86,6 +143,38 @@ export default {
   float: left;
   border: 1px solid $tertiary-color;
   border-radius: 10px;
+}
+
+.user-likes {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 110px;
+  height: 25px;
+  font-size: 14px;
+}
+
+.user-like-button {
+  height: 30px;
+  color: black;
+  background-color: white;
+  border-radius: 50px;
+}
+
+.like-image {
+  width: 25px;
+  height: 25px;
+}
+
+.user-likes-number {
+  width: 150px;
+  height: 20px;
+  padding: 2px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 5px;
 }
 
 .deleted-user-message {

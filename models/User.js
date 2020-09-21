@@ -40,6 +40,7 @@ class User extends Model {
 
   static associate(models) {
     this.ChatRooms = this.belongsToMany(models.Room, { as: 'ChatRooms', through: 'user_rooms' });
+    this.UserLikes = this.belongsToMany(models.Message, { as: 'userLikes', through: 'user_likes' });
   }
 
   signJwt() {

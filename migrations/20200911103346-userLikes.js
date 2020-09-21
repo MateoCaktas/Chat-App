@@ -2,13 +2,16 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('user_rooms', {
-      room_id: {
+    return queryInterface.createTable('user_likes', {
+      message_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'rooms',
+          model: 'messages',
           key: 'id'
-        }
+        },
+        primaryKey: true,
+        allowNull: false,
+        onDelete: 'CASCADE'
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -16,12 +19,14 @@ module.exports = {
           model: 'users',
           key: 'id'
         },
+        primaryKey: true,
+        allowNull: false,
         onDelete: 'CASCADE'
       }
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('user_rooms');
+    return queryInterface.dropTable('user_likes');
   }
 };

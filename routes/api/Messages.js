@@ -13,6 +13,8 @@ router.get('/', (req, res) => {
       },
       include: [{
         model: db.models.User, as: 'userMessage'
+      }, {
+        model: db.models.UserLikes, as: 'userLikes'
       }]
     })
     .then(result => res.json(result))
@@ -40,23 +42,24 @@ router.delete('/:id', authAdmin, (req, res) => {
   .catch(err => res.status(400).send(err));
 });
 
-router.put('/:id', (req, res) => {
-  const { time, content, fkRoom, fkUser } = req.body;
-
-  db.models.Message.update({
-    time,
-    content,
-    FK_room: fkRoom,
-    FK_user: fkUser
-  }, {
+router.delete('/:id/likes/:userId', authAdmin, (req, res) => {
+  db.models.UserLikes.destroy({
     where: {
-      id: req.params.id
-    },
-    returning: true,
-    plain: true
+      message_id: req.params.id,
+      user_id: req.params.userId
+    }
   })
-  .then(msg => res.json(msg))
+  .then(() => res.send('User like deleted'))
   .catch(err => res.status(400).send(err));
+});
+
+router.post('/:id/likes/:userId', (req, res) => {
+  db.models.UserLikes.create({
+    message_id: req.params.id,
+    user_id: req.params.userId
+  })
+    .then(like => res.json(like))
+    .catch(err => res.status(400).send(err));
 });
 
 module.exports = router;
