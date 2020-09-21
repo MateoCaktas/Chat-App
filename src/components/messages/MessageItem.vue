@@ -16,7 +16,7 @@
         <custom-button
           @click="likeMessage"
           class="user-like-button">
-          <img class="like-image" :src="isLiked">
+          <img class="like-image" :src="likedStatusIcon">
         </custom-button>
         <span class="user-likes-number"> {{ likesCount }} likes</span>
       </div>
@@ -28,7 +28,7 @@
 
 import LikedIcon from '@/assets/liked.png';
 import LikeIcon from '@/assets/like.png';
-import Request from '../../services';
+import Request from '@/services';
 
 export default {
   name: 'message-item',
@@ -49,22 +49,15 @@ export default {
       isActive: true,
       loggedUser: {},
       usersLikes: [],
-      userLikesRequest: {},
-      isLikedByLoggedUser: false
+      userLikesRequest: {}
     };
   },
   computed: {
-    isLiked: {
-      get() {
-        const path = this.isLikedByLoggedUser
-          ? LikedIcon
-          : LikeIcon;
-
-        return path;
-      },
-      set(value) {
-        this.isLikedByLoggedUser = value;
-      }
+    isLiked() {
+      return this.usersLikes.find(it => it.user_id === this.loggedUser.id);
+    },
+    likedStatusIcon() {
+      return this.isLiked ? LikedIcon : LikeIcon;
     },
     likesCount() {
       return this.usersLikes.length;
@@ -74,8 +67,6 @@ export default {
     sendLikesRequest(type, req) {
       return this.userLikesRequest.sendRequest(type, req)
         .then(() => {
-          this.isLiked = !this.isLikedByLoggedUser;
-
           if (type === 'post') {
             this.usersLikes.push({
               user_id: this.loggedUser.id,
@@ -99,10 +90,8 @@ export default {
     },
     likeMessage() {
       const req = {};
-      let type = 'delete';
+      const type = this.isLiked ? 'delete' : 'post';
       req.id = this.loggedUser.id;
-
-      if (!this.isLikedByLoggedUser) type = 'post';
 
       this.sendLikesRequest(type, req);
     }
@@ -112,8 +101,6 @@ export default {
     this.usersLikes = this.message.userLikes;
 
     this.loggedUser = JSON.parse(localStorage.loggedUser);
-
-    this.isLikedByLoggedUser = this.usersLikes.filter(it => it.user_id === this.loggedUser.id).length;
 
     if (this.message.userMessage) this.userName = this.message.userMessage.fullName;
     this.isDeleted = !this.message.userMessage;

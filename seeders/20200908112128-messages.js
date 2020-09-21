@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('messages', [{
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.bulkInsert('messages', [{
       time: new Date(Date.now()),
       content: 'This is first user\'s message.',
       f_k_user: 1,
@@ -35,7 +35,7 @@ module.exports = {
     }]);
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDlete('messages');
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.bulkDlete('messages');
   }
 };

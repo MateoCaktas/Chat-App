@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: (queryInterface, Sequelize) => {
     function getFullName(firstName, lastName) {
       return `${firstName} ${lastName}`;
     }
 
-    await queryInterface.bulkInsert('users', [
+    return queryInterface.bulkInsert('users', [
       {
         first_name: 'First',
         last_name: 'User',
@@ -86,7 +86,7 @@ module.exports = {
     );
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('users');
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete('users');
   }
 };

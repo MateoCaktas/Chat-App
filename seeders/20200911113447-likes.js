@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('user_likes', [{
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.bulkInsert('user_likes', [{
       message_id: 1,
       user_id: 1
     }, {
@@ -14,7 +14,7 @@ module.exports = {
     }]);
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('user_likes');
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete('user_likes');
   }
 };
