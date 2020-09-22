@@ -18,7 +18,20 @@
           class="user-like-button">
           <img class="like-image" :src="likedStatusIcon">
         </custom-button>
-        <span class="user-likes-number"> {{ likesCount }} likes</span>
+        <span
+          @mouseover="showUserLikes = true"
+          @mouseleave="showUserLikes = false"
+          class="user-likes-number">
+          {{ likesCount }} likes
+        </span>
+      </div>
+      <div
+        v-if="userLikes.length && showUserLikes"
+        class="user-likes-list"
+        :class="{ 'user-like-label-left': message.FK_user === loggedUser.id }">
+        <div v-for="user in userLikes" :key="user.id">
+          {{ user.fullName }}
+        </div>
       </div>
     </div>
   </transition>
@@ -48,38 +61,35 @@ export default {
       isDeleted: false,
       isActive: true,
       loggedUser: {},
-      usersLikes: [],
-      userLikesRequest: {}
+      userLikes: [],
+      userLikesRequest: {},
+      showUserLikes: false
     };
   },
   computed: {
     isLiked() {
-      return this.usersLikes.find(it => it.user_id === this.loggedUser.id);
+      return this.userLikes.find(it => it.id === this.loggedUser.id);
     },
     likedStatusIcon() {
       return this.isLiked ? LikedIcon : LikeIcon;
     },
     likesCount() {
-      return this.usersLikes.length;
+      return this.userLikes.length;
     }
   },
   methods: {
     sendLikesRequest(type, req) {
       return this.userLikesRequest.sendRequest(type, req)
         .then(() => {
-          if (type === 'post') {
-            this.usersLikes.push({
-              user_id: this.loggedUser.id,
-              message_id: this.message.id
-            });
-          } else this.usersLikes = this.usersLikes.filter(it => it.user_id !== this.loggedUser.id);
+          if (type === 'post') this.userLikes.push(this.loggedUser);
+          else this.userLikes = this.userLikes.filter(it => it.id !== this.loggedUser.id);
         });
     },
     getMessageLikes() {
       return this.userLikesRequest.sendRequest('get', `messageId=${this.message.id}`)
         .then(result => result.json())
         .then(result => {
-          this.usersLikes = result;
+          this.userLikes = [...result.users];
         });
     },
     deleteMessage(message) {
@@ -98,8 +108,7 @@ export default {
   },
   mounted() {
     this.userLikesRequest = new Request(`/messages/${this.message.id}/likes`);
-    this.usersLikes = this.message.userLikes;
-
+    this.userLikes = [...this.message.users];
     this.loggedUser = JSON.parse(localStorage.loggedUser);
 
     if (this.message.userMessage) this.userName = this.message.userMessage.fullName;
@@ -200,6 +209,22 @@ export default {
 
 .delete-message-button:hover {
   transform: rotate(135deg);
+}
+
+.user-likes-list {
+  position: absolute;
+  top: 70px;
+  left: 110px;
+  width: 120px;
+  padding: 5px;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  z-index: 9999;
+}
+
+.user-like-label-left {
+  left: -80px;
 }
 
 .message:hover .delete-message-button {

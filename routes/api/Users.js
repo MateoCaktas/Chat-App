@@ -6,7 +6,11 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  db.models.User.findAll()
+  let id = [];
+
+  if (req.query.ids) id = JSON.parse(req.query.ids);
+
+  getUsers(id)
     .then(user => res.json(user))
     .catch(err => res.status(400).send(err));
 });
@@ -48,5 +52,13 @@ router.put('/:id', authAdmin, (req, res) => {
     .then(result => res.json(result)))
     .catch(err => res.status(400).send(err));
 });
+
+function getUsers(id) {
+  if (!id.length) return db.models.User.findAll();
+
+  return db.models.User.findAll({
+    where: { id }
+  });
+}
 
 module.exports = router;
