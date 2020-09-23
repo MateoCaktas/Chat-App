@@ -19,18 +19,16 @@
           <img class="like-image" :src="likedStatusIcon">
         </custom-button>
         <span
-          @mouseover="showUserLikes = true"
-          @mouseleave="showUserLikes = false"
           class="user-likes-number">
           {{ likesCount }} likes
         </span>
-      </div>
-      <div
-        v-if="userLikes.length && showUserLikes"
-        class="user-likes-list"
-        :class="{ 'user-like-label-left': message.FK_user === loggedUser.id }">
-        <div v-for="user in userLikes" :key="user.id">
-          {{ user.fullName }}
+        <div
+          v-if="userLikes.length"
+          class="user-likes-list"
+          :class="{ 'user-like-label-left': message.FK_user === loggedUser.id }">
+          <div v-for="user in userLikes" :key="user.id">
+            {{ user.fullName }}
+          </div>
         </div>
       </div>
     </div>
@@ -212,15 +210,19 @@ export default {
 }
 
 .user-likes-list {
+  display: none;
   position: absolute;
-  top: 70px;
-  left: 110px;
+  left: 120px;
   width: 120px;
   padding: 5px;
   color: white;
   background-color: black;
   border-radius: 5px;
   z-index: 9999;
+}
+
+.user-likes-number:hover + .user-likes-list {
+  display: block;
 }
 
 .user-like-label-left {
