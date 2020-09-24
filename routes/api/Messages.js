@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
       include: [{
         model: db.models.User, as: 'userMessage'
       }, {
-        model: db.models.UserLikes, as: 'userLikes'
+        model: db.models.User, as: 'users'
       }]
     })
     .then(result => res.json(result))
