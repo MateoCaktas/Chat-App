@@ -1,5 +1,7 @@
 <template>
-  <button @click="$emit('click')" class="button">
+  <button
+    @click="$emit('click')"
+    class="button">
     <slot>
       Default value
     </slot>
