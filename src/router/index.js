@@ -9,7 +9,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     component: Home
   },
@@ -32,10 +32,6 @@ const routes = [
     path: '/rooms',
     name: 'Rooms',
     component: Rooms
-  },
-  {
-    path: '*',
-    redirect: '/login'
   }
 ];
 
