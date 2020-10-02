@@ -5,7 +5,7 @@
     </h1>
     <div class="navigation-bar">
       <router-link
-        to="/home"
+        to="/"
         class="navigation-link">
         Home
       </router-link>
