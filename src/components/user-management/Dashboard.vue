@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 
 import Request from '../../services';
 import UserItem from '../users/UserItem';
@@ -39,7 +40,11 @@ export default {
       httpRequest: {}
     };
   },
+  computed: {
+    ...mapGetters(['loggedUser'])
+  },
   methods: {
+    ...mapActions(['updateUser']),
     openModal() {
       this.showModal = true;
     },
@@ -67,9 +72,9 @@ export default {
         return user;
       })
       .then(user => {
-        if (user.id === JSON.parse(localStorage.loggedUser).id) {
-          // Save the changes on user if (loggedUser = changedUser) to the localStorage
-          localStorage.setItem('loggedUser', JSON.stringify(user));
+        if (user.id === this.loggedUser.id) {
+          // Save the changes on user if (loggedUser = changedUser) to the Vuex store
+          this.updateUser(user);
         }
       });
     },

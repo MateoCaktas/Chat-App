@@ -14,7 +14,7 @@
           Edit User
         </custom-button>
         <custom-button
-          v-if="!loggedUser"
+          v-if="!loggedInUser"
           @click="deleteUser"
           class="delete-button">
           Delete User
@@ -34,6 +34,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex';
 import UserModal from './UserModal';
 
 export default {
@@ -52,8 +53,9 @@ export default {
     };
   },
   computed: {
-    loggedUser() {
-      return this.user.id === JSON.parse(localStorage.loggedUser).id;
+    ...mapGetters(['loggedUser']),
+    loggedInUser() {
+      return this.user.id === this.loggedUser.id;
     },
     validateFields() {
       return this.user.firstName && this.user.lastName && this.user.email && this.user.password;

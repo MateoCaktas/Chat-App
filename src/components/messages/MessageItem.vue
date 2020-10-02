@@ -48,6 +48,7 @@
 
 import LikedIcon from '@/assets/liked.png';
 import LikeIcon from '@/assets/like.png';
+import { mapGetters } from 'vuex';
 import Request from '@/services';
 
 export default {
@@ -56,10 +57,6 @@ export default {
     message: {
       type: Object,
       default: () => {}
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -67,13 +64,13 @@ export default {
       userName: 'Deleted User',
       isDeleted: false,
       isActive: true,
-      loggedUser: {},
       userLikes: [],
       userLikesRequest: {},
       showUserLikes: false
     };
   },
   computed: {
+    ...mapGetters(['loggedUser', 'isAdmin']),
     isLiked() {
       return this.userLikes.find(it => it.id === this.loggedUser.id);
     },
@@ -116,7 +113,6 @@ export default {
   mounted() {
     this.userLikesRequest = new Request(`/messages/${this.message.id}/likes`);
     this.userLikes = [...this.message.users];
-    this.loggedUser = JSON.parse(localStorage.loggedUser);
 
     if (this.message.userMessage) this.userName = this.message.userMessage.fullName;
     this.isDeleted = !this.message.userMessage;
