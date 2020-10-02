@@ -1,7 +1,7 @@
 import Request from '../../services';
 
 const state = {
-  loggedUser: {
+  loggedInUser: {
     id: 0,
     firstName: '',
     lastName: '',
@@ -13,9 +13,9 @@ const state = {
 };
 
 const getters = {
-  loggedUser: state => state.loggedUser,
-  isAdmin: state => state.loggedUser.isAdmin,
-  isLoggedIn: state => state.loggedUser.id !== 0
+  loggedInUser: state => state.loggedInUser,
+  isAdmin: state => state.loggedInUser.isAdmin,
+  isLoggedIn: state => state.loggedInUser.id !== 0
 };
 
 const actions = {
@@ -49,7 +49,7 @@ const actions = {
 };
 
 const mutations = {
-  setUser: (state, user) => (state.loggedUser = user)
+  setUser: (state, user) => (state.loggedInUser = user)
 };
 
 export default {

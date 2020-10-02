@@ -41,7 +41,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loggedUser'])
+    ...mapGetters(['loggedInUser'])
   },
   methods: {
     ...mapActions(['updateUser']),
@@ -72,8 +72,8 @@ export default {
         return user;
       })
       .then(user => {
-        if (user.id === this.loggedUser.id) {
-          // Save the changes on user if (loggedUser = changedUser) to the Vuex store
+        if (user.id === this.loggedInUser.id) {
+          // Save the changes on user if (loggedInUser = changedUser) to the Vuex store
           this.updateUser(user);
         }
       });

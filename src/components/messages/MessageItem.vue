@@ -32,7 +32,7 @@
         <div
           v-if="userLikes.length"
           class="user-likes-list"
-          :class="{ 'user-like-label-left': message.FK_user === loggedUser.id }">
+          :class="{ 'user-like-label-left': message.FK_user === loggedInUser.id }">
           <div
             v-for="user in userLikes"
             :key="user.id">
@@ -70,9 +70,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loggedUser', 'isAdmin']),
+    ...mapGetters(['loggedInUser', 'isAdmin']),
     isLiked() {
-      return this.userLikes.find(it => it.id === this.loggedUser.id);
+      return this.userLikes.find(it => it.id === this.loggedInUser.id);
     },
     likedStatusIcon() {
       return this.isLiked ? LikedIcon : LikeIcon;
@@ -85,8 +85,8 @@ export default {
     sendLikesRequest(type, req) {
       return this.userLikesRequest.sendRequest(type, req)
         .then(() => {
-          if (type === 'post') this.userLikes.push(this.loggedUser);
-          else this.userLikes = this.userLikes.filter(it => it.id !== this.loggedUser.id);
+          if (type === 'post') this.userLikes.push(this.loggedInUser);
+          else this.userLikes = this.userLikes.filter(it => it.id !== this.loggedInUser.id);
         });
     },
     getMessageLikes() {
@@ -105,7 +105,7 @@ export default {
     likeMessage() {
       const req = {};
       const type = this.isLiked ? 'delete' : 'post';
-      req.id = this.loggedUser.id;
+      req.id = this.loggedInUser.id;
 
       this.sendLikesRequest(type, req);
     }

@@ -14,7 +14,7 @@
           Edit User
         </custom-button>
         <custom-button
-          v-if="!loggedInUser"
+          v-if="!loggedUser"
           @click="deleteUser"
           class="delete-button">
           Delete User
@@ -53,9 +53,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loggedUser']),
-    loggedInUser() {
-      return this.user.id === this.loggedUser.id;
+    ...mapGetters(['loggedInUser']),
+    loggedUser() {
+      return this.user.id === this.loggedInUser.id;
     },
     validateFields() {
       return this.user.firstName && this.user.lastName && this.user.email && this.user.password;

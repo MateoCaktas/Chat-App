@@ -43,7 +43,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const user = store.state.user.loggedUser ? store.state.user.loggedUser : null;
+  const user = store.state.user.loggedInUser ? store.state.user.loggedInUser : null;
 
   if (to.name === 'Login') return next();
   // Check if token exists in the cookie

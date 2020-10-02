@@ -20,7 +20,7 @@
           :key="message.id"
           @delete="deleteMessage"
           :message="message"
-          :class="{ 'logged-user-message': message.FK_user === loggedUser.id }" />
+          :class="{ 'logged-user-message': message.FK_user === loggedInUser.id }" />
       </div>
 
       <form
@@ -80,10 +80,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loggedUser', 'isAdmin']),
+    ...mapGetters(['loggedInUser', 'isAdmin']),
     belongsToRoom() {
       // Checks if the user is part of the room (admins can go to a room which they are not part of)
-      return this.usersList.filter(user => user.email === this.loggedUser.email).length;
+      return this.usersList.filter(user => user.email === this.loggedInUser.email).length;
     }
   },
   methods: {
@@ -105,14 +105,14 @@ export default {
       this.$router.go('-1');
     },
     leaveRoom(user) {
-      if (!user) user = this.loggedUser;
+      if (!user) user = this.loggedInUser;
 
       this.getUsersBelongingToRoom.sendRequest('delete', user)
         .then(() => {
           const index = this.usersList.findIndex(currentUser => currentUser.id === user.id);
           this.usersList.splice(index, 1);
           // If the user himself leaves the room, redirect him to Home page
-          if (user.id === this.loggedUser.id) this.$router.push({ name: 'Home' });
+          if (user.id === this.loggedInUser.id) this.$router.push({ name: 'Home' });
         });
     },
     sendMessage() {
@@ -120,7 +120,7 @@ export default {
       message.content = this.inputMessage;
       message.time = Date.now();
       message.fkRoom = parseInt(this.$route.params.id);
-      message.fkUser = this.loggedUser.id;
+      message.fkUser = this.loggedInUser.id;
 
       this.httpRequest.sendRequest('post', message)
         .then(() => {
