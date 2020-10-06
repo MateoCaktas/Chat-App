@@ -3,11 +3,7 @@
     <div class="background-image"></div>
     <div class="messages-container">
       <div class="messages-container-header">
-        <custom-button
-          @click="goBack"
-          class="messages-container-back-button">
-          Back
-        </custom-button>
+        <custom-button @click="goBack"> Back </custom-button>
         <h1 class="messages-container-title">Room {{ roomId }}</h1>
         <custom-button
           v-if="belongsToRoom"
@@ -16,7 +12,9 @@
           Leave Room
         </custom-button>
       </div>
-      <div ref="messages" class="messages">
+      <div
+        ref="messages"
+        class="messages">
         <MessageItem
           v-for="message in messages"
           :key="message.id"
@@ -26,18 +24,39 @@
           :class="{ 'logged-user-message': message.FK_user === loggedUser.id }" />
       </div>
 
-      <form v-show="belongsToRoom" @submit.prevent="sendMessage" id="input-message-form">
-        <input v-model="inputMessage" type="text" class="input-message-window">
-        <custom-button type="submit" :disabled="!inputMessage" class="send-message-button">Send</custom-button>
+      <form
+        v-show="belongsToRoom"
+        @submit.prevent="sendMessage"
+        id="input-message-form">
+        <input
+          v-model="inputMessage"
+          type="text"
+          class="input-message-window">
+        <custom-button
+          type="submit"
+          :disabled="!inputMessage"
+          class="send-message-button">
+          Send
+        </custom-button>
       </form>
     </div>
 
     <div class="users-list">
       <h3>Users:</h3>
-      <div v-for="user in usersList" :key="user.email" class="user-list-item">
-        <img class="user-list-image" src="@/assets/user.png">
+      <div
+        v-for="user in usersList"
+        :key="user.email"
+        class="user-list-item">
+        <img
+          class="user-list-image"
+          src="@/assets/user.png">
         <div class="user-list-name">{{ user.fullName }}</div>
-        <div v-if="loggedUser.isAdmin" @click="leaveRoom(user)" class="delete-user-button">+</div>
+        <custom-button
+          v-if="loggedUser.isAdmin"
+          @click="leaveRoom(user)"
+          class="delete-user-button">
+          +
+        </custom-button>
       </div>
     </div>
   </div>
@@ -151,8 +170,6 @@ export default {
 }
 
 .send-message-button {
-  @include button;
-
   margin: 5px;
 }
 
@@ -192,13 +209,7 @@ export default {
   flex: 1;
 }
 
-.messages-container-back-button {
-  @include button;
-}
-
 .messages-container-leave-button {
-  @include button;
-
   width: 100px;
   background-color: red;
 }
@@ -247,8 +258,6 @@ export default {
 }
 
 .delete-user-button {
-  @include button;
-
   text-align: center;
   transform: rotate(-45deg);
   width: 20px;

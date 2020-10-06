@@ -1,8 +1,12 @@
 <template>
-  <transition v-if="isActive" name="fade-message">
+  <transition
+    v-if="isActive"
+    name="fade-message">
     <div class="message">
       <div class="user">
-        <img class="user-image" src="@/assets/user.png">
+        <img
+          class="user-image"
+          src="@/assets/user.png">
         <div class="user-name">{{ userName }} </div>
       </div>
       <custom-button
@@ -11,22 +15,27 @@
         class="delete-message-button">
         +
       </custom-button>
-      <div class="user-message-content" :class="{ 'deleted-user-message': isDeleted }">{{ message.content }}</div>
+      <div
+        class="user-message-content"
+        :class="{ 'deleted-user-message': isDeleted }">
+        {{ message.content }}
+      </div>
       <div class="user-likes">
         <custom-button
           @click="likeMessage"
           class="user-like-button">
-          <img class="like-image" :src="likedStatusIcon">
+          <img
+            class="like-image"
+            :src="likedStatusIcon">
         </custom-button>
-        <span
-          class="user-likes-number">
-          {{ likesCount }} likes
-        </span>
+        <span class="user-likes-number"> {{ likesCount }} likes </span>
         <div
           v-if="userLikes.length"
           class="user-likes-list"
           :class="{ 'user-like-label-left': message.FK_user === loggedUser.id }">
-          <div v-for="user in userLikes" :key="user.id">
+          <div
+            v-for="user in userLikes"
+            :key="user.id">
             {{ user.fullName }}
           </div>
         </div>
@@ -144,7 +153,7 @@ export default {
 
 .user-message-content {
   padding: 10px;
-  color: white;
+  color: $secondary-color;
   font-size: 18px;
   background-color: $primary-color;
   float: left;
@@ -165,8 +174,8 @@ export default {
 
 .user-like-button {
   height: 30px;
-  color: black;
-  background-color: white;
+  color: $tertiary-color;
+  background-color: $secondary-color;
   border-radius: 50px;
 }
 
@@ -179,8 +188,8 @@ export default {
   width: 150px;
   height: 20px;
   padding: 2px;
-  background-color: white;
-  border: 2px solid black;
+  background-color: $secondary-color;
+  border: 2px solid $tertiary-color;
   border-radius: 5px;
 }
 
@@ -196,7 +205,7 @@ export default {
   transform: rotate(-45deg);
   width: 30px;
   height: 30px;
-  color: white;
+  color: $secondary-color;
   font-size: 20px;
   font-weight: bold;
   transition: 1.5s;
@@ -215,8 +224,8 @@ export default {
   left: 120px;
   width: 120px;
   padding: 5px;
-  color: white;
-  background-color: black;
+  color: $secondary-color;
+  background-color: $tertiary-color;
   border-radius: 5px;
   z-index: 9999;
 }

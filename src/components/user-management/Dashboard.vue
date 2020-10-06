@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>Admin dashboard</h1>
-    <div v-for="user in users" :key="user.id">
+    <div
+      v-for="user in users"
+      :key="user.id">
       <UserItem
         @change-user-data="changeUserData"
         :user="user" />

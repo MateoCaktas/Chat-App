@@ -4,8 +4,7 @@
       @logout="logOutUser"
       :user="user" />
     <transition name="view">
-      <router-view
-        @logIn="logInUser" />
+      <router-view @logIn="logInUser" />
     </transition>
     <Footer />
   </div>

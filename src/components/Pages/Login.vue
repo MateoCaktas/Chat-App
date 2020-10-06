@@ -1,11 +1,22 @@
 <template>
   <div>
     <h2> You need to log in to proceed. </h2>
-    <form @submit.prevent="logIn" id="input-form">
+    <form
+      @submit.prevent="logIn"
+      id="input-form">
       <p>Please enter your email</p>
-      <input v-model="email" type="text" class="login-input-field" placeholder="email">
+      <input
+        v-model="email"
+        type="text"
+        class="login-input-field"
+        placeholder="email">
       <p>Please enter your password</p>
-      <input v-model="password" type="password" class="login-input-field" placeholder="password" autocomplete="on">
+      <input
+        v-model="password"
+        type="password"
+        class="login-input-field"
+        placeholder="password"
+        autocomplete="on">
       <custom-button
         class="login-button"
         type="submit">

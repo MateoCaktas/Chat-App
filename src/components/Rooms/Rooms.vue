@@ -3,7 +3,9 @@
     <div id="rooms-container">
       <h1> User rooms </h1>
       <div class="room-list">
-        <div v-for="room in rooms" :key="room.id">
+        <div
+          v-for="room in rooms"
+          :key="room.id">
           <RoomItem
             @save-room-data="saveRoomData"
             class="room-item"
@@ -12,8 +14,7 @@
       </div>
       <custom-button
         @click="openModal"
-        class="create-room-button"
-        value="Create a room">
+        class="create-room-button">
         Create a room
       </custom-button>
     </div>

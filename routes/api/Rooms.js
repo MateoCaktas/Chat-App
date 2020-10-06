@@ -6,10 +6,8 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  let id = 0;
-
   // If the user is not Admin, set the ID and retrieve only his rooms
-  id = !req.user.isAdmin ? req.user.id : null;
+  const id = !req.user.isAdmin ? req.user.id : null;
 
   getRooms(id)
     .then(rooms => res.json(rooms))
@@ -28,8 +26,8 @@ router.post('/', authAdmin, (req, res) => {
         name,
         limit
       })
-      .then(room => {
-        room.setBelongingUsers(users);
+      .then(async room => {
+        await room.setBelongingUsers(users);
         return room;
       })
       .then(room => res.send(room))
@@ -58,8 +56,8 @@ router.put('/:id', (req, res) => {
           name,
           limit
         })
-        .then(room => {
-          room.setBelongingUsers(users);
+        .then(async room => {
+          await room.setBelongingUsers(users);
           return room;
         })
         .then(room => res.send(room)))

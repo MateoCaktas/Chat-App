@@ -1,6 +1,8 @@
 <template>
   <transition name="fade-user-item">
-    <div v-if="isActive" class="user-window">
+    <div
+      v-if="isActive"
+      class="user-window">
       <div class="user-info">
         <h1> {{ user.fullName }}</h1>
         <p> {{ user.email }}</p>

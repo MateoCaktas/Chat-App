@@ -25,7 +25,10 @@
         <div class="modal-body-line">
           <h4 class="belonging-users-title">Belonging Users:</h4>
           <div class="users-input">
-            <div v-for="(mail, index) in usersEmails" :key="mail" class="user-input">
+            <div
+              v-for="(mail, index) in usersEmails"
+              :key="mail"
+              class="user-input">
               <input
                 v-model="usersEmails[index]"
                 class="input-field"
@@ -52,7 +55,9 @@
             </div>
           </div>
         </div>
-        <div v-if="isEditing" class="modal-body-line">
+        <div
+          v-if="isEditing"
+          class="modal-body-line">
           <h4>Room ID: {{ currentRoom.id }}</h4>
         </div>
       </template>

@@ -28,7 +28,9 @@
             class="input-field"
             placeholder="Email">
         </div>
-        <div v-if="!isEditing" class="modal-body-line">
+        <div
+          v-if="!isEditing"
+          class="modal-body-line">
           <h4 class="modal-body-title">Password:</h4>
           <input
             v-model="currentUser.password"
@@ -36,10 +38,15 @@
             placeholder="Password">
         </div>
         <div>
-          <input v-model="currentUser.isAdmin" class="checkbox" type="checkbox">
+          <input
+            v-model="currentUser.isAdmin"
+            class="checkbox"
+            type="checkbox">
           <label for="checkbox"> Admin </label>
         </div>
-        <div v-if="currentUser.id" class="modal-body-line">
+        <div
+          v-if="currentUser.id"
+          class="modal-body-line">
           <h4 class="modal-body-title">User ID: {{ currentUser.id }}</h4>
         </div>
       </template>
