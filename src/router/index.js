@@ -3,6 +3,7 @@ import Home from '../components/pages/Home.vue';
 import Login from '../components/pages/Login.vue';
 import Room from '../components/rooms/Room.vue';
 import Rooms from '../components/rooms/Rooms.vue';
+import store from '../store';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
@@ -42,7 +43,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const user = localStorage.loggedUser ? JSON.parse(localStorage.loggedUser) : null;
+  const user = store.state.user.loggedInUser ? store.state.user.loggedInUser : null;
 
   if (to.name === 'Login') return next();
   // Check if token exists in the cookie

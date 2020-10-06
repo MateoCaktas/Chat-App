@@ -28,7 +28,7 @@
       </router-link>
       <div v-else>
         <custom-button
-          @click="logoutUser"
+          @click="logOff"
           class="logout-button">
           Logout
         </custom-button>
@@ -38,32 +38,22 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'custom-header',
-  props: {
-    user: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isLoggedIn: false,
-      isAdmin: false
-    };
+  computed: {
+    ...mapGetters(['isAdmin', 'isLoggedIn'])
   },
   methods: {
-    logoutUser() {
-      this.isAdmin = false;
-      this.isLoggedIn = false;
-      return this.$emit('logout');
-    }
-  },
-  watch: {
-    user(user) {
-      this.isAdmin = user.isAdmin;
-      this.isLoggedIn = !!user;
+    ...mapActions(['logoutUser']),
+    logOff() {
+      this.logoutUser();
+      this.$router.push({ name: 'Login' })
+        .catch(() => {});
+    },
+    incrementCounter() {
+      this.incrementCount();
     }
   }
 };

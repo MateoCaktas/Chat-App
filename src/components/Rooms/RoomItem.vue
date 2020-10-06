@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 
 import Request from '../../services/index';
 import RoomModal from './RoomModal';
@@ -47,11 +48,11 @@ export default {
       showModal: false,
       usersEmails: [],
       actionType: 'edit',
-      httpRequest: {},
-      isAdmin: false
+      httpRequest: {}
     };
   },
   computed: {
+    ...mapGetters(['isAdmin']),
     usersLength() {
       return this.usersEmails.length;
     }
@@ -81,7 +82,6 @@ export default {
     }
   },
   mounted() {
-    this.isAdmin = JSON.parse(localStorage.loggedUser).isAdmin;
     this.httpRequest = new Request(`/rooms/${this.room.id}/users`);
 
     this.getUsers();

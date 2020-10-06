@@ -34,6 +34,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex';
 import UserModal from './UserModal';
 
 export default {
@@ -52,8 +53,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['loggedInUser']),
     loggedUser() {
-      return this.user.id === JSON.parse(localStorage.loggedUser).id;
+      return this.user.id === this.loggedInUser.id;
     },
     validateFields() {
       return this.user.firstName && this.user.lastName && this.user.email && this.user.password;

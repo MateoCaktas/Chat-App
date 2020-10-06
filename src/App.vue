@@ -1,10 +1,8 @@
 <template>
   <div id="app">
-    <Header
-      @logout="logOutUser"
-      :user="user" />
+    <Header />
     <transition name="view">
-      <router-view @logIn="logInUser" />
+      <router-view />
     </transition>
     <Footer />
   </div>
@@ -12,35 +10,11 @@
 
 <script>
 
-import cookieCache from './services/cookieCache';
 import Footer from './components/common/Footer';
 import Header from './components/common/Header';
 
 export default {
   name: 'app',
-  data() {
-    return {
-      user: {}
-    };
-  },
-  methods: {
-    logInUser(response) {
-      this.user = response.user;
-      localStorage.removeItem('loggedUser');
-      localStorage.loggedUser = JSON.stringify(response.user);
-
-      this.$cookie.set('token', response.jwt);
-      this.$router.push({ name: 'Dashboard' })
-        .catch(() => {});
-    },
-    logOutUser() {
-      cookieCache.resetCookie();
-      localStorage.removeItem('loggedUser');
-      document.cookie = 'token=Expired; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      this.$router.push({ name: 'Login' })
-        .catch(err => console.log(err));
-    }
-  },
   components: {
     Header,
     Footer

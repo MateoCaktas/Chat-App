@@ -27,8 +27,7 @@
 </template>
 
 <script>
-
-import Request from '../../services';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -39,15 +38,18 @@ export default {
     };
   },
   methods: {
+    ...mapActions(['logUser']),
     logIn() {
       const userCredentials = {
         email: this.email,
         password: this.password
       };
-      this.httpRequest = new Request('/login');
-      this.httpRequest.sendRequest('post', userCredentials)
-        .then(res => res.json())
-        .then(res => this.$emit('logIn', res))
+
+      this.logUser(userCredentials)
+       .then(() => {
+         this.$router.push({ name: 'Dashboard' })
+          .catch(() => {});
+       })
         .catch(err => console.log(err));
     }
   }

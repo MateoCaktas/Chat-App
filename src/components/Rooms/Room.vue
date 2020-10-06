@@ -20,8 +20,7 @@
           :key="message.id"
           @delete="deleteMessage"
           :message="message"
-          :is-admin="loggedUser.isAdmin"
-          :class="{ 'logged-user-message': message.FK_user === loggedUser.id }" />
+          :class="{ 'logged-user-message': message.FK_user === loggedInUser.id }" />
       </div>
 
       <form
@@ -52,7 +51,7 @@
           src="@/assets/user.png">
         <div class="user-list-name">{{ user.fullName }}</div>
         <custom-button
-          v-if="loggedUser.isAdmin"
+          v-if="isAdmin"
           @click="leaveRoom(user)"
           class="delete-user-button">
           +
@@ -64,6 +63,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex';
 import MessageItem from '../messages/MessageItem';
 import Request from '../../services';
 
@@ -72,7 +72,6 @@ export default {
   data() {
     return {
       inputMessage: '',
-      loggedUser: {},
       roomId: 0,
       httpRequest: {},
       messages: [],
@@ -81,9 +80,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['loggedInUser', 'isAdmin']),
     belongsToRoom() {
       // Checks if the user is part of the room (admins can go to a room which they are not part of)
-      return this.usersList.filter(user => user.email === this.loggedUser.email).length;
+      return this.usersList.filter(user => user.email === this.loggedInUser.email).length;
     }
   },
   methods: {
@@ -105,14 +105,14 @@ export default {
       this.$router.go('-1');
     },
     leaveRoom(user) {
-      if (!user) user = JSON.parse(localStorage.loggedUser);
+      if (!user) user = this.loggedInUser;
 
       this.getUsersBelongingToRoom.sendRequest('delete', user)
         .then(() => {
           const index = this.usersList.findIndex(currentUser => currentUser.id === user.id);
           this.usersList.splice(index, 1);
           // If the user himself leaves the room, redirect him to Home page
-          if (user.id === JSON.parse(localStorage.loggedUser).id) this.$router.push({ name: 'Home' });
+          if (user.id === this.loggedInUser.id) this.$router.push({ name: 'Home' });
         });
     },
     sendMessage() {
@@ -120,7 +120,7 @@ export default {
       message.content = this.inputMessage;
       message.time = Date.now();
       message.fkRoom = parseInt(this.$route.params.id);
-      message.fkUser = this.loggedUser.id;
+      message.fkUser = this.loggedInUser.id;
 
       this.httpRequest.sendRequest('post', message)
         .then(() => {
@@ -137,7 +137,6 @@ export default {
     }
   },
   mounted() {
-    this.loggedUser = JSON.parse(localStorage.loggedUser);
     this.roomId = this.$route.params.id;
     this.httpRequest = new Request('/messages');
 

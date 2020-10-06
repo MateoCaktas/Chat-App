@@ -32,7 +32,7 @@
         <div
           v-if="userLikes.length"
           class="user-likes-list"
-          :class="{ 'user-like-label-left': message.FK_user === loggedUser.id }">
+          :class="{ 'user-like-label-left': message.FK_user === loggedInUser.id }">
           <div
             v-for="user in userLikes"
             :key="user.id">
@@ -48,6 +48,7 @@
 
 import LikedIcon from '@/assets/liked.png';
 import LikeIcon from '@/assets/like.png';
+import { mapGetters } from 'vuex';
 import Request from '@/services';
 
 export default {
@@ -56,10 +57,6 @@ export default {
     message: {
       type: Object,
       default: () => {}
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -67,15 +64,15 @@ export default {
       userName: 'Deleted User',
       isDeleted: false,
       isActive: true,
-      loggedUser: {},
       userLikes: [],
       userLikesRequest: {},
       showUserLikes: false
     };
   },
   computed: {
+    ...mapGetters(['loggedInUser', 'isAdmin']),
     isLiked() {
-      return this.userLikes.find(it => it.id === this.loggedUser.id);
+      return this.userLikes.find(it => it.id === this.loggedInUser.id);
     },
     likedStatusIcon() {
       return this.isLiked ? LikedIcon : LikeIcon;
@@ -88,8 +85,8 @@ export default {
     sendLikesRequest(type, req) {
       return this.userLikesRequest.sendRequest(type, req)
         .then(() => {
-          if (type === 'post') this.userLikes.push(this.loggedUser);
-          else this.userLikes = this.userLikes.filter(it => it.id !== this.loggedUser.id);
+          if (type === 'post') this.userLikes.push(this.loggedInUser);
+          else this.userLikes = this.userLikes.filter(it => it.id !== this.loggedInUser.id);
         });
     },
     getMessageLikes() {
@@ -108,7 +105,7 @@ export default {
     likeMessage() {
       const req = {};
       const type = this.isLiked ? 'delete' : 'post';
-      req.id = this.loggedUser.id;
+      req.id = this.loggedInUser.id;
 
       this.sendLikesRequest(type, req);
     }
@@ -116,7 +113,6 @@ export default {
   mounted() {
     this.userLikesRequest = new Request(`/messages/${this.message.id}/likes`);
     this.userLikes = [...this.message.users];
-    this.loggedUser = JSON.parse(localStorage.loggedUser);
 
     if (this.message.userMessage) this.userName = this.message.userMessage.fullName;
     this.isDeleted = !this.message.userMessage;
